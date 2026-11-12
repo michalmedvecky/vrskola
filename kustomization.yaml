@@ -1,0 +1,27 @@
+# Nasazení VR školy do k3s. Žádný image se nestaví: soubory hry z web/ jdou do ConfigMapy
+# a servíruje je neupravený nginx-unprivileged. Při změně web/ se změní hash ConfigMapy → Deployment se sám přerolluje.
+#
+# ConfigMapa má ~750 kB (víc než limit anotace last-applied), proto se aplikuje server-side:
+#   kubectl apply --server-side -k .
+# Flux (kustomize-controller) server-side apply používá sám.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: vrskola
+labels:
+  - pairs:
+      app.kubernetes.io/name: vrskola
+    includeSelectors: true
+resources:
+  - deploy/namespace.yaml
+  - deploy/deployment.yaml
+  - deploy/service.yaml
+  - deploy/ingress.yaml
+configMapGenerator:
+  - name: vrskola-web
+    files:
+      - web/index.html
+      - web/slova.js
+      - web/three.module.min.js
+  - name: vrskola-nginx
+    files:
+      - deploy/default.conf

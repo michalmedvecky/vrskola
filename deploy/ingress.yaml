@@ -1,0 +1,25 @@
+# WebXR v Questu funguje jen přes https → Ingress s TLS. k3s má v základu Traefik.
+# PŘED NASAZENÍM upravit: host (2×) a jméno ClusterIssueru cert-manageru.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: vrskola
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - vrskola.example.com
+      secretName: vrskola-tls
+  rules:
+    - host: vrskola.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: vrskola
+                port:
+                  name: http
