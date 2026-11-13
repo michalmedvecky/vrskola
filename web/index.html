@@ -16,6 +16,13 @@
   #dotyk #d-ok.on{background:#15803d;border-color:#5dff8a}
   #dotyk #d-bad.on{background:#b91c1c;border-color:#ff8a8a}
   #dotyk #d-pauza{background:#25335e;border-color:#6cf;opacity:1}
+  /* Bludiště na tabletu: vlevo chůze dopředu / dozadu, vpravo otáčení */
+  #pad{position:fixed;left:0;right:0;bottom:24px;display:none;justify-content:space-between;padding:0 20px;z-index:3;pointer-events:none}
+  #pad div{display:flex;gap:12px;pointer-events:none}
+  #pad .pl{flex-direction:column}
+  #pad button{pointer-events:auto;width:84px;height:84px;font:700 34px system-ui,"Segoe UI",Arial,sans-serif;color:#fff;border-radius:20px;border:3px solid #6cf;background:rgba(26,35,64,.8);touch-action:none;-webkit-user-select:none;user-select:none}
+  #pad button.on{background:#2f7cff;border-color:#fff}
+  #pad #pad-mec{background:rgba(120,20,60,.85);border-color:#ff7ac8}
 </style>
 <script type="importmap">{"imports":{"three":"./three.module.min.js"}}</script>
 </head>
@@ -26,6 +33,8 @@
   <b>Střelnice:</b> pravá ruka střílí slova napsaná <b>správně</b>, levá ruka slova napsaná <b>špatně</b>.<br>
   <b>Meče:</b> slova letí proti tobě, <b>zelený</b> meč (pravá ruka) seká správná, <b>červený</b> meč (levá ruka) špatná.<br>
   <b>Doplňovačka:</b> na kartách chybí písmeno, kteroukoli pistolí vystřel správné <b>y</b> nebo <b>i</b> pod slovem.<br>
+  <b>Bludiště:</b> na křižovatce jdi tam, kam ukazuje <b>správně napsané</b> slovo. Špatná cesta končí u příšery – rozsekni ji mečem (vyletí z ní správné slovo), nebo uteč zpátky!
+  Chůze levou páčkou, pravou páčkou otáčení po krocích, mečem v ruce se seká; na počítači <b>W/S</b> nebo <b>↑/↓</b> chůze, <b>A/D</b> nebo <b>←/→</b> otáčení, <b>klik</b> nebo <b>mezerník</b> seká; na tabletu tlačítka ▲▼ a ◄►, seká ⚔ nebo klepnutí.<br>
   <b>Pauza:</b> tlačítko <b>B</b> nebo <b>Y</b> na ovladači (na počítači <b>Esc</b>) – pokračovat, ukončit hru, nebo opustit VR.<br>
   Na počítači (zkouška): myš míří, <b>levé tlačítko</b> = levá ruka, <b>pravé tlačítko</b> = pravá ruka (u mečů drž tlačítko a táhni myší), šipky nebo WASD otáčí pohled.<br>
   <b>Cvičení</b> (přepínač v menu): správná slova jsou <b style="color:#5dff8a">zelená</b>, špatná <b style="color:#ff6b6b">červená</b>, body se nepočítají, jen statistika.<br>
@@ -34,6 +43,10 @@
 </div>
 <div id="dotyk">
   <button id="d-bad">✘ špatně</button><button id="d-pauza">⏸</button><button id="d-ok" class="on">✔ správně</button>
+</div>
+<div id="pad">
+  <div class="pl"><button data-k="f">▲</button><button data-k="b">▼</button></div>
+  <div class="pr"><button data-k="l">◄</button><button id="pad-mec">⚔</button><button data-k="r">►</button></div>
 </div>
 <button id="vr" disabled>Načítám…</button>
 
@@ -59,8 +72,8 @@ const GAME_TIME = Number(new URLSearchParams(location.search).get('cas')) || 300
 const MAX_WORDS = 42;
 const FADE_IN = 1.2, FADE_OUT = 1.0;
 const SCORE_GOOD = 1, SCORE_BAD = -1;   // skóre může jít i do záporu
-const LS_KEYS = { strelba: 'smartoped-vr-top3', mece: 'smartoped-vr-mece-top3', karty: 'smartoped-vr-karty-top3' }; // každý režim má svou tabulku
-const MODES = ['strelba', 'mece', 'karty'];
+const LS_KEYS = { strelba: 'smartoped-vr-top3', mece: 'smartoped-vr-mece-top3', karty: 'smartoped-vr-karty-top3', bludiste: 'smartoped-vr-bludiste-top3' }; // každý režim má svou tabulku
+const MODES = ['strelba', 'mece', 'karty', 'bludiste'];
 let mode = (() => { const q = new URLSearchParams(location.search).get('rezim'); if (MODES.includes(q)) return q;
   try { const v = localStorage.getItem('smartoped-vr-rezim'); return MODES.includes(v) ? v : 'strelba'; } catch { return 'strelba'; } })();
 // Cvičení: správná slova zeleně, špatná červeně (u doplňovačky zelené správné písmeno); žádné body ani tabulka, jen statistika.
@@ -134,7 +147,9 @@ scene.fog = new THREE.FogExp2(0x05060f, 0.025);
 
 const camera = new THREE.PerspectiveCamera(70, innerWidth/innerHeight, 0.05, 200);
 camera.position.set(0, 1.6, 0);
-scene.add(camera);
+// "dolly": hráč i ovladače jsou v ní; v Bludišti se hýbe s ní (chůze, otáčení po krocích), jinak stojí v počátku
+const dolly = new THREE.Group(); scene.add(dolly);
+dolly.add(camera);
 
 addEventListener('resize', () => {
   camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
@@ -144,15 +159,17 @@ addEventListener('resize', () => {
 scene.add(new THREE.HemisphereLight(0x8899ff, 0x220022, 1.2));
 const dl = new THREE.DirectionalLight(0xffffff, 1.2); dl.position.set(2, 5, 3); scene.add(dl);
 
-// Prostředí: neonová podlaha, kruhy, hvězdy
+// Prostředí: neonová podlaha, kruhy, hvězdy (v Bludišti se podlaha, kruhy a sloupy schovají, hvězdy jdou s hráčem)
+const decor = new THREE.Group(); scene.add(decor);
+let stars = null;
 (function buildWorld(){
   const grid = new THREE.GridHelper(120, 60, 0x2a6cff, 0x162a5a);
   grid.material.transparent = true; grid.material.opacity = 0.55;
-  scene.add(grid);
+  decor.add(grid);
   for (const [r, col] of [[1.2,0x33ddff],[7,0x8844ff],[16,0xff33aa]]) {
     const ring = new THREE.Mesh(new THREE.RingGeometry(r, r+0.04, 128),
       new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.7, side: THREE.DoubleSide }));
-    ring.rotation.x = -Math.PI/2; ring.position.y = 0.01; scene.add(ring);
+    ring.rotation.x = -Math.PI/2; ring.position.y = 0.01; decor.add(ring);
   }
   const n = 1500, pos = new Float32Array(n*3);
   for (let i=0;i<n;i++){
@@ -160,13 +177,13 @@ const dl = new THREE.DirectionalLight(0xffffff, 1.2); dl.position.set(2, 5, 3); 
     pos[i*3] = R*Math.sin(ph)*Math.cos(th); pos[i*3+1] = R*Math.cos(ph); pos[i*3+2] = R*Math.sin(ph)*Math.sin(th);
   }
   const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos,3));
-  scene.add(new THREE.Points(g, new THREE.PointsMaterial({ color: 0xffffff, size: 0.35, fog: false })));
+  stars = new THREE.Points(g, new THREE.PointsMaterial({ color: 0xffffff, size: 0.35, fog: false })); scene.add(stars);
   // vzdálené neonové sloupy kolem dokola
   for (let i=0;i<24;i++){
     const a = i/24*Math.PI*2, h = 4+Math.random()*10;
     const m = new THREE.Mesh(new THREE.BoxGeometry(0.3,h,0.3),
       new THREE.MeshBasicMaterial({ color: i%2 ? 0x3355ff : 0xaa33ff, transparent:true, opacity:0.5 }));
-    m.position.set(Math.cos(a)*30, h/2, Math.sin(a)*30); scene.add(m);
+    m.position.set(Math.cos(a)*30, h/2, Math.sin(a)*30); decor.add(m);
   }
 })();
 
@@ -385,11 +402,13 @@ function placePanelInFront(){
   cam.getWorldPosition(p); cam.getWorldDirection(d); d.y = 0;
   if (d.lengthSq() < 1e-4) d.set(0,0,-1); d.normalize();
   const y = renderer.xr.isPresenting ? Math.max(1.0, p.y) : 1.6;
-  panel.position.set(p.x + d.x*3, y, p.z + d.z*3);
+  const dist = mz.active ? 2.2 : 3;   // v bludišti blíž (a kreslí se přes zdi, viz níže)
+  panel.position.set(p.x + d.x*dist, y, p.z + d.z*dist);
   panel.lookAt(p.x, y, p.z);
+  panel.material.depthTest = !mz.active; panel.renderOrder = mz.active ? 900 : 0;
   if (mode === 'mece' && state !== 'playing' && !blocks.length) setTrackFrame();
 }
-function showPanel(fn){ drawPanelFn = fn; hoverBtn = null; redrawPanel(); panel.visible = true; placePanelInFront(); }
+function showPanel(fn){ if (fn === drawMenu) leaveMaze(); drawPanelFn = fn; hoverBtn = null; redrawPanel(); panel.visible = true; placePanelInFront(); }
 function hidePanel(){ panel.visible = false; buttons = []; }
 function redrawPanel(){
   buttons = [];
@@ -423,9 +442,8 @@ function drawTop(g, y0, highlightIdx = -1){
 
 function drawMenu(g){
   txt(g, 'Vyjmenovaná slova', PW/2, 56, { px: 58, color: '#7fe3ff' });
-  button(g, 'm-strelba', 'Střelnice', PW/2-440, 96, 280, 64, () => setMode('strelba'), { color: mode === 'strelba' ? '#2f7cff' : '#25335e', px: 36 });
-  button(g, 'm-mece', 'Meče', PW/2-140, 96, 280, 64, () => setMode('mece'), { color: mode === 'mece' ? '#2f7cff' : '#25335e', px: 36 });
-  button(g, 'm-karty', 'Doplňovačka', PW/2+160, 96, 280, 64, () => setMode('karty'), { color: mode === 'karty' ? '#2f7cff' : '#25335e', px: 36 });
+  [['strelba', 'Střelnice'], ['mece', 'Meče'], ['karty', 'Doplňovačka'], ['bludiste', 'Bludiště']].forEach(([m, label], i) =>
+    button(g, 'm-' + m, label, 67 + i*225, 96, 215, 64, () => setMode(m), { color: mode === m ? '#2f7cff' : '#25335e', px: 32 }));
   button(g, 'p-hra', 'Hra na body', PW/2-320, 176, 200, 56, setScoring, { color: !practice && !duel ? '#b8860b' : '#25335e', px: 28 });
   button(g, 'p-cviceni', 'Cvičení', PW/2-100, 176, 200, 56, () => setPractice(true), { color: practice ? '#15803d' : '#25335e', px: 28 });
   button(g, 'p-souboj', 'Souboj třídy', PW/2+120, 176, 200, 56, setDuel, { color: duel ? '#b4237a' : '#25335e', px: 28 });
@@ -433,6 +451,10 @@ function drawMenu(g){
     txt(g, 'Na kartách chybí písmeno. Doplň Y, nebo I?', PW/2, 272, { px: 34, color: '#7fe3ff' });
     txt(g, 'Vystřel správné písmeno pod slovem, klidně kteroukoli rukou.', PW/2, 314, { px: 30, color: '#ffd23f' });
     txt(g, 'Karty se objevují kolem tebe a časem mizí. ' + gameLenText(), PW/2, 354, { px: 28, weight: 'normal' });
+  } else if (mode === 'bludiste'){
+    txt(g, 'Na křižovatce jdi tam, kam ukazuje slovo napsané SPRÁVNĚ.', PW/2, 272, { px: 32, color: '#5dff8a' });
+    txt(g, 'Špatná cesta končí u příšery – rozsekni ji mečem, nebo uteč!', PW/2, 314, { px: 32, color: '#ff6b6b' });
+    txt(g, (xrSession ? 'Levá páčka chůze, pravá otáčí, mečem se máchá. ' : usedTouch ? 'Tlačítka ▲▼ chůze, ◄► otáčení, ⚔ nebo klepnutí seká. ' : 'W/S chůze, A/D otáčení, klik nebo mezerník seká. ') + gameLenText(), PW/2, 354, { px: 26, weight: 'normal' });
   } else if (mode === 'mece'){
     txt(g, 'ZELENÝ meč (pravá ruka) seká slova SPRÁVNĚ', PW/2, 272, { px: 34, color: '#5dff8a' });
     txt(g, 'ČERVENÝ meč (levá ruka) seká slova ŠPATNĚ', PW/2, 314, { px: 34, color: '#ff6b6b' });
@@ -446,6 +468,8 @@ function drawMenu(g){
     roundRect(g, 150, 396, 724, 176, 20); g.fillStyle = 'rgba(21,128,61,0.18)'; g.fill(); g.lineWidth = 3; g.strokeStyle = '#5dff8a'; g.stroke();
     txt(g, 'Cvičení', PW/2, 428, { px: 40, color: '#5dff8a' });
     if (mode === 'karty') txt(g, 'Správné písmeno svítí ZELENĚ, špatné ČERVENĚ.', PW/2, 480, { px: 30 });
+    else if (mode === 'bludiste'){ txt(g, 'Šipka se slovem napsaným správně je ZELENÁ,', PW/2, 470, { px: 30, color: '#5dff8a' });
+      txt(g, 'šipka se slovem napsaným špatně je ČERVENÁ.', PW/2, 506, { px: 30, color: '#ff6b6b' }); }
     else { txt(g, 'Slova napsaná správně jsou ZELENÁ,', PW/2, 470, { px: 30, color: '#5dff8a' });
       txt(g, 'slova napsaná špatně jsou ČERVENÁ.', PW/2, 506, { px: 30, color: '#ff6b6b' }); }
     txt(g, 'Body se nepočítají, uvidíš jen, kolik máš správně a kolik špatně.', PW/2, 548, { px: 24, weight: 'normal', color: '#bcd' });
@@ -511,7 +535,7 @@ function drawResults(g){
   txt(g, `Správně: ${goodCount}`, 330, 525, { px: 46, color: '#5dff8a' });
   txt(g, `Nesprávně: ${badCount}`, 694, 525, { px: 46, color: '#ff6b6b' });
   const total = goodCount + badCount;
-  const extra = mode !== 'strelba' ? `propásnuto ${missCount}` : '';
+  const extra = mode === 'mece' || mode === 'karty' ? `propásnuto ${missCount}` : mode === 'bludiste' ? `křižovatek ${mz.cur}` : '';
   if (total || extra) txt(g, [total ? `úspěšnost ${Math.round(goodCount/total*100)} %` : '', extra].filter(Boolean).join('  ·  '), PW/2, 565, { px: 26, weight: 'normal', color: '#bcd' });
   exitVrButton(g);
   button(g, 'again', 'Hrát znovu', PW/2-200, 620, 400, 100, startGame, { color: '#1a9d4a', px: 48 });
@@ -568,7 +592,7 @@ function drawPracticeResults(g){
   txt(g, String(goodCount), 320, 300, { px: 120, color: '#5dff8a' });
   txt(g, String(badCount), 704, 300, { px: 120, color: '#ff6b6b' });
   const total = goodCount + badCount;
-  const extra = [total ? `úspěšnost ${Math.round(goodCount/total*100)} %` : '', mode !== 'strelba' ? `propásnuto ${missCount}` : ''].filter(Boolean).join('  ·  ');
+  const extra = [total ? `úspěšnost ${Math.round(goodCount/total*100)} %` : '', mode === 'mece' || mode === 'karty' ? `propásnuto ${missCount}` : mode === 'bludiste' ? `křižovatek ${mz.cur}` : ''].filter(Boolean).join('  ·  ');
   if (extra) txt(g, extra, PW/2, 400, { px: 30, weight: 'normal', color: '#bcd' });
   exitVrButton(g);
   button(g, 'again', 'Cvičit znovu', PW/2-200, 500, 400, 100, startGame, { color: '#1a9d4a', px: 48 });
@@ -804,9 +828,10 @@ function startGame(){
   gameTime = duel ? duelCas : GAME_TIME;
   score = 0; goodCount = 0; badCount = 0; missCount = 0; timeLeft = gameTime; spawnTimer = 0; lastTick = -1; hudKey = '';
   hidePanel(); hud.visible = true; state = 'playing';
+  if (mode === 'bludiste') startMaze(); else leaveMaze();
   if (mode === 'mece'){ setTrackFrame(); spawnTimer = 0.6; }
   else if (mode === 'karty'){ setCardFrame(); for (let i=0;i<3;i++) spawnCard(); spawnTimer = 2.5; }
-  else for (let i=0;i<6;i++) spawnWord();
+  else if (mode === 'strelba') for (let i=0;i<6;i++) spawnWord();
   sfx.start();
   music.start();
 }
@@ -814,7 +839,7 @@ function startGame(){
 function gameObjects(){ return [...words.map(w => w.mesh), ...cards.map(c => c.mesh), ...blocks.map(b => b.mesh)]; }
 function pauseGame(){
   if (state !== 'playing') return;
-  state = 'paused'; hud.visible = false; mouseHeld.left = mouseHeld.right = false;
+  state = 'paused'; hud.visible = false; mouseHeld.left = mouseHeld.right = false; mz.vig = 0;
   for (const m of gameObjects()) m.visible = false;
   music.pause(); sfx.click();
   showPanel(drawPause);
@@ -842,7 +867,7 @@ function drawPause(g){
   exitVrButton(g);
 }
 function endGame(){
-  state = 'over'; hud.visible = false;
+  state = 'over'; hud.visible = false; mz.vig = 0;
   for (const w of words) if (w.phase === 'live'){ w.phase = 'out'; w.t = 0; }
   for (const b of blocks) if (b.phase === 'fly'){ b.phase = 'out'; b.t = 0; }
   for (const c of cards) if (c.phase === 'live'){ c.phase = 'out'; c.t = 0; }
@@ -912,11 +937,12 @@ const MON_MAT = {
   horn: new THREE.MeshStandardMaterial({ color: 0xffe9a8, roughness: 0.4 }),
 };
 const MON_COLORS = [0x9b3dff, 0x2ecc71, 0xff7a1a, 0x1ab8ff, 0xff3da5];
-function spawnMonster(wordPos){
-  const vp = viewPos().clone();
+// Postaví příšeru: vnější skupina g (pozice, měřítko, natočení) a vnitřní tělo, které animate(t) rozpohybuje.
+function buildMonster(){
   const col = MON_COLORS[Math.random()*MON_COLORS.length|0];
   const skin = new THREE.MeshStandardMaterial({ color: col, emissive: col, emissiveIntensity: 0.25, roughness: 0.7 });
-  const g = new THREE.Group(), add = (geo, mat, x, y, z, sx=1, sy=1, sz=1) => { const m = new THREE.Mesh(geo, mat); m.position.set(x,y,z); m.scale.set(sx,sy,sz); g.add(m); return m; };
+  const outer = new THREE.Group(), g = new THREE.Group(); outer.add(g);
+  const add = (geo, mat, x, y, z, sx=1, sy=1, sz=1) => { const m = new THREE.Mesh(geo, mat); m.position.set(x,y,z); m.scale.set(sx,sy,sz); g.add(m); return m; };
   add(MON_GEO.body, skin, 0, 0, 0, 1, 1.15, 0.9);
   for (let i=0;i<9;i++){ const a = -1.2 + i*0.3; const sp = add(MON_GEO.spike, skin, Math.sin(a)*0.55, 0.9 + Math.cos(a)*0.05, -0.15); sp.rotation.z = -a*0.8; } // čupřina
   for (const sx of [-1, 1]){ const h = add(MON_GEO.horn, MON_MAT.horn, sx*0.5, 0.95, 0); h.rotation.z = -sx*0.5; }
@@ -931,23 +957,28 @@ function spawnMonster(wordPos){
     const arm = new THREE.Mesh(MON_GEO.arm, skin); arm.position.y = 0.37; pivot.add(arm);
     const hand = new THREE.Mesh(MON_GEO.hand, skin); hand.position.y = 0.78; pivot.add(hand);
     pivot.userData.sx = sx; arms.push(pivot); }
-  // pozice: kousek před slovem směrem k hráči a pod ním, ať je vidět i opravené slovo nad ním
-  const base = wordPos.clone().lerp(vp, 0.3); base.y = Math.max(0.9, base.y - 1.35);
-  g.position.copy(base); g.lookAt(vp.x, base.y, vp.z); g.scale.setScalar(0.001);
-  scene.add(g);
-  const dur = 2.0, phase = Math.random()*10;
-  effects.push({ t: 0, dur, update(dt, k){
-    const t = this.t + phase;
-    const pop = k < 0.15 ? easeOutBack(k/0.15) : k > 0.82 ? Math.max(0.001, 1 - (k-0.82)/0.18) : 1;
-    g.scale.setScalar(pop);
-    g.position.y = base.y + Math.abs(Math.sin(t*14))*0.12;      // poskakuje
+  pupils.forEach(p => p.userData.x0 = p.position.x);
+  const phase = Math.random()*10;
+  return { g: outer, skin, animate(t0){
+    const t = t0 + phase;
+    g.position.y = Math.abs(Math.sin(t*14))*0.12;                // poskakuje
     g.rotation.z = Math.sin(t*38)*0.12;                          // třese se
     mouth.scale.y = 0.35 + 0.35*Math.abs(Math.sin(t*22));        // ječí
     for (const p of pupils){ if (Math.random() < 0.25){ p.position.x = p.userData.x0 + (Math.random()-0.5)*0.22; p.position.y = 0.38 + (Math.random()-0.5)*0.22; } }
     for (const e of eyes) e.scale.set(1 + 0.15*Math.sin(t*30), 1.2 + 0.15*Math.sin(t*30), 1);
     for (const a of arms) a.rotation.z = a.userData.sx * (-0.6 - 1.2*Math.abs(Math.sin(t*16 + a.userData.sx))); // mává rukama nad hlavou
-  }, dispose(){ scene.remove(g); skin.dispose(); } });
-  pupils.forEach(p => p.userData.x0 = p.position.x);
+  }, dispose(){ outer.parent?.remove(outer); skin.dispose(); } };
+}
+function spawnMonster(wordPos){
+  const vp = viewPos().clone(), mon = buildMonster(), g = mon.g;
+  // pozice: kousek před slovem směrem k hráči a pod ním, ať je vidět i opravené slovo nad ním
+  const base = wordPos.clone().lerp(vp, 0.3); base.y = Math.max(0.9, base.y - 1.35);
+  g.position.copy(base); g.lookAt(vp.x, base.y, vp.z); g.scale.setScalar(0.001);
+  scene.add(g);
+  effects.push({ t: 0, dur: 2.0, update(dt, k){
+    g.scale.setScalar(k < 0.15 ? easeOutBack(k/0.15) : k > 0.82 ? Math.max(0.001, 1 - (k-0.82)/0.18) : 1);
+    mon.animate(this.t);
+  }, dispose(){ mon.dispose(); } });
 }
 function easeOutBack(x){ const c1 = 1.70158, c3 = c1 + 1; return 1 + c3*Math.pow(x-1, 3) + c1*Math.pow(x-1, 2); }
 
@@ -957,6 +988,7 @@ const HAND_COLOR = { right: 0x3dff7a, left: 0xff4d4d };
 
 function shoot(hand, origin, dir, haptic){
   audio();
+  if (mode === 'bludiste' && !panel.visible){ if (state === 'playing') mzSwing(); return; }   // v bludišti klik / klepnutí = seknutí mečem
   sfx.shot(hand);
   haptic?.(0.4, 40);
   raycaster.set(origin, dir); raycaster.far = 60;
@@ -1036,14 +1068,14 @@ for (let i=0;i<2;i++){
   c.addEventListener('disconnected', () => { if (c.userData.gun){ c.remove(c.userData.gun); c.userData.gun = null; } c.userData.source = null; });
   c.addEventListener('selectstart', () => {
     if (!c.userData.source) return;
-    if (mode === 'mece' && !panel.visible) return;   // s meči se nestřílí, jen se kliká v menu
+    if ((mode === 'mece' || mode === 'bludiste') && !panel.visible) return;   // s meči a v bludišti se nestřílí, jen se kliká v menu
     const o = new THREE.Vector3(), q = new THREE.Quaternion();
     c.getWorldPosition(o); c.getWorldQuaternion(q);
     const d = new THREE.Vector3(0,0,-1).applyQuaternion(q);
     const act = c.userData.source.gamepad?.hapticActuators?.[0];
     shoot(c.userData.hand, o, d, act ? (v, ms) => { try { act.pulse(v, ms); } catch {} } : null);
   });
-  scene.add(c); controllers.push(c);
+  dolly.add(c); controllers.push(c);
 }
 
 /* ================= REŽIM MEČE =================
@@ -1153,7 +1185,7 @@ for (let i=0;i<2;i++){
       (v, ms) => { try { act()?.pulse(v, ms); } catch {} });
   });
   gr.addEventListener('disconnected', () => { if (gr.userData.rig){ gr.remove(gr.userData.rig.obj); rigs.splice(rigs.indexOf(gr.userData.rig), 1); gr.userData.rig = null; } });
-  scene.add(gr);
+  dolly.add(gr);
 }
 const mouseHeld = { left: false, right: false };
 const deskRigs = ['left', 'right'].map(hand => {
@@ -1161,13 +1193,19 @@ const deskRigs = ['left', 'right'].map(hand => {
   return makeRig(hand, obj, () => !renderer.xr.isPresenting && mode === 'mece' && !panel.visible && mouseHeld[hand], null);
 });
 function updateDeskSwords(){
+  const cq = camera.getWorldQuaternion(new THREE.Quaternion()), cp = camera.getWorldPosition(new THREE.Vector3());
+  const maze = mode === 'bludiste' && mz.active && state === 'playing';
   for (const r of deskRigs){
-    const show = mode === 'mece' && !renderer.xr.isPresenting; r.obj.visible = show; if (!show) continue;
+    const show = !renderer.xr.isPresenting && (mode === 'mece' || (maze && r.hand === 'right')); r.obj.visible = show; if (!show) continue;
     const s = r.hand === 'right' ? 1 : -1;
-    const anchor = new THREE.Vector3(s*0.28, -0.38, -0.25).applyQuaternion(camera.quaternion).add(camera.position);
+    const anchor = new THREE.Vector3(s*0.28, -0.38, -0.25).applyQuaternion(cq).add(cp);
     let target;
-    if (mouseHeld[r.hand]){ raycaster.setFromCamera(mouse, camera); target = raycaster.ray.origin.clone().addScaledVector(raycaster.ray.direction, 1.25); }
-    else target = new THREE.Vector3(s*1.0, -0.2, -0.6).applyQuaternion(camera.quaternion).add(camera.position);
+    if (maze){   // bludiště: meč v pravé ruce, seknutí zprava doleva šikmo dolů
+      const k = mz.swing > 0 ? 1 - mz.swing/MZ_SWING : 0, a = k > 0 ? Math.sin(k*Math.PI) : 0, sw = k > 0 ? 1.2 - k*2.4 : 1.0;
+      target = new THREE.Vector3(sw, 0.1 + (k > 0 ? 0.4 - k*0.9 : -0.3), -0.6 - a*0.6).applyQuaternion(cq).add(cp);
+    }
+    else if (mouseHeld[r.hand]){ raycaster.setFromCamera(mouse, camera); target = raycaster.ray.origin.clone().addScaledVector(raycaster.ray.direction, 1.25); }
+    else target = new THREE.Vector3(s*1.0, -0.2, -0.6).applyQuaternion(cq).add(cp);
     r.obj.position.copy(anchor); r.obj.lookAt(anchor.clone().multiplyScalar(2).sub(target)); // lookAt míří osou +Z, čepel je na −Z
   }
 }
@@ -1176,7 +1214,7 @@ function updateDeskSwords(){
 const _B = new THREE.Vector3(), _T = new THREE.Vector3();
 function updateSwords(dt){
   for (const r of rigs){
-    if (!deskRigs.includes(r)) r.obj.visible = mode === 'mece';   // meče v rukou (v headsetu)
+    if (!deskRigs.includes(r)) r.obj.visible = mode === 'mece' || (mode === 'bludiste' && !panel.visible);   // meče v rukou (v headsetu)
     if (!r.active()){ r.has = false; continue; }
     _B.set(0, 0, -BLADE_START); _T.set(0, 0, -BLADE_START - BLADE_LEN);
     r.obj.localToWorld(_B); r.obj.localToWorld(_T); track.worldToLocal(_B); track.worldToLocal(_T);
@@ -1239,6 +1277,430 @@ function splitWord(b, horizontalCut, right){
   }, dispose(){ for (const hv of halves){ track.remove(hv.m); hv.m.geometry.dispose(); hv.m.material.dispose(); } tex.dispose(); } });
 }
 
+/* ================= REŽIM BLUDIŠTĚ =================
+   Hráč chodí neonovým bludištěm z políček MZ_C × MZ_C metrů. Na každé křižovatce (tvar T) visí na zdi před ním
+   šipka doleva a šipka doprava, u každé jedno slovo: jedno napsané správně, druhé špatně. Správná cesta vede
+   k další křižovatce, špatná do slepé uličky, kde čeká příšera a honí hráče zpátky ke křižovatce.
+   Bludiště se staví průběžně před hráčem (správná cesta vede vždy zhruba "na sever", takže je pořád kam stavět)
+   a za ním se uklízí. Za správnou volbou se cesta zavře modrou branou, špatná se po útěku zavře červenou.
+   Proti nevolnosti ve VR: stálá rychlost bez zrychlování a houpání, při chůzi se zúží zorné pole (viněta),
+   pravou páčkou se otáčí po 30° skocích. */
+const MZ_C = 4, MZ_T = 0.2, MZ_H = 2.6, MZ_R = 0.3;   // políčko, tloušťka a výška zdi, poloměr hráče (m)
+const DIRX = [0, 1, 0, -1], DIRZ = [-1, 0, 1, 0];     // 0 = sever (−z), 1 = východ, 2 = jih, 3 = západ
+const MZ_SPEED_VR = 2.2, MZ_SPEED_PC = 3.0, MZ_TURN_PC = 1.9, MZ_SNAP = Math.PI/6;
+const MON_SPEED0 = 1.5, MON_SPEED1 = 2.0, MON_CATCH = 0.9, MON_Y = 0.95, MON_SCALE = 0.75;
+const MON_HIT_R = 0.75, MZ_SWING = 0.3, MZ_REACH = 2.6;   // poloměr zásahu příšery; seknutí na PC/tabletu: délka a dosah
+const mz = { active: false, cells: new Map(), segs: [], juncs: [], cur: 0, pending: null, pendingDir: 0, walls: [],
+  monster: null, swing: 0, signY: 1.5, snapArmed: true, vig: 0, fade: null, root: new THREE.Group() };
+scene.add(mz.root);
+const mzKey = (x, z) => x + ',' + z;
+const dirYaw = d => Math.atan2(-DIRX[d], -DIRZ[d]);   // natočení (kamera / cedule), aby hleděla směrem d
+const Y_AXIS = new THREE.Vector3(0, 1, 0);
+
+const MZ_MAT = (() => {
+  const tex = (draw) => { const c = document.createElement('canvas'); c.width = c.height = 256; draw(c.getContext('2d'));
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t; };
+  const floor = tex(g => { g.fillStyle = '#0a1030'; g.fillRect(0, 0, 256, 256);
+    g.strokeStyle = 'rgba(70,120,255,0.6)'; g.lineWidth = 5; g.strokeRect(2, 2, 252, 252);
+    g.strokeStyle = 'rgba(70,120,255,0.2)'; g.lineWidth = 2; g.beginPath(); g.moveTo(128, 0); g.lineTo(128, 256); g.moveTo(0, 128); g.lineTo(256, 128); g.stroke(); });
+  const wall = tex(g => { const gr = g.createLinearGradient(0, 0, 0, 256); gr.addColorStop(0, '#141c48'); gr.addColorStop(1, '#2a3b85');
+    g.fillStyle = gr; g.fillRect(0, 0, 256, 256); g.fillStyle = 'rgba(130,170,255,0.28)'; g.fillRect(0, 150, 256, 6); g.fillRect(126, 0, 4, 256); });
+  return {
+    floor: new THREE.MeshStandardMaterial({ map: floor, roughness: 0.9 }),
+    wall: new THREE.MeshStandardMaterial({ map: wall, roughness: 0.85, emissive: 0x0a1235 }),
+    trim: new THREE.MeshBasicMaterial({ color: 0x33ddff }),
+    gateBad: new THREE.MeshBasicMaterial({ color: 0xff3344, transparent: true, opacity: 0.38, side: THREE.DoubleSide, depthWrite: false }),
+    gateOne: new THREE.MeshBasicMaterial({ color: 0x3d7bff, transparent: true, opacity: 0.22, side: THREE.DoubleSide, depthWrite: false }),
+  };
+})();
+// spojí víc geometrií (zdi jednoho kusu bludiště) do jedné, ať má Quest málo volání kreslení
+function mergeGeos(geos){
+  const parts = geos.map(g => { const n = g.index ? g.toNonIndexed() : g; if (n !== g) g.dispose(); return n; });
+  const count = parts.reduce((s, g) => s + g.attributes.position.count, 0);
+  const pos = new Float32Array(count*3), nor = new Float32Array(count*3), uv = new Float32Array(count*2); let o = 0;
+  for (const g of parts){ pos.set(g.attributes.position.array, o*3); nor.set(g.attributes.normal.array, o*3); uv.set(g.attributes.uv.array, o*2);
+    o += g.attributes.position.count; g.dispose(); }
+  const m = new THREE.BufferGeometry();
+  m.setAttribute('position', new THREE.BufferAttribute(pos, 3)); m.setAttribute('normal', new THREE.BufferAttribute(nor, 3)); m.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+  return m;
+}
+
+/* ---- mřížka a stavba ---- */
+function mzCell(x, z){ const k = mzKey(x, z); let c = mz.cells.get(k); if (!c){ c = { x, z, open: [false, false, false, false] }; mz.cells.set(k, c); } return c; }
+function mzLink(a, b){ for (let d = 0; d < 4; d++) if (a.x + DIRX[d] === b.x && a.z + DIRZ[d] === b.z){ a.open[d] = true; b.open[(d+2)%4] = true; return; } }
+function mzWalk(x, z, dir, n){ const out = []; for (let i = 0; i < n; i++){ x += DIRX[dir]; z += DIRZ[dir]; out.push([x, z]); } return out; }
+function mzFree(list){ const seen = new Set(); for (const [x, z] of list){ const k = mzKey(x, z); if (mz.cells.has(k) || seen.has(k)) return false; seen.add(k); } return true; }
+function mzChain(prev, coords){ const out = []; for (const [x, z] of coords){ const c = mzCell(x, z); mzLink(prev, c); out.push(c); prev = c; } return out; }
+const mzCenter = (c, y = 0) => new THREE.Vector3(c.x*MZ_C, y, c.z*MZ_C);
+
+// Postaví podlahu a zdi pro políčka (jejich průchody už musí být známé). Každé políčko má vlastní zdi zapuštěné
+// dovnitř, takže dvě sousední nepropojená políčka mají zeď dvojitou a nic nebliká.
+function mzBuildSeg(cells, j){
+  const seg = { j, group: new THREE.Group(), walls: [], geos: [], extra: [] };
+  const C = MZ_C, T = MZ_T, H = MZ_H, wallG = [], trimG = [], floorG = [];
+  for (const c of cells){
+    const X = c.x*C, Z = c.z*C;
+    floorG.push(new THREE.PlaneGeometry(C, C).rotateX(-Math.PI/2).translate(X, 0, Z));
+    for (let d = 0; d < 4; d++){
+      if (c.open[d]) continue;
+      const ns = d % 2 === 0, cx = X + DIRX[d]*(C/2 - T/2), cz = Z + DIRZ[d]*(C/2 - T/2), sx = ns ? C : T, sz = ns ? T : C;
+      wallG.push(new THREE.BoxGeometry(sx, H, sz).translate(cx, H/2, cz));
+      trimG.push(new THREE.BoxGeometry(sx + 0.02, 0.05, sz + 0.02).translate(cx, H, cz));          // svítící horní hrana
+      const ix = X + DIRX[d]*(C/2 - T - 0.006), iz = Z + DIRZ[d]*(C/2 - T - 0.006);
+      trimG.push(new THREE.BoxGeometry(ns ? C : 0.01, 0.04, ns ? 0.01 : C).translate(ix, 0.08, iz)); // lišta u podlahy
+      seg.walls.push({ x0: cx - sx/2, x1: cx + sx/2, z0: cz - sz/2, z1: cz + sz/2, seg });
+    }
+  }
+  for (const [geos, mat] of [[floorG, MZ_MAT.floor], [wallG, MZ_MAT.wall], [trimG, MZ_MAT.trim]]){
+    if (!geos.length) continue;
+    const m = new THREE.Mesh(mergeGeos(geos), mat); seg.group.add(m); seg.geos.push(m.geometry);
+  }
+  mz.root.add(seg.group); mz.segs.push(seg); mz.walls.push(...seg.walls);
+  return seg;
+}
+function mzDisposeSeg(seg){
+  mz.root.remove(seg.group); for (const g of seg.geos) g.dispose(); for (const f of seg.extra) f();
+  mz.walls = mz.walls.filter(w => w.seg !== seg); mz.segs.splice(mz.segs.indexOf(seg), 1);
+}
+
+// Cedule se šipkou a slovem; draw(tone) ji umí přebarvit (neutral | good | bad).
+function makeSign(text, side, tone, maxW){
+  const px = 96, f = `bold ${px}px ${FONT}`, c = document.createElement('canvas'), g = c.getContext('2d'); g.font = f;
+  const tw = Math.ceil(g.measureText(text).width), aw = px*1.2, pad = px*0.4;
+  c.width = Math.ceil(pad*3 + aw + tw); c.height = Math.round(px*1.5);
+  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4;
+  function draw(tone){
+    const col = { neutral: ['rgba(10,18,46,0.95)', '#7fd4ff', '#ffd23f'], good: ['rgba(8,60,28,0.96)', '#5dff8a', '#5dff8a'], bad: ['rgba(70,10,16,0.96)', '#ff6b6b', '#ff6b6b'] }[tone];
+    g.clearRect(0, 0, c.width, c.height);
+    roundRect(g, 5, 5, c.width-10, c.height-10, px*0.3); g.fillStyle = col[0]; g.fill(); g.lineWidth = 8; g.strokeStyle = col[1]; g.stroke();
+    const ay = c.height/2, s = side === 'left' ? -1 : 1, mid = side === 'left' ? pad + aw/2 : c.width - pad - aw/2;
+    const tip = mid + s*aw/2, back = mid - s*aw/2, neck = mid + s*aw*0.05;
+    g.fillStyle = col[2]; g.beginPath();
+    g.moveTo(tip, ay); g.lineTo(neck, ay - px*0.42); g.lineTo(neck, ay - px*0.16); g.lineTo(back, ay - px*0.16);
+    g.lineTo(back, ay + px*0.16); g.lineTo(neck, ay + px*0.16); g.lineTo(neck, ay + px*0.42); g.closePath(); g.fill();
+    g.font = f; g.fillStyle = '#fff'; g.textBaseline = 'middle'; g.textAlign = 'center';
+    g.fillText(text, side === 'left' ? pad*2 + aw + tw/2 : pad + tw/2, ay + px*0.04);
+    tex.needsUpdate = true;
+  }
+  draw(tone);
+  let h = 0.55, w = h*c.width/c.height; if (w > maxW){ h *= maxW/w; w = maxW; }
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map: tex, transparent: true, fog: false }));
+  return { mesh, w, h, draw };
+}
+
+// Další křižovatka z čekajícího políčka P (hráč na něj přijde směrem h): vlevo a vpravo po dvou políčkách
+// a zatáčka, takže od křižovatky obě cesty vypadají stejně. Správná pak pokračuje k další křižovatce,
+// špatná končí po 1–2 políčkách slepou uličkou.
+function mzGenNext(){
+  const P = mz.pending, h = mz.pendingDir, L = (h+3)%4, R = (h+1)%4;
+  for (let attempt = 0; attempt < 40; attempt++){
+    let cDir = Math.random() < 0.5 ? L : R; if (cDir === 2) cDir = cDir === L ? R : L;   // správně nikdy na jih
+    const wDir = cDir === L ? R : L;
+    const turns = [(cDir+3)%4, (cDir+1)%4].filter(d => d !== 2), cTurn = turns[Math.random()*turns.length|0];
+    const k = 1 + (Math.random()*2|0);
+    const ca = mzWalk(P.x, P.z, cDir, 2), cb = mzWalk(ca[1][0], ca[1][1], cTurn, k + 1);
+    const cCoords = [...ca, ...cb.slice(0, k)], nj = cb[k];
+    const straight = attempt >= 30;   // když se nic nevejde, slepá ulička bez zatáčky
+    const wTurn = straight ? wDir : [(wDir+3)%4, (wDir+1)%4][Math.random()*2|0], m = straight ? 1 : 1 + (Math.random()*2|0);
+    const wa = mzWalk(P.x, P.z, wDir, 2), wCoords = [...wa, ...mzWalk(wa[1][0], wa[1][1], wTurn, m)];
+    const room = [...mzWalk(nj[0], nj[1], (cTurn+3)%4, 1), ...mzWalk(nj[0], nj[1], (cTurn+1)%4, 1)];   // místo pro další křižovatku
+    if (!mzFree([...cCoords, nj, ...wCoords, ...room])) continue;
+    return mzMakeJunction(P, h, cDir, wDir, cCoords, wCoords, nj, cTurn);
+  }
+  // nic se nevešlo: kus rovné chodby dál a zkusit to znovu
+  const cells = mzChain(P, mzWalk(P.x, P.z, h, 2));
+  mzBuildSeg([P, cells[0]], mz.juncs.length - 0.5);
+  mz.pending = cells[1];
+  return null;
+}
+function mzMakeJunction(P, h, cDir, wDir, cCoords, wCoords, njc, nh){
+  const cPath = mzChain(P, cCoords), wPath = mzChain(P, wCoords);
+  const nj = mzCell(njc[0], njc[1]); mzLink(cPath[cPath.length-1], nj);
+  const J = { i: mz.juncs.length, cell: P, h, cDir, wDir, cPath, wPath, info: nextWord(), status: 'open', wasWrong: false };
+  mz.juncs.push(J);
+  const seg = J.seg = mzBuildSeg([P, ...cPath, ...wPath], J.i);
+  // cedule na zdi naproti příchodu: horní ukazuje doleva, dolní doprava
+  const face = mzCenter(P).addScaledVector(new THREE.Vector3(DIRX[h], 0, DIRZ[h]), MZ_C/2 - MZ_T - 0.03);
+  const L = (h+3)%4, left = new THREE.Vector3(DIRX[L], 0, DIRZ[L]), maxW = MZ_C - 2*MZ_T - 0.3;
+  for (const dir of [cDir, wDir]){
+    const isLeft = dir === L, correct = dir === cDir;
+    const s = makeSign(correct ? J.info.correct : J.info.wrong, isLeft ? 'left' : 'right', practice ? (correct ? 'good' : 'bad') : 'neutral', maxW);
+    s.mesh.position.copy(face).addScaledVector(left, (isLeft ? 1 : -1)*(maxW/2 - s.w/2));
+    s.mesh.position.y = mz.signY + (isLeft ? 0.36 : -0.36);
+    s.mesh.rotation.y = dirYaw(h);   // rovina s natočením dirYaw(d) má líc proti směru d, tedy k hráči
+    seg.group.add(s.mesh); seg.extra.push(() => disposeMesh(s.mesh));
+    J[correct ? 'signC' : 'signW'] = s;
+  }
+  mz.pending = nj; mz.pendingDir = nh;
+  return J;
+}
+// Brána v průchodu z křižovatky směrem dir: 'bad' = červená se špatným slovem, 'one' = modrá za správnou volbou.
+function mzGate(J, dir, kind){
+  const C = MZ_C, ns = dir % 2 === 0, p = mzCenter(J.cell).addScaledVector(new THREE.Vector3(DIRX[dir], 0, DIRZ[dir]), C/2);
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(C - 2*MZ_T, MZ_H), kind === 'bad' ? MZ_MAT.gateBad : MZ_MAT.gateOne);
+  mesh.position.set(p.x, MZ_H/2, p.z); mesh.rotation.y = ns ? 0 : Math.PI/2;
+  J.seg.group.add(mesh); J.seg.extra.push(() => mesh.geometry.dispose());
+  if (kind === 'bad'){
+    const lab = makeLabel(`✘ ${J.info.wrong}`, { h: 0.38, color: '#fff', bg: 'rgba(120,10,20,0.92)', border: '#ff6b6b' });
+    const s = Math.min(1, (C - 2*MZ_T - 0.4)/lab.userData.w); lab.scale.setScalar(s); lab.material.opacity = 1;
+    lab.position.set(p.x - DIRX[dir]*0.06, mz.signY, p.z - DIRZ[dir]*0.06); lab.rotation.y = dirYaw(dir);
+    J.seg.group.add(lab); J.seg.extra.push(() => disposeMesh(lab));
+  }
+  const w = ns ? { x0: p.x - C/2, x1: p.x + C/2, z0: p.z - 0.05, z1: p.z + 0.05 } : { x0: p.x - 0.05, x1: p.x + 0.05, z0: p.z - C/2, z1: p.z + C/2 };
+  w.seg = J.seg; J.seg.walls.push(w); mz.walls.push(w);
+}
+function mzEnsure(){ for (let n = 0; n < 30 && mz.juncs.length < mz.cur + 3; n++) mzGenNext(); }
+function mzCleanup(){ for (const s of [...mz.segs]) if (s.j < mz.cur - 2) mzDisposeSeg(s); }
+
+/* ---- hráč: pozice, natočení, srážky se zdmi ---- */
+const _hp = new THREE.Vector3();
+function mzHead(){ return camera.getWorldPosition(_hp); }
+function mzRotateAround(p, a){   // otočí hráče kolem bodu p (hlavy) o úhel a
+  const off = dolly.position.clone().sub(p).applyAxisAngle(Y_AXIS, a);
+  dolly.position.set(p.x + off.x, 0, p.z + off.z); dolly.rotation.y += a; dolly.updateMatrixWorld(true);
+}
+function mzPlace(x, z, toYaw){   // postaví hráče (hlavu) na x, z a natočí ho
+  if (renderer.xr.isPresenting){
+    const head = mzHead().clone(), d = camera.getWorldDirection(new THREE.Vector3());
+    mzRotateAround(head, toYaw - Math.atan2(-d.x, -d.z));
+    const h2 = mzHead(); dolly.position.x += x - h2.x; dolly.position.z += z - h2.z; dolly.updateMatrixWorld(true);
+  } else { dolly.position.set(x, 0, z); dolly.rotation.set(0, 0, 0); yaw = toYaw; pitch = 0; camera.rotation.set(0, yaw, 0, 'YXZ'); dolly.updateMatrixWorld(true); }
+}
+function mzResolve(p){   // vytlačí kruh hráče (poloměr MZ_R) ze zdí
+  const r = MZ_R;
+  for (let it = 0; it < 3; it++){
+    let moved = false;
+    for (const w of mz.walls){
+      if (p.x < w.x0 - 1 || p.x > w.x1 + 1 || p.z < w.z0 - 1 || p.z > w.z1 + 1) continue;
+      const cx = Math.max(w.x0, Math.min(p.x, w.x1)), cz = Math.max(w.z0, Math.min(p.z, w.z1));
+      const dx = p.x - cx, dz = p.z - cz, d2 = dx*dx + dz*dz;
+      if (d2 >= r*r) continue;
+      if (d2 > 1e-10){ const d = Math.sqrt(d2), k = (r - d)/d; p.x += dx*k; p.z += dz*k; }
+      else { const o = [[w.x0 - r - p.x, 0], [w.x1 + r - p.x, 0], [0, w.z0 - r - p.z], [0, w.z1 + r - p.z]].sort((a, b) => Math.abs(a[0]+a[1]) - Math.abs(b[0]+b[1]))[0];
+        p.x += o[0]; p.z += o[1]; }
+      moved = true;
+    }
+    if (!moved) break;
+  }
+  return p;
+}
+function mzHaptic(v, ms){ for (const c of controllers){ const a = c.userData.source?.gamepad?.hapticActuators?.[0]; try { a?.pulse(v, ms); } catch {} } }
+
+// Viněta (zúžení zorného pole při chůzi ve VR) a zatmění (když hráče chytí příšera): obojí visí před kamerou.
+function cameraOverlay(z, order, draw){
+  const c = document.createElement('canvas'); c.width = c.height = 256; draw(c.getContext('2d'));
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 1.2), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(c), transparent: true, opacity: 0, depthTest: false, depthWrite: false, fog: false }));
+  m.position.z = z; m.renderOrder = order; m.visible = false; camera.add(m); return m;
+}
+const vignette = cameraOverlay(-0.2, 998, g => {   // průhledný střed ~36°, úplná tma od ~56° od středu pohledu
+  const gr = g.createRadialGradient(128, 128, 128*0.24, 128, 128, 128*0.5); gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(1, 'rgba(0,0,0,1)');
+  g.fillStyle = gr; g.fillRect(0, 0, 256, 256); });
+const fader = cameraOverlay(-0.15, 1000, g => { g.fillStyle = '#000'; g.fillRect(0, 0, 256, 256); });
+
+/* ---- průběh hry ---- */
+function startMaze(){
+  leaveMaze();
+  mz.active = true; decor.visible = false; scene.fog.density = 0.05;
+  mz.signY = renderer.xr.isPresenting ? Math.min(1.8, Math.max(1.1, mzHead().y)) : 1.6;
+  const s0 = mzCell(0, 0), start = mzChain(s0, mzWalk(0, 0, 0, 3));   // začátek: chodba na sever, za zády zeď
+  mzBuildSeg([s0, start[0], start[1]], -0.5);
+  mz.pending = start[2]; mz.pendingDir = 0; mz.cur = 0;
+  mzEnsure();
+  mzPlace(0, 0.8, 0);
+}
+function leaveMaze(){
+  mzRemoveMonster();
+  for (const s of [...mz.segs]) mzDisposeSeg(s);
+  mz.cells.clear(); mz.juncs.length = 0; mz.walls = []; mz.fade = null; mz.vig = 0;
+  vignette.visible = fader.visible = false;
+  if (mz.active){ dolly.position.set(0, 0, 0); dolly.rotation.set(0, 0, 0); stars.position.set(0, 0, 0); }
+  mz.active = false; decor.visible = true; scene.fog.density = 0.025;
+}
+function inFront(dist, dy = 0){   // bod před hráčem (pro plovoucí texty)
+  const d = camera.getWorldDirection(new THREE.Vector3()); d.y = 0; if (d.lengthSq() < 1e-6) d.set(0, 0, -1); d.normalize();
+  const p = mzHead().clone().addScaledVector(d, dist); p.y += dy; return p;
+}
+function mzWrong(J){   // hráč vešel do špatné cesty
+  J.status = 'wrong'; J.wasWrong = true;
+  logDuel(J.info.wrong, 'R');
+  score += SCORE_BAD; badCount++;
+  sfx.bad(); mzHaptic(0.6, 150);
+  mzSpawnMonster(J);
+}
+function mzRight(J){   // hráč vešel do správné cesty
+  if (!J.wasWrong){
+    logDuel(J.info.correct, 'R');
+    score += SCORE_GOOD; goodCount++;
+    sfx.good(); mzHaptic(0.8, 80); J.signC.draw('good');
+    floatText(practice ? '✔' : `+${SCORE_GOOD}`, inFront(2.5, 0.1), practice ? PRACTICE_COLOR.good : '#ffe34d');
+  } else sfx.click();
+  J.status = 'done';
+  mzGate(J, J.cDir, 'one');
+  mz.cur = J.i + 1;
+  mzEnsure(); mzCleanup();
+}
+function mzEscape(J){   // hráč utekl zpátky na křižovatku (nebo ho příšera chytila a vrátila)
+  J.status = 'escaped';
+  mzGate(J, J.wDir, 'bad');
+  J.signW.draw('bad'); J.signC.draw('good');
+  if (J.slain) return;   // správné slovo už vyletělo z příšery
+  const ahead = new THREE.Vector3(DIRX[J.h], 0, DIRZ[J.h]);   // nad cedulemi, ale kousek od zdi, ať se text při natáčení nezanoří
+  floatText(`správně je: ${J.info.correct}`, mzCenter(J.cell, mz.signY + 0.75).addScaledVector(ahead, MZ_C/2 - 0.8), '#ffffff', 2.6, 0.4);
+  if (mz.monster){ mz.monster.mode = 'leave'; mz.monster.lt = 0; }
+}
+function mzCaught(J){
+  sfx.scream(); sfx.bad(); mzHaptic(1.0, 400);
+  mz.fade = { t: 0, done: false, mid(){
+    mzRemoveMonster();
+    const c = mzCenter(J.cell).addScaledVector(new THREE.Vector3(-DIRX[J.h], 0, -DIRZ[J.h]), 1.3);   // na křižovatku, kousek od cedulí
+    mzPlace(c.x, c.z, dirYaw(J.h));
+    mzEscape(J);
+  } };
+}
+/* ---- příšera ve slepé uličce ---- */
+function mzSpawnMonster(J){
+  mzRemoveMonster();
+  const pts = [...J.wPath].reverse().map(c => mzCenter(c));   // od konce slepé uličky ke křižovatce
+  pts.push(mzCenter(J.cell).addScaledVector(new THREE.Vector3(DIRX[J.wDir], 0, DIRZ[J.wDir]), MZ_C/2));
+  const cum = [0]; for (let i = 1; i < pts.length; i++) cum.push(cum[i-1] + pts[i].distanceTo(pts[i-1]));
+  const mon = buildMonster(); mon.g.position.set(pts[0].x, MON_Y, pts[0].z); mon.g.scale.setScalar(0.001); mz.root.add(mon.g);
+  mz.monster = { ...mon, J, pts, cum, len: cum[cum.length-1], s: 0, t: 0, mode: 'chase', roar: 0, lt: 0 };
+  sfx.scream();
+}
+function mzRemoveMonster(){ if (mz.monster){ mz.monster.dispose(); mz.monster = null; } }
+function mzAt(M, s){
+  for (let i = 1; i < M.pts.length; i++) if (s <= M.cum[i] || i === M.pts.length - 1){
+    const k = (s - M.cum[i-1])/((M.cum[i] - M.cum[i-1]) || 1); return M.pts[i-1].clone().lerp(M.pts[i], Math.max(0, Math.min(1, k))); }
+  return M.pts[0].clone();
+}
+function mzProject(M, p){   // jak daleko po cestě příšery je hráč
+  let best = Infinity, bs = 0;
+  for (let i = 1; i < M.pts.length; i++){
+    const a = M.pts[i-1], b = M.pts[i], abx = b.x - a.x, abz = b.z - a.z, L2 = abx*abx + abz*abz || 1;
+    const k = Math.max(0, Math.min(1, ((p.x - a.x)*abx + (p.z - a.z)*abz)/L2)), qx = a.x + abx*k, qz = a.z + abz*k;
+    const d = (p.x - qx)**2 + (p.z - qz)**2; if (d < best){ best = d; bs = M.cum[i-1] + k*Math.sqrt(L2); }
+  }
+  return bs;
+}
+function mzUpdateMonster(dt, p, active){
+  const M = mz.monster; if (!M) return;
+  M.t += dt;
+  if (M.mode === 'leave'){ M.lt += dt; if (M.lt > 1.4){ mzRemoveMonster(); return; } }
+  const k = M.mode === 'leave' ? Math.max(0.001, 1 - Math.max(0, M.lt - 1.0)/0.4) : Math.max(0.001, easeOutBack(Math.min(1, M.t/0.4)));
+  M.g.scale.setScalar(MON_SCALE*k);
+  if (active && M.mode === 'chase'){
+    if (M.t > 0.5){   // chvilku zařve, pak se rozběhne za hráčem (pomaleji než hráč, ale zrychluje)
+      const sp = MON_SPEED0 + (MON_SPEED1 - MON_SPEED0)*Math.min(1, (M.t - 0.5)/5), ds = mzProject(M, p) - M.s;
+      M.s = Math.max(0, Math.min(M.len - 0.5, M.s + Math.sign(ds)*Math.min(Math.abs(ds), sp*dt)));
+    }
+    if (M.t - M.roar > 2.8){ M.roar = M.t; sfx.scream(); }
+  }
+  const pos = mzAt(M, M.s); M.g.position.set(pos.x, MON_Y, pos.z); M.g.lookAt(p.x, MON_Y, p.z);
+  M.animate(M.t);
+  if (active && M.mode === 'chase' && M.t > 0.3 && renderer.xr.isPresenting && mzBladeHits(M)){ mzKill(M); return; }
+  if (active && M.mode === 'chase' && Math.hypot(p.x - pos.x, p.z - pos.z) < MON_CATCH) mzCaught(M.J);
+}
+
+// Příšeru jde zabít mečem: vybuchne a vyletí z ní správně napsané slovo. Pak se dítě vrátí na křižovatku.
+function mzKill(M){
+  const J = M.J, c = M.g.position.clone(); c.y = MON_Y + 0.2;
+  J.slain = true; M.mode = 'dead';
+  mzRemoveMonster();
+  sfx.slash('right'); sfx.good(); mzHaptic(0.9, 120);
+  burst(c, 0xff7ac8, 70, 2.5, { size: 0.07, ring: 3 }); burst(c, 0x5dff8a, 40, 1.6, { size: 0.06, ring: 2 });
+  J.signW.draw('bad'); J.signC.draw('good');
+  const lab = makeLabel(J.info.correct, { h: 0.55, color: PRACTICE_COLOR.good, bg: PRACTICE_COLOR.goodBg, border: PRACTICE_COLOR.good });
+  lab.position.copy(c); lab.scale.setScalar(0.2); mz.root.add(lab);
+  // slovo vyletí z příšery a zastaví se ~2,6 m před hráčem ve výšce očí, ať se dá přečíst; chvíli visí a pak zmizí
+  const head = mzHead().clone(), away = c.clone().sub(head).setY(0); if (away.lengthSq() < 1e-4) away.set(0, 0, -1); away.normalize();
+  const end = head.clone().addScaledVector(away, 2.6); end.y = head.y + 0.15;
+  effects.push({ t: 0, dur: 3.2, update(dt, k){
+    const e = 1 - Math.pow(1 - Math.min(1, k*2.2), 3);
+    lab.position.lerpVectors(c, end, e);
+    lab.scale.setScalar(0.2 + 0.8*easeOutBack(Math.min(1, k*3)));
+    lab.lookAt(viewPos()); lab.material.opacity = k > 0.8 ? (1 - k)/0.2 : 1;
+  }, dispose(){ mz.root.remove(lab); disposeMesh(lab); } });
+}
+function mzSwing(){   // seknutí na počítači / tabletu: zasáhne příšeru, když je blízko a zhruba před hráčem
+  if (mz.swing > 0) return;
+  mz.swing = MZ_SWING; sfx.slash('right');
+  const M = mz.monster; if (!M || M.mode !== 'chase' || M.t < 0.3) return;
+  const p = mzHead(), d = camera.getWorldDirection(new THREE.Vector3()); d.y = 0; d.normalize();
+  const to = M.g.position.clone().sub(p).setY(0), dist = to.length();
+  if (dist < MZ_REACH && to.normalize().dot(d) > 0.6) mzKill(M);
+}
+const _bA = new THREE.Vector3(), _bB = new THREE.Vector3(), _mc = new THREE.Vector3();
+function mzBladeHits(M){   // ve VR: čepel meče v ruce proti kouli příšery
+  _mc.copy(M.g.position); _mc.y += 0.15;
+  for (const r of rigs){
+    if (deskRigs.includes(r) || !r.obj.visible) continue;
+    _bA.set(0, 0, -BLADE_START); _bB.set(0, 0, -BLADE_START - BLADE_LEN); r.obj.localToWorld(_bA); r.obj.localToWorld(_bB);
+    const ab = _bB.clone().sub(_bA), k = Math.max(0, Math.min(1, _mc.clone().sub(_bA).dot(ab)/ab.lengthSq()));
+    if (_bA.clone().addScaledVector(ab, k).distanceTo(_mc) < MON_HIT_R){ r.haptic?.(1.0, 120); return true; }
+  }
+  return false;
+}
+function updateMaze(dt){
+  if (!mz.active) return;
+  stars.position.set(dolly.position.x, 0, dolly.position.z);
+  mz.swing = Math.max(0, mz.swing - dt);
+  if (state === 'paused') return;
+  if (mz.fade){   // zatmění: 0,3 s do tmy, přesun, chvilka tmy, rozsvícení
+    const f = mz.fade; f.t += dt;
+    if (!f.done && f.t >= 0.3){ f.done = true; f.mid(); }
+    fader.material.opacity = f.done ? Math.max(0, Math.min(1, 1 - (f.t - 0.55)/0.45)) : Math.min(1, f.t/0.3);
+    if (f.done && f.t > 1.0) mz.fade = null;
+  }
+  fader.visible = !!mz.fade;
+  const playing = state === 'playing' && !mz.fade, vr = renderer.xr.isPresenting;
+  let speed = 0;
+  if (playing){
+    let fwd = 0, side = 0, snap = 0;
+    if (vr){
+      for (const c of controllers){
+        const gp = c.userData.source?.gamepad; if (!gp) continue;
+        const four = gp.axes.length >= 4, ax = (four ? gp.axes[2] : gp.axes[0]) || 0, ay = (four ? gp.axes[3] : gp.axes[1]) || 0;
+        const dz = v => Math.abs(v) < 0.2 ? 0 : v;
+        if (c.userData.hand === 'left'){ fwd -= dz(ay); side += dz(ax); }
+        else {   // pravá páčka: do stran otáčení po skocích, dopředu / dozadu také chůze
+          if (Math.abs(ax) > 0.7 && mz.snapArmed){ snap = ax > 0 ? -MZ_SNAP : MZ_SNAP; mz.snapArmed = false; }
+          else if (Math.abs(ax) < 0.3) mz.snapArmed = true;
+          if (Math.abs(ay) > Math.abs(ax)) fwd -= dz(ay);
+        }
+      }
+    } else {
+      if (keys['w'] || keys['arrowup'] || padKeys.f) fwd += 1;
+      if (keys['s'] || keys['arrowdown'] || padKeys.b) fwd -= 1;
+      if (keys['q']) side -= 1;
+      if (keys['e']) side += 1;
+    }
+    const head = mzHead().clone();
+    if (snap) mzRotateAround(head, snap);
+    const d = camera.getWorldDirection(new THREE.Vector3()); d.y = 0; if (d.lengthSq() < 1e-6) d.set(0, 0, -1); d.normalize();
+    const mag = Math.hypot(fwd, side); if (mag > 1){ fwd /= mag; side /= mag; }
+    const v = (vr ? MZ_SPEED_VR : MZ_SPEED_PC)*dt;
+    // pohyb hlavy (páčka/klávesy + fyzická chůze v místnosti) se ořízne o zdi a rozdíl se přičte k dolly
+    const target = mzResolve(head.clone().addScaledVector(d, fwd*v).add(new THREE.Vector3(-d.z, 0, d.x).multiplyScalar(side*v)));
+    dolly.position.x += target.x - head.x; dolly.position.z += target.z - head.z;
+    speed = Math.min(1, Math.hypot(fwd, side));
+  }
+  // viněta jen v headsetu a jen při chůzi páčkou
+  mz.vig += ((vr && playing ? speed*0.92 : 0) - mz.vig)*Math.min(1, dt*10);
+  vignette.material.opacity = mz.vig; vignette.visible = mz.vig > 0.01;
+
+  const p = mzHead().clone();
+  mzUpdateMonster(dt, p, playing);
+  if (!playing) return;
+  const J = mz.juncs[mz.cur]; if (!J) return;
+  const X = J.cell.x*MZ_C, Z = J.cell.z*MZ_C, pcx = Math.round(p.x/MZ_C), pcz = Math.round(p.z/MZ_C);
+  const depth = dir => (p.x - X)*DIRX[dir] + (p.z - Z)*DIRZ[dir];
+  // do cesty se "vejde" až uprostřed jejího prvního políčka, nakouknutí za roh se nepočítá
+  const entered = (path, dir) => { const i = path.findIndex(c => c.x === pcx && c.z === pcz); return i > 0 || (i === 0 && depth(dir) >= 0.9*MZ_C); };
+  if (J.status === 'open' && entered(J.wPath, J.wDir)) mzWrong(J);
+  else if ((J.status === 'open' || J.status === 'escaped') && entered(J.cPath, J.cDir)) mzRight(J);
+  else if (J.status === 'wrong' && pcx === J.cell.x && pcz === J.cell.z && depth(J.wDir) < MZ_C/2 - 0.5) mzEscape(J);
+}
+
 /* ================= OVLÁDÁNÍ NA POČÍTAČI ================= */
 const mouse = new THREE.Vector2(0, 0); let mouseIn = false;
 let yaw = 0, pitch = 0; const keys = {};
@@ -1258,7 +1720,18 @@ function pointerHand(e){ return e.pointerType !== 'mouse' ? touchHand : e.button
 function updateTouchUi(){
   const show = usedTouch && !renderer.xr.isPresenting && state === 'playing';
   dotyk.style.display = show ? 'flex' : 'none';
-  if (show){ const guns = mode !== 'karty'; dOk.style.display = dBad.style.display = guns ? '' : 'none'; }
+  if (show){ const guns = mode === 'strelba' || mode === 'mece'; dOk.style.display = dBad.style.display = guns ? '' : 'none'; }
+  const showPad = show && mode === 'bludiste';
+  if (pad.style.display !== (showPad ? 'flex' : 'none')){ pad.style.display = showPad ? 'flex' : 'none'; if (!showPad) for (const k in padKeys) padKeys[k] = false; }
+}
+// Bludiště na tabletu: tlačítka se drží (▲▼ chůze, ◄► otáčení)
+const pad = document.getElementById('pad'), padKeys = { f: false, b: false, l: false, r: false };
+document.getElementById('pad-mec').addEventListener('pointerdown', e => { e.preventDefault(); audio(); if (state === 'playing') mzSwing(); });
+for (const b of pad.querySelectorAll('button[data-k]')){
+  const k = b.dataset.k, set = v => { padKeys[k] = v; b.classList.toggle('on', v); };
+  b.addEventListener('pointerdown', e => { e.preventDefault(); audio(); set(true); try { b.setPointerCapture(e.pointerId); } catch {} });
+  for (const ev of ['pointerup', 'pointercancel', 'lostpointercapture']) b.addEventListener(ev, () => set(false));
+  b.addEventListener('contextmenu', e => e.preventDefault());
 }
 const TAP_MOVE = 12;   // px, větší pohyb už je tažení
 renderer.domElement.addEventListener('pointermove', e => {
@@ -1295,7 +1768,7 @@ function desktopShoot(e){
   mouse.set(e.clientX/innerWidth*2-1, -(e.clientY/innerHeight)*2+1);
   raycaster.setFromCamera(mouse, camera);
   const hand = pointerHand(e);
-  const origin = camera.position.clone().add(new THREE.Vector3(hand==='right'?0.25:-0.25, -0.3, 0).applyQuaternion(camera.quaternion));
+  const origin = camera.getWorldPosition(new THREE.Vector3()).add(new THREE.Vector3(hand==='right'?0.25:-0.25, -0.3, 0).applyQuaternion(camera.getWorldQuaternion(new THREE.Quaternion())));
   // směr: od pistole k bodu, kam míří kurzor
   const target = raycaster.ray.origin.clone().addScaledVector(raycaster.ray.direction, 12);
   const pick = raycaster.intersectObjects([panel, ...words.filter(w=>w.phase==='live'||w.phase==='out').map(w=>w.mesh),
@@ -1306,10 +1779,17 @@ function desktopShoot(e){
 addEventListener('pointerup', e => { if (e.pointerType !== 'mouse') mouseHeld.left = mouseHeld.right = false; else mouseHeld[e.button === 2 ? 'right' : 'left'] = false; });
 addEventListener('blur', () => { mouseHeld.left = mouseHeld.right = false; });
 addEventListener('keydown', e => { keys[e.key.toLowerCase()] = true;
+  if (e.key === ' ' && mode === 'bludiste' && state === 'playing' && !e.repeat){ e.preventDefault(); audio(); mzSwing(); }
   if (e.key === 'Escape' || e.key.toLowerCase() === 'p'){ if (state === 'playing') pauseGame(); else if (state === 'paused') resumeGame(); } });
 addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
 function updateDesktop(dt){
   const s = 1.6*dt;
+  if (mz.active){   // bludiště: W/S chůze (řeší updateMaze), A/D a šipky do stran otáčí
+    if (keys['arrowleft'] || keys['a'] || padKeys.l) yaw += MZ_TURN_PC*dt;
+    if (keys['arrowright'] || keys['d'] || padKeys.r) yaw -= MZ_TURN_PC*dt;
+    camera.rotation.set(pitch, yaw, 0, 'YXZ');
+    return;
+  }
   if (keys['arrowleft'] || keys['a']) yaw += s;
   if (keys['arrowright'] || keys['d']) yaw -= s;
   if (keys['arrowup'] || keys['w']) pitch = Math.min(1.2, pitch + s);
@@ -1318,7 +1798,8 @@ function updateDesktop(dt){
 }
 
 /* ================= POMOCNÉ: POZICE HRÁČE ================= */
-function viewCamera(){ return renderer.xr.isPresenting ? renderer.xr.getCamera() : camera; }
+// I ve VR stačí "camera": three.js do ní každý snímek zkopíruje pózu hlavy (vůči dolly), takže světová pozice sedí i při chůzi.
+function viewCamera(){ return camera; }
 const _vp = new THREE.Vector3();
 function viewPos(){ return viewCamera().getWorldPosition(_vp); }
 
@@ -1345,7 +1826,7 @@ async function initVR(){
 initVR();
 
 /* ================= HLAVNÍ SMYČKA ================= */
-window.__vs = { words, blocks, cards, pauseGame, resumeGame, quitGame, rigs, track, camera, mouseHeld, setMode, setPractice, setDuel, setScoring, startGame, get practice(){ return practice; }, get duel(){ return duel; }, get duelAnswers(){ return duelAnswers; }, get duelResult(){ return duelResult; }, get mode(){ return mode; }, get state(){ return state; }, get score(){ return score; }, get good(){ return goodCount; }, get bad(){ return badCount; } }; // pro testování
+window.__vs = { mz, mzPlace, dolly, words, blocks, cards, pauseGame, resumeGame, quitGame, rigs, track, camera, mouseHeld, setMode, setPractice, setDuel, setScoring, startGame, get practice(){ return practice; }, get duel(){ return duel; }, get duelAnswers(){ return duelAnswers; }, get duelResult(){ return duelResult; }, get mode(){ return mode; }, get state(){ return state; }, get score(){ return score; }, get good(){ return goodCount; }, get bad(){ return badCount; } }; // pro testování
 track.visible = mode === 'mece';
 showPanel(drawMenu);
 const clock = new THREE.Clock();
@@ -1372,6 +1853,8 @@ renderer.setAnimationLoop(() => {
       }
     } else if (mode === 'karty'){
       if (spawnTimer <= 0){ spawnCard(); spawnTimer = 3.0 - progress*1.6; }   // 3 s → 1,4 s
+    } else if (mode === 'bludiste'){
+      // chůze, křižovatky a příšera: updateMaze() níže
     } else {
       const interval = 1.3 - progress*0.97;   // 1.3 s → 0.33 s
       if (spawnTimer <= 0){ spawnWord(); spawnTimer = interval; }
@@ -1409,6 +1892,9 @@ renderer.setAnimationLoop(() => {
     }
   }
 
+  // bludiště
+  updateMaze(dt);
+
   // karty (doplňovačka)
   if (state !== 'paused') updateCards(dt, vp);
   updateCardHover();
@@ -1426,8 +1912,9 @@ renderer.setAnimationLoop(() => {
   }
 
   // ukazatel na panelu + zvýraznění tlačítek (s meči je vidět jen paprsek v menu)
+  const noGun = mode === 'mece' || mode === 'bludiste';
   for (const c of controllers){ const gun = c.userData.gun; if (!gun) continue;
-    gun.visible = mode !== 'mece' || panel.visible; gun.userData.model.visible = mode !== 'mece'; }
+    gun.visible = !noGun || panel.visible; gun.userData.model.visible = !noGun; }
   let newHover = null;
   if (panel.visible){
     for (const c of controllers){

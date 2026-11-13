@@ -19,7 +19,7 @@ const DATA_DIR = process.env.DATA_DIR || './data';
 const CAS = Math.max(10, Number(process.env.SOUBOJ_CAS) || 300);
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || '';
 const STATIC_DIR = process.env.STATIC_DIR ? resolve(process.env.STATIC_DIR) : '';
-const MODES = ['strelba', 'mece', 'karty'];
+const MODES = ['strelba', 'mece', 'karty', 'bludiste'];
 const TOP_N = 5, KEEP_N = 100;              // ukazuje se 5, uchovává se 100 nejlepších jmen na režim
 const MIN_GAP_MS = 60;                       // odpověď dřív než 60 ms po předchozí se nezapočítá (ani oběma rukama to rychleji nejde)
 const MAX_RATE = 2.5;                        // víc správných odpovědí než 2,5 za sekundu se nezapočítá
@@ -75,6 +75,7 @@ function checkTicket(ticket, mode){
 /* ---- výpočet skóre z odpovědí ---- */
 // odpověď = [čas ve hře v ms, text, akce]; Střelnice/Meče: text = zobrazené slovo, akce 'R' (pravá = správně) / 'L';
 // Doplňovačka: text = správný tvar slova, akce = vystřelené písmeno.
+// Bludiště: text = slovo u cesty, kterou hráč na křižovatce zvolil, akce vždy 'R' (= „tohle je správně“).
 function evaluate(mode, answers, cas){
   if (!Array.isArray(answers)) return 'chybí odpovědi';
   if (answers.length > cas * MAX_ANSWERS_RATE + 5) return 'příliš mnoho odpovědí';
