@@ -25,6 +25,15 @@ configMapGenerator:
       - web/index.html
       - web/slova.js
       - web/three.module.min.js
+  - name: vrskola-portrety   # portréty do bludiště (~220 kB), zvlášť kvůli limitu 1 MiB na ConfigMapu
+    files:
+      - web/portrety/hus.jpg
+      - web/portrety/dobrovsky.jpg
+      - web/portrety/jungmann.jpg
+      - web/portrety/safarik.jpg
+      - web/portrety/palacky.jpg
+      - web/portrety/macha.jpg
+      - web/portrety/nemcova.jpg
   - name: vrskola-nginx
     files:
       - deploy/default.conf

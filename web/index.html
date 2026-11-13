@@ -1360,6 +1360,65 @@ const MZ_MAT = (() => {
     gateOne: new THREE.MeshBasicMaterial({ color: 0x3d7bff, transparent: true, opacity: 0.22, side: THREE.DoubleSide, depthWrite: false }),
   };
 })();
+/* ---- portréty velikánů češtiny na zdech (kresby Jana Vilímka, volné dílo; zdroje v portrety/ZDROJE.md) ---- */
+const PORTRETY = [
+  { f: 'hus',       n: 'Mistr Jan Hus',      y: 'asi 1370–1415', t: 'zavedl háčky a čárky' },
+  { f: 'dobrovsky', n: 'Josef Dobrovský',    y: '1753–1829',     t: 'první velká mluvnice češtiny' },
+  { f: 'jungmann',  n: 'Josef Jungmann',     y: '1773–1847',     t: 'Slovník česko-německý' },
+  { f: 'safarik',   n: 'Pavel Josef Šafařík', y: '1795–1861',    t: 'Slovanské starožitnosti' },
+  { f: 'palacky',   n: 'František Palacký',  y: '1798–1876',     t: 'Dějiny národu českého' },
+  { f: 'macha',     n: 'Karel Hynek Mácha',  y: '1810–1836',     t: 'básník, Máj' },
+  { f: 'nemcova',   n: 'Božena Němcová',     y: '1820–1862',     t: 'spisovatelka, Babička' },
+];
+const MZ_PORT = { list: [], bag: [], W: 0.8 };   // připravené portréty { mat, geo }, sáček pro losování bez opakování
+function makePortrait(p, img){
+  const W = 512, F = 44, iw = W - 2*F, ih = Math.round(iw * img.height / img.width), PH = 128, H = F + ih + 14 + PH + F;
+  const c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d');
+  // zlacený rám s lištami
+  const gr = g.createLinearGradient(0, 0, W, H); gr.addColorStop(0, '#8a6a22'); gr.addColorStop(0.35, '#f1d27a'); gr.addColorStop(0.6, '#a9822c'); gr.addColorStop(1, '#e4c46a');
+  g.fillStyle = gr; g.fillRect(0, 0, W, H);
+  g.lineWidth = 4; g.strokeStyle = 'rgba(60,40,8,0.7)'; g.strokeRect(2, 2, W-4, H-4); g.strokeRect(F*0.45, F*0.45, W - F*0.9, H - F*0.9);
+  g.strokeStyle = 'rgba(255,240,190,0.6)'; g.lineWidth = 2; g.strokeRect(F*0.45 + 4, F*0.45 + 4, W - F*0.9 - 8, H - F*0.9 - 8);
+  // tmavé paspartu, obraz
+  g.fillStyle = '#2a1f14'; g.fillRect(F - 6, F - 6, iw + 12, H - 2*F + 12);
+  g.drawImage(img, F, F, iw, ih);
+  // mosazná jmenovka
+  const py = F + ih + 14, pw = iw - 40, px = F + 20;
+  const pg = g.createLinearGradient(0, py, 0, py + PH - 8); pg.addColorStop(0, '#e9cf86'); pg.addColorStop(1, '#a8873a');
+  roundRect(g, px, py, pw, PH - 8, 10); g.fillStyle = pg; g.fill(); g.lineWidth = 3; g.strokeStyle = '#5a4210'; g.stroke();
+  g.fillStyle = '#2b1d05'; g.textAlign = 'center'; g.textBaseline = 'middle';
+  const fit = (txt, px0, wt) => { let s = px0; do { g.font = `${wt} ${s}px Georgia, "Times New Roman", serif`; s -= 2; } while (g.measureText(txt).width > pw - 24 && s > 12); };
+  fit(p.n, 40, 'bold'); g.fillText(p.n, W/2, py + 34);
+  fit(`${p.y} · ${p.t}`, 29, 'normal'); g.fillText(`${p.y} · ${p.t}`, W/2, py + 82);
+  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
+  const w = MZ_PORT.W;
+  return { mat: new THREE.MeshBasicMaterial({ map: tex, color: 0xd8d8d8 }), geo: new THREE.PlaneGeometry(w, w * H / W), h: w * H / W };
+}
+for (const p of PORTRETY){   // načíst na pozadí; když se obrázek nenačte, bludiště je prostě bez něj
+  const img = new Image();
+  img.onload = () => MZ_PORT.list.push(makePortrait(p, img));
+  img.src = 'portrety/' + p.f + '.jpg';
+}
+function mzNextPortrait(){
+  if (!MZ_PORT.list.length) return null;
+  if (!MZ_PORT.bag.length){ MZ_PORT.bag = [...MZ_PORT.list]; for (let i = MZ_PORT.bag.length - 1; i > 0; i--){ const k = Math.random()*(i+1)|0; [MZ_PORT.bag[i], MZ_PORT.bag[k]] = [MZ_PORT.bag[k], MZ_PORT.bag[i]]; } }
+  return MZ_PORT.bag.pop();
+}
+// pověsí 0–2 portréty na náhodné plné zdi kusu bludiště (ne na zeď s cedulemi na křižovatce)
+function mzHangPortraits(seg, cells, skipFirst){
+  const spots = [];
+  cells.forEach((c, i) => { if (i === 0 && skipFirst) return; for (let d = 0; d < 4; d++) if (!c.open[d]) spots.push([c, d]); });
+  let n = (Math.random() < 0.8 ? 1 : 0) + (cells.length > 3 && Math.random() < 0.35 ? 1 : 0);
+  while (n-- > 0 && spots.length){
+    const [c, d] = spots.splice(Math.random()*spots.length|0, 1)[0], P = mzNextPortrait(); if (!P) return;
+    const m = new THREE.Mesh(P.geo, P.mat), off = (Math.random() - 0.5) * 1.2, o = MZ_C/2 - MZ_T - 0.015;
+    // posun podél zdi: kolmo na směr d
+    m.position.set(c.x*MZ_C + DIRX[d]*o + DIRZ[d]*off, Math.max(P.h/2 + 0.5, mz.signY - 0.1), c.z*MZ_C + DIRZ[d]*o - DIRX[d]*off);
+    m.rotation.y = dirYaw(d);
+    seg.group.add(m); seg.portraits = (seg.portraits || 0) + 1;
+  }
+}
+
 // spojí víc geometrií (zdi jednoho kusu bludiště) do jedné, ať má Quest málo volání kreslení
 function mergeGeos(geos){
   const parts = geos.map(g => { const n = g.index ? g.toNonIndexed() : g; if (n !== g) g.dispose(); return n; });
@@ -1402,6 +1461,7 @@ function mzBuildSeg(cells, j){
     if (!geos.length) continue;
     const m = new THREE.Mesh(mergeGeos(geos), mat); seg.group.add(m); seg.geos.push(m.geometry);
   }
+  mzHangPortraits(seg, cells, Number.isInteger(j));   // na křižovatce (první políčko) visí cedule
   mz.root.add(seg.group); mz.segs.push(seg); mz.walls.push(...seg.walls);
   return seg;
 }
@@ -1900,7 +1960,7 @@ async function initVR(){
 initVR();
 
 /* ================= HLAVNÍ SMYČKA ================= */
-window.__vs = { mz, mzPlace, dolly, words, blocks, cards, pauseGame, resumeGame, quitGame, rigs, track, camera, mouseHeld, setMode, setPractice, setDuel, setScoring, startGame, get practice(){ return practice; }, get duel(){ return duel; }, get duelAnswers(){ return duelAnswers; }, get duelResult(){ return duelResult; }, get mode(){ return mode; }, get state(){ return state; }, get score(){ return score; }, get good(){ return goodCount; }, get bad(){ return badCount; } }; // pro testování
+window.__vs = { mz, mzPlace, MZ_PORT, dolly, words, blocks, cards, pauseGame, resumeGame, quitGame, rigs, track, camera, mouseHeld, setMode, setPractice, setDuel, setScoring, startGame, get practice(){ return practice; }, get duel(){ return duel; }, get duelAnswers(){ return duelAnswers; }, get duelResult(){ return duelResult; }, get mode(){ return mode; }, get state(){ return state; }, get score(){ return score; }, get good(){ return goodCount; }, get bad(){ return badCount; } }; // pro testování
 track.visible = mode === 'mece';
 showPanel(drawMenu);
 const clock = new THREE.Clock();

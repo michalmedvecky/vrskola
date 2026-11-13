@@ -195,7 +195,7 @@ const server = http.createServer(async (req, res) => {
     if (STATIC_DIR && req.method === 'GET' && !path.startsWith('/api')){
       const file = normalize(join(STATIC_DIR, decodeURIComponent(url.pathname === '/' ? '/index.html' : url.pathname)));
       if (file.startsWith(STATIC_DIR) && existsSync(file)){
-        const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.png': 'image/png' };
+        const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.png': 'image/png', '.jpg': 'image/jpeg' };
         res.writeHead(200, { 'Content-Type': types[extname(file)] || 'application/octet-stream', 'Cache-Control': 'no-cache' });
         return res.end(readFileSync(file));
       }
