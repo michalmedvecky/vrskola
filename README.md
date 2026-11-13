@@ -9,6 +9,10 @@ Přesunuto z repa `smartoped` (`web/vr/`), stav včetně pauzy a tlačítka Opus
 - **Meče** – slova letí po dráze proti hráči, zelený meč seká správná, červený špatná (`?rezim=mece`).
 - **Doplňovačka** – karty s mezerou místo y/i, hráč vystřelí správné písmeno (`?rezim=karty`).
 
+Každý režim jde hrát **na body**, nebo jako **Cvičení** (přepínač v menu, `?cviceni=1`): správně napsaná slova
+jsou zelená, špatně napsaná červená (v Doplňovačce je zelené správné písmeno). Body se nepočítají ani nezapisují
+do tabulky, na konci je jen statistika správně / nesprávně.
+
 Hra trvá 5 minut (`?cas=30` zkrátí), tabulka 3 nejlepších se ukládá v prohlížeči headsetu. Pauza: B/Y (Esc na počítači).
 Na počítači jde hrát myší (levé/pravé tlačítko, šipky otáčí).
 
