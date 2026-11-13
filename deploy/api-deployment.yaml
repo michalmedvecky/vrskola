@@ -1,0 +1,83 @@
+# Mini server pro online souboje (TOP 5). Žádný image se nestaví: server.mjs a slova.js jsou v ConfigMapě vrskola-api
+# a spouští je neupravený node:22-alpine. Výsledky a klíč pro podpis lístků leží na PVC vrskola-api-data.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vrskola-api
+spec:
+  replicas: 1                 # výsledky jsou v souboru na RWO disku → právě jedna replika
+  strategy:
+    type: Recreate
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: api
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000         # uživatel "node" v obrazu
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: api
+          # node:22-alpine
+          image: node@sha256:1314fb30ec37592d5845e5a160d522c0e680972aa534549940b8d73bde88481a
+          command: ["node", "/app/server.mjs"]
+          workingDir: /app
+          env:
+            - name: PORT
+              value: "8081"
+            - name: DATA_DIR
+              value: /data
+            - name: SLOVA
+              value: /app/slova.js
+            - name: SOUBOJ_CAS          # délka souboje v sekundách, stejná pro všechny děti
+              value: "300"
+            - name: ADMIN_TOKEN         # heslo učitele pro mazání tabulky; Secret je nepovinný (bez něj mazání nejde)
+              valueFrom:
+                secretKeyRef:
+                  name: vrskola-api-admin
+                  key: token
+                  optional: true
+          ports:
+            - name: http
+              containerPort: 8081
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+          resources:
+            requests:
+              cpu: 5m
+              memory: 32Mi
+            limits:
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+          volumeMounts:
+            - name: app
+              mountPath: /app
+              readOnly: true
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: app
+          configMap:
+            name: vrskola-api
+        - name: data
+          persistentVolumeClaim:
+            claimName: vrskola-api-data

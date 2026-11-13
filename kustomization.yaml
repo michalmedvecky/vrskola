@@ -16,6 +16,9 @@ resources:
   - deploy/deployment.yaml
   - deploy/service.yaml
   - deploy/ingress.yaml
+  - deploy/api-pvc.yaml
+  - deploy/api-deployment.yaml
+  - deploy/api-service.yaml
 configMapGenerator:
   - name: vrskola-web
     files:
@@ -25,3 +28,7 @@ configMapGenerator:
   - name: vrskola-nginx
     files:
       - deploy/default.conf
+  - name: vrskola-api
+    files:
+      - server/server.mjs
+      - web/slova.js

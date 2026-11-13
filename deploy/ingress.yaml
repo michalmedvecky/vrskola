@@ -16,6 +16,13 @@ spec:
     - host: vrskola.example.com
       http:
         paths:
+          - path: /api              # mini server pro online souboje
+            pathType: Prefix
+            backend:
+              service:
+                name: vrskola-api
+                port:
+                  name: http
           - path: /
             pathType: Prefix
             backend:
