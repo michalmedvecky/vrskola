@@ -17,6 +17,9 @@ Přesunuto z repa `smartoped` (`web/vr/`), stav včetně pauzy a tlačítka Opus
   Meč se ukáže, až když příšera honí hráče. Chůze má zvuk kroků a jemné pohupování (ve VR jen náznak), držením
   páčky / klávesy se krok během ~2 s zrychlí (VR 2,8 → 4,6 m/s, počítač 3,6 → 6,5 m/s). Zdi jsou cihlové, podlaha
   kamenná (textury se kreslí v prohlížeči, žádné soubory). Proti nevolnosti: otáčení po skocích a při chůzi se zúží zorné pole.
+  Po zdech náhodně visí portréty velikánů češtiny (Hus, Dobrovský, Jungmann, Šafařík, Palacký, Mácha, Němcová)
+  v rámu s mosaznou jmenovkou; jsou to volná díla Jana Vilímka, zdroje v `web/portrety/ZDROJE.md`. V k3s jsou
+  ve vlastní ConfigMapě `vrskola-portrety` (nginx je servíruje z `/portrety/`).
 
 Každý režim jde hrát **na body**, nebo jako **Cvičení** (přepínač v menu, `?cviceni=1`): správně napsaná slova
 jsou zelená, špatně napsaná červená (v Doplňovačce je zelené správné písmeno). Body se nepočítají ani nezapisují
