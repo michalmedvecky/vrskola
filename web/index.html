@@ -319,6 +319,18 @@ const sfx = {
   },
   slash(hand){ const pan = hand==='left'?-0.6:0.6; tone(520, 0.12, { type:'sawtooth', vol:0.07, slide:140, pan }); noise(0.12, 0.12); },
   click(){ tone(660, 0.07, { type:'triangle', vol:0.12 }); },
+  // krok po kamenné podlaze: krátké dunění + šoupnutí, střídavě vlevo a vpravo
+  step(side = 1, vol = 1){
+    const a = audio(), t = a.currentTime, len = Math.floor(a.sampleRate*0.09);
+    const b = a.createBuffer(1, len, a.sampleRate), d = b.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = (Math.random()*2 - 1)*Math.pow(1 - i/len, 3);
+    const s = a.createBufferSource(), f = a.createBiquadFilter(), g = a.createGain(), p = a.createStereoPanner ? a.createStereoPanner() : null;
+    f.type = 'lowpass'; f.frequency.value = 500 + Math.random()*250; g.gain.value = 0.32*vol;
+    s.buffer = b; s.connect(f); f.connect(g);
+    if (p){ p.pan.value = side*0.25; g.connect(p); p.connect(a.destination); } else g.connect(a.destination);
+    s.start(t);
+    tone(85 + Math.random()*15, 0.08, { vol: 0.18*vol, slide: 45, pan: side*0.25 });
+  },
   start(){ [523, 659, 784, 1047].forEach((f,i)=>tone(f, 0.2, { type:'triangle', vol:0.15, when:i*0.1 })); },
   tick(){ tone(1000, 0.05, { type:'square', vol:0.05 }); },
   end(){ [784, 659, 523, 659, 784, 1047].forEach((f,i)=>tone(f, 0.3, { type:'triangle', vol:0.15, when:i*0.14 })); },
@@ -1194,7 +1206,7 @@ const deskRigs = ['left', 'right'].map(hand => {
 });
 function updateDeskSwords(){
   const cq = camera.getWorldQuaternion(new THREE.Quaternion()), cp = camera.getWorldPosition(new THREE.Vector3());
-  const maze = mode === 'bludiste' && mz.active && state === 'playing';
+  const maze = mzSwordTime();
   for (const r of deskRigs){
     const show = !renderer.xr.isPresenting && (mode === 'mece' || (maze && r.hand === 'right')); r.obj.visible = show; if (!show) continue;
     const s = r.hand === 'right' ? 1 : -1;
@@ -1214,7 +1226,8 @@ function updateDeskSwords(){
 const _B = new THREE.Vector3(), _T = new THREE.Vector3();
 function updateSwords(dt){
   for (const r of rigs){
-    if (!deskRigs.includes(r)) r.obj.visible = mode === 'mece' || (mode === 'bludiste' && !panel.visible);   // meče v rukou (v headsetu)
+    if (!deskRigs.includes(r)) r.obj.visible = mode === 'mece' || (mode === 'bludiste' && mzSwordTime());   // meče v rukou (v headsetu)
+    else if (renderer.xr.isPresenting) r.obj.visible = false;   // meče pro počítač ve VR nikdy (jinak by zůstaly viset ve vzduchu)
     if (!r.active()){ r.has = false; continue; }
     _B.set(0, 0, -BLADE_START); _T.set(0, 0, -BLADE_START - BLADE_LEN);
     r.obj.localToWorld(_B); r.obj.localToWorld(_T); track.worldToLocal(_B); track.worldToLocal(_T);
@@ -1287,27 +1300,55 @@ function splitWord(b, horizontalCut, right){
    pravou páčkou se otáčí po 30° skocích. */
 const MZ_C = 4, MZ_T = 0.2, MZ_H = 2.6, MZ_R = 0.3;   // políčko, tloušťka a výška zdi, poloměr hráče (m)
 const DIRX = [0, 1, 0, -1], DIRZ = [-1, 0, 1, 0];     // 0 = sever (−z), 1 = východ, 2 = jih, 3 = západ
-const MZ_SPEED_VR = 2.2, MZ_SPEED_PC = 3.0, MZ_TURN_PC = 1.9, MZ_SNAP = Math.PI/6;
-const MON_SPEED0 = 1.5, MON_SPEED1 = 2.0, MON_CATCH = 0.9, MON_Y = 0.95, MON_SCALE = 0.75;
+// rychlost chůze: základní a po delším držení páčky / klávesy (rozejde se za ~2 s)
+const MZ_SPEED = { vr: [2.8, 4.6], pc: [3.6, 6.5] }, MZ_RUN_UP = 2.0, MZ_TURN_PC = 1.9, MZ_SNAP = Math.PI/6;
+const MZ_BOB = { vr: 0.012, pc: 0.045 };   // pohupování při chůzi (m); ve VR jen náznak kvůli nevolnosti
+const MON_SPEED0 = 1.9, MON_SPEED1 = 2.7, MON_CATCH = 0.9, MON_Y = 0.95, MON_SCALE = 0.75;
+// v bludišti se meč ukáže jen tehdy, když je co sekat (příšera honí hráče)
+function mzSwordTime(){ return mode === 'bludiste' && mz.active && state === 'playing' && !panel.visible && !!mz.monster && mz.monster.mode === 'chase'; }
 const MON_HIT_R = 0.75, MZ_SWING = 0.3, MZ_REACH = 2.6;   // poloměr zásahu příšery; seknutí na PC/tabletu: délka a dosah
 const mz = { active: false, cells: new Map(), segs: [], juncs: [], cur: 0, pending: null, pendingDir: 0, walls: [],
-  monster: null, swing: 0, signY: 1.5, snapArmed: true, vig: 0, fade: null, root: new THREE.Group() };
+  monster: null, swing: 0, run: 0, stepDist: 0, stepSide: 1, bob: 0, signY: 1.5, snapArmed: true, vig: 0, fade: null, root: new THREE.Group() };
 scene.add(mz.root);
 const mzKey = (x, z) => x + ',' + z;
 const dirYaw = d => Math.atan2(-DIRX[d], -DIRZ[d]);   // natočení (kamera / cedule), aby hleděla směrem d
 const Y_AXIS = new THREE.Vector3(0, 1, 0);
 
 const MZ_MAT = (() => {
-  const tex = (draw) => { const c = document.createElement('canvas'); c.width = c.height = 256; draw(c.getContext('2d'));
-    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t; };
-  const floor = tex(g => { g.fillStyle = '#0a1030'; g.fillRect(0, 0, 256, 256);
-    g.strokeStyle = 'rgba(70,120,255,0.6)'; g.lineWidth = 5; g.strokeRect(2, 2, 252, 252);
-    g.strokeStyle = 'rgba(70,120,255,0.2)'; g.lineWidth = 2; g.beginPath(); g.moveTo(128, 0); g.lineTo(128, 256); g.moveTo(0, 128); g.lineTo(256, 128); g.stroke(); });
-  const wall = tex(g => { const gr = g.createLinearGradient(0, 0, 0, 256); gr.addColorStop(0, '#141c48'); gr.addColorStop(1, '#2a3b85');
-    g.fillStyle = gr; g.fillRect(0, 0, 256, 256); g.fillStyle = 'rgba(130,170,255,0.28)'; g.fillRect(0, 150, 256, 6); g.fillRect(126, 0, 4, 256); });
+  // procedurální textury (bez souborů): textura = 1 m × 1 m cihel, resp. 2 m × 2 m dlažby, opakuje se
+  const tex = (draw, rx, ry) => { const c = document.createElement('canvas'); c.width = c.height = 512; draw(c.getContext('2d'), 512);
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8;
+    t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rx, ry); return t; };
+  const speckle = (g, n, S) => { for (let i = 0; i < n; i++){ const v = Math.random() < 0.5 ? 0 : 255;
+    g.fillStyle = `rgba(${v},${v},${v},${0.03 + Math.random()*0.06})`; g.fillRect(Math.random()*S, Math.random()*S, 1 + Math.random()*3, 1 + Math.random()*3); } };
+  const brick = tex((g, S) => {   // 8 řad cihel na metr výšky, 4 cihly na metr, každá druhá řada posunutá
+    g.fillStyle = '#3a3440'; g.fillRect(0, 0, S, S);                      // spárování
+    const rows = 8, cols = 4, bh = S/rows, bw = S/cols, m = 5;
+    for (let r = 0; r < rows; r++) for (let c = -1; c < cols; c++){
+      const x = c*bw + (r % 2 ? bw/2 : 0), y = r*bh, h = 8 + Math.random()*14, l = 30 + Math.random()*12, sat = 35 + Math.random()*20;
+      g.fillStyle = `hsl(${h},${sat}%,${l}%)`; g.fillRect(x + m/2, y + m/2, bw - m, bh - m);
+      g.fillStyle = 'rgba(255,255,255,0.07)'; g.fillRect(x + m/2, y + m/2, bw - m, 3);   // světlejší horní hrana
+      g.fillStyle = 'rgba(0,0,0,0.18)'; g.fillRect(x + m/2, y + bh - m/2 - 4, bw - m, 4); // stín dole
+    }
+    speckle(g, 5000, S);
+  }, MZ_C, MZ_H);
+  const stone = tex((g, S) => {   // kamenná dlažba: nepravidelně široké kameny v řadách
+    g.fillStyle = '#1c1d24'; g.fillRect(0, 0, S, S);
+    const rows = 5, rh = S/rows, m = 6;
+    for (let r = 0; r < rows; r++){
+      let x = -Math.random()*60;
+      while (x < S){
+        const w = 70 + Math.random()*90, wEnd = Math.min(w, S - x), l = 26 + Math.random()*14, h = 210 + Math.random()*40;
+        g.fillStyle = `hsl(${h},${6 + Math.random()*8}%,${l}%)`;
+        roundRect(g, Math.max(0, x) + m/2, r*rh + m/2, wEnd - m - (x < 0 ? -x : 0), rh - m, 10); g.fill();
+        x += w;
+      }
+    }
+    speckle(g, 7000, S);
+  }, MZ_C/2, MZ_C/2);
   return {
-    floor: new THREE.MeshStandardMaterial({ map: floor, roughness: 0.9 }),
-    wall: new THREE.MeshStandardMaterial({ map: wall, roughness: 0.85, emissive: 0x0a1235 }),
+    floor: new THREE.MeshStandardMaterial({ map: stone, roughness: 0.95 }),
+    wall: new THREE.MeshStandardMaterial({ map: brick, roughness: 0.9, emissive: 0x140c10 }),
     trim: new THREE.MeshBasicMaterial({ color: 0x33ddff }),
     gateBad: new THREE.MeshBasicMaterial({ color: 0xff3344, transparent: true, opacity: 0.38, side: THREE.DoubleSide, depthWrite: false }),
     gateOne: new THREE.MeshBasicMaterial({ color: 0x3d7bff, transparent: true, opacity: 0.22, side: THREE.DoubleSide, depthWrite: false }),
@@ -1513,7 +1554,8 @@ function leaveMaze(){
   for (const s of [...mz.segs]) mzDisposeSeg(s);
   mz.cells.clear(); mz.juncs.length = 0; mz.walls = []; mz.fade = null; mz.vig = 0;
   vignette.visible = fader.visible = false;
-  if (mz.active){ dolly.position.set(0, 0, 0); dolly.rotation.set(0, 0, 0); stars.position.set(0, 0, 0); }
+  if (mz.active){ dolly.position.set(0, 0, 0); dolly.rotation.set(0, 0, 0); stars.position.set(0, 0, 0); if (!renderer.xr.isPresenting) camera.position.set(0, 1.6, 0); }
+  mz.run = mz.bob = mz.stepDist = 0;
   mz.active = false; decor.visible = true; scene.fog.density = 0.025;
 }
 function inFront(dist, dy = 0){   // bod před hráčem (pro plovoucí texty)
@@ -1678,12 +1720,24 @@ function updateMaze(dt){
     if (snap) mzRotateAround(head, snap);
     const d = camera.getWorldDirection(new THREE.Vector3()); d.y = 0; if (d.lengthSq() < 1e-6) d.set(0, 0, -1); d.normalize();
     const mag = Math.hypot(fwd, side); if (mag > 1){ fwd /= mag; side /= mag; }
-    const v = (vr ? MZ_SPEED_VR : MZ_SPEED_PC)*dt;
+    // držení páčky / klávesy postupně zrychlí krok, puštění rychle zpomalí
+    mz.run = mag > 0.5 ? Math.min(1, mz.run + dt/MZ_RUN_UP) : Math.max(0, mz.run - dt*3);
+    const sp = MZ_SPEED[vr ? 'vr' : 'pc'], v = (sp[0] + (sp[1] - sp[0])*mz.run)*dt;
     // pohyb hlavy (páčka/klávesy + fyzická chůze v místnosti) se ořízne o zdi a rozdíl se přičte k dolly
     const target = mzResolve(head.clone().addScaledVector(d, fwd*v).add(new THREE.Vector3(-d.z, 0, d.x).multiplyScalar(side*v)));
     dolly.position.x += target.x - head.x; dolly.position.z += target.z - head.z;
     speed = Math.min(1, Math.hypot(fwd, side));
-  }
+    // kroky: zvuk po každém kroku a pohupování svázané s ušlou vzdáleností
+    const moved = Math.hypot(target.x - head.x, target.z - head.z), stepLen = 0.75 + 0.25*mz.run;
+    if (moved > 1e-4){
+      mz.stepDist += moved;
+      if (mz.stepDist >= stepLen){ mz.stepDist -= stepLen; mz.stepSide = -mz.stepSide; sfx.step(mz.stepSide, 0.7 + 0.3*mz.run); }
+      mz.bob = Math.min(1, mz.bob + dt*6);
+    } else mz.bob = Math.max(0, mz.bob - dt*4);
+  } else mz.bob = Math.max(0, mz.bob - dt*4);
+  const ph = mz.stepDist/(0.75 + 0.25*mz.run)*Math.PI, bobY = -Math.abs(Math.sin(ph))*mz.bob*MZ_BOB[vr ? 'vr' : 'pc']*(1 + 0.5*mz.run);
+  if (vr) dolly.position.y = bobY;
+  else { camera.position.y = 1.6 + bobY; camera.position.x = Math.cos(ph)*mz.bob*0.012; }
   // viněta jen v headsetu a jen při chůzi páčkou
   mz.vig += ((vr && playing ? speed*0.92 : 0) - mz.vig)*Math.min(1, dt*10);
   vignette.material.opacity = mz.vig; vignette.visible = mz.vig > 0.01;

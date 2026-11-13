@@ -13,7 +13,10 @@ Přesunuto z repa `smartoped` (`web/vr/`), stav včetně pauzy a tlačítka Opus
   rozseknout mečem, pak z ní vyletí správně napsané slovo; nebo se dá utéct zpátky ke křižovatce
   (`?rezim=bludiste`). Správná volba +1, špatná −1. Ovládání: ve VR levá páčka chůze, pravá páčka otáčení
   po 30° skocích, meče v rukou; na počítači W/S nebo ↑/↓ chůze, A/D nebo ←/→ otáčení (Q/E úkrok), klik nebo
-  mezerník seká; na tabletu tlačítka ▲▼ a ◄►, seká ⚔ nebo klepnutí, rozhlížet se jde i tažením prstu. Proti nevolnosti: stálá rychlost bez houpání a při chůzi se zúží zorné pole.
+  mezerník seká; na tabletu tlačítka ▲▼ a ◄►, seká ⚔ nebo klepnutí, rozhlížet se jde i tažením prstu.
+  Meč se ukáže, až když příšera honí hráče. Chůze má zvuk kroků a jemné pohupování (ve VR jen náznak), držením
+  páčky / klávesy se krok během ~2 s zrychlí (VR 2,8 → 4,6 m/s, počítač 3,6 → 6,5 m/s). Zdi jsou cihlové, podlaha
+  kamenná (textury se kreslí v prohlížeči, žádné soubory). Proti nevolnosti: otáčení po skocích a při chůzi se zúží zorné pole.
 
 Každý režim jde hrát **na body**, nebo jako **Cvičení** (přepínač v menu, `?cviceni=1`): správně napsaná slova
 jsou zelená, špatně napsaná červená (v Doplňovačce je zelené správné písmeno). Body se nepočítají ani nezapisují
