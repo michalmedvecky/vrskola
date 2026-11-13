@@ -44,7 +44,7 @@ Na počítači jde hrát myší (levé/pravé tlačítko, šipky otáčí).
 | Cesta | Co to je |
 |---|---|
 | `web/index.html` | celá hra |
-| `web/sady/` | sady zadání (`index.json` = nabídka, `vyjmenovana.json`, `vybrane-slova.json`, `shoda.json`, `nasobilka.json`, `cinstina.json`, formát v `README.md`) |
+| `web/sady/` | sady zadání (`index.json` = nabídka, `vyjmenovana.json`, `vybrane-slova.json`, `shoda.json`, `nasobilka.json`, `anglictina.json`, `cinstina.json`, formát v `README.md`) |
 | `web/pisma/` | přibalená písma sad (čínské znaky: podmnožina Noto Sans SC, OFL), generuje `nastroje/pismo-podmnozina.sh` |
 | `web/sada.js` | parser sad, sdílený hrou i serverem |
 | `web/three.module.min.js` | three.js 0.160 |

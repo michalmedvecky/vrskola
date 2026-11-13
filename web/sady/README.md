@@ -13,6 +13,7 @@ Stejné soubory čte i server Souboje třídy, takže body počítá podle stejn
 | `vybrane-slova.json` | slovenské vybrané slová |
 | `shoda.json` | shoda přísudku s podmětem: koncovka -i/-y (`psi štěkal[i]`, `děti si hrál[y]`, `kluci a holky běhal[i]`); rod střední (-a) vynechán |
 | `nasobilka.json` | malá násobilka 1–10 (`7 · 8 = [56\|48\|64\|63\|49]`, špatné výsledky = sousední násobky a ±1), vygenerovaná |
+| `anglictina.json` | anglická slovíčka pro 1. stupeň ZŠ (3.–5. třída), 20 tematických skupin: `dog = [pes]`, špatné překlady z ostatních slovíček skupiny |
 | `cinstina.json` | čínská slovíčka pro začátečníky (`狗 gǒu = [pes]`, 128 slovíček ve 13 tematických skupinách: pozdravy, čísla, lidé, rodina, zvířata, jídlo, barvy, tělo, příroda, čas, slovesa, přídavná jména, škola a doma); znaky kreslí přibalené písmo `pisma/cinstina.woff2` |
 
 ## Formát
