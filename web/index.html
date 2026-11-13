@@ -34,11 +34,12 @@
 <body>
 <button id="navod" title="Návod" hidden>?</button>
 <div id="help" hidden>
-  <b>Vyjmenovaná slova VR</b><br>
+  <b id="help-nazev">Vyjmenovaná slova VR</b><br>
   V headsetu: klikni na <b>Vstoupit do VR</b> a v menu vyber režim.<br>
+  Nahoře v menu jde (když je víc sad) šipkami vybrat <b>zadání</b>, které se procvičuje.<br>
   <b>Střelnice:</b> pravá ruka střílí slova napsaná <b>správně</b>, levá ruka slova napsaná <b>špatně</b>.<br>
   <b>Meče:</b> slova letí proti tobě, <b>zelený</b> meč (pravá ruka) seká správná, <b>červený</b> meč (levá ruka) špatná.<br>
-  <b>Doplňovačka:</b> na kartách chybí písmeno, kteroukoli pistolí vystřel správné <b>y</b> nebo <b>i</b> pod slovem.<br>
+  <b>Doplňovačka:</b> na kartách chybí kousek slova (třeba <b>y</b> nebo <b>i</b>), kteroukoli pistolí vystřel správnou možnost pod kartou.<br>
   <b>Bludiště:</b> na křižovatce jdi tam, kam ukazuje <b>správně napsané</b> slovo. Špatná cesta končí u příšery – rozsekni ji mečem (vyletí z ní správné slovo), nebo uteč zpátky!
   Chůze levou páčkou, pravou páčkou otáčení po krocích, mečem v ruce se seká; na počítači <b>W/S</b> nebo <b>↑/↓</b> chůze, <b>A/D</b> nebo <b>←/→</b> otáčení, <b>klik</b> nebo <b>mezerník</b> seká; na tabletu tlačítka ▲▼ a ◄►, seká ⚔ nebo klepnutí.<br>
   <b>Pauza:</b> tlačítko <b>B</b> nebo <b>Y</b> na ovladači (na počítači <b>Esc</b>) – pokračovat, ukončit hru, nebo opustit VR.<br>
@@ -58,20 +59,56 @@
 
 <script type="module">
 import * as THREE from 'three';
-import { SLOVA } from './slova.js';
+import { pripravSadu, ID_RE } from './sada.js';
 
-/* ================= SLOVA =================
-   Seznam slov je v ./slova.js (kopie ze smartoped/web/slova.js). Písmeno v [závorkách] je to, které se procvičuje;
-   špatný tvar vznikne záměnou y↔i, ý↔í. Kde by i záměna dala skutečné slovo, je v seznamu krátké spojení. */
-const SWAP = { y:'i', i:'y', 'ý':'í', 'í':'ý', Y:'I', I:'Y', 'Ý':'Í', 'Í':'Ý' };
-const WORDS = [];
-for (const [pismeno, { y, i }] of Object.entries(SLOVA)){
-  for (const raw of [...y, ...i]){
-    const m = raw.match(/^(.*)\[(.)\](.*)$/);
-    if (!m || !SWAP[m[2]]) continue;
-    WORDS.push({ correct: m[1]+m[2]+m[3], wrong: m[1]+SWAP[m[2]]+m[3], pismeno, pre: m[1], letter: m[2], post: m[3] });
-  }
+/* ================= SADY ZADÁNÍ =================
+   Hry samy nevědí, co se procvičuje: obsah (položky, texty v menu, portréty v bludišti) je v sadách v ./sady/
+   (seznam v sady/index.json, formát v sady/README.md, sdílený parser ./sada.js používá i server souboje).
+   Položka „před[odpověď|špatně…]po“ dá správný tvar, špatné tvary a možnosti pro Doplňovačku. */
+const SADY = [];
+await (async () => {
+  let ids = [];
+  try { ids = await (await fetch('sady/index.json', { cache: 'no-cache' })).json(); } catch (e) { console.error('sady/index.json', e); }
+  const loaded = await Promise.all((Array.isArray(ids) ? ids : []).filter(id => ID_RE.test(id)).map(id =>
+    fetch(`sady/${id}.json`, { cache: 'no-cache' }).then(r => r.json()).then(pripravSadu)
+      .catch(e => { console.error(`sada ${id}:`, e); return null; })));
+  for (const s of loaded) if (s){ if (s.chyby.length) console.warn(`sada ${s.id}:`, s.chyby); SADY.push(s); }
+})();
+if (!SADY.length){
+  const h = document.getElementById('help'); h.hidden = false; h.textContent = 'Nepodařilo se načíst žádnou sadu zadání (sady/index.json).';
+  throw new Error('žádná sada');
 }
+let sada = (() => { const want = new URLSearchParams(location.search).get('sada') || (() => { try { return localStorage.getItem('smartoped-vr-sada'); } catch { return null; } })();
+  return SADY.find(s => s.id === want) || SADY[0]; })();
+// text pro menu: sada ho může přepsat (pole řádků), jinak obecný
+const TEXTY = {
+  strelba: ['PRAVÁ ruka střílí SPRÁVNÉ odpovědi', 'LEVÁ ruka střílí ŠPATNÉ odpovědi'],
+  mece: ['ZELENÝ meč (pravá ruka) seká SPRÁVNÉ odpovědi', 'ČERVENÝ meč (levá ruka) seká ŠPATNÉ odpovědi'],
+  karty: ['Na kartách chybí kousek. Co tam patří?', 'Vystřel správnou možnost pod kartou, klidně kteroukoli rukou.'],
+  bludiste: ['Na křižovatce jdi tam, kam ukazuje SPRÁVNÁ odpověď.', 'Špatná cesta končí u příšery – rozsekni ji mečem, nebo uteč!'],
+  cviceni: ['Správné odpovědi jsou ZELENÉ,', 'špatné odpovědi jsou ČERVENÉ.'],
+  cviceniKarty: ['Správná možnost svítí ZELENĚ, špatná ČERVENĚ.'],
+  cviceniBludiste: ['Šipka se správnou odpovědí je ZELENÁ,', 'šipka se špatnou odpovědí je ČERVENÁ.'],
+};
+const T = (k) => { const v = sada.texty[k]; return Array.isArray(v) ? v : typeof v === 'string' ? [v] : TEXTY[k]; };
+function shuffle(a){ for (let i = a.length - 1; i > 0; i--){ const j = Math.random()*(i+1)|0; [a[i], a[j]] = [a[j], a[i]]; } return a; }
+// jedno vylosování položky: správný tvar, jeden špatný tvar (Střelnice, Meče, Bludiště) a možnosti pro Doplňovačku
+function drawItem(it){
+  const wrongOpt = it.wrongOptions[Math.random()*it.wrongOptions.length | 0];
+  let options = shuffle([it.answer, ...shuffle([...it.wrongOptions]).slice(0, sada.pocetMoznosti - 1)]);
+  const order = sada.poradiMoznosti;   // např. vždy y vlevo, i vpravo
+  if (order){ const r = (o) => { const i = order.indexOf(o); return i < 0 ? 99 : i; }; options.sort((a, b) => r(a) - r(b)); }
+  return { item: it, correct: it.correct, wrong: it.pre + wrongOpt + it.post, pre: it.pre, post: it.post, answer: it.answer, options };
+}
+function setSada(id){
+  const s = SADY.find(x => x.id === id); if (!s) return;
+  sada = s; bag = []; try { localStorage.setItem('smartoped-vr-sada', s.id); } catch {}
+  applySadaUi(); loadPortraits();
+  if (duel) refreshDuelTop(true);
+  redrawPanel();
+}
+function applySadaUi(){ document.title = `${sada.nazev} VR`; document.documentElement.lang = sada.jazyk; document.getElementById('help-nazev').textContent = `${sada.nazev} VR`; }
+applySadaUi();
 
 /* ================= NASTAVENÍ ================= */
 const GAME_TIME = Number(new URLSearchParams(location.search).get('cas')) || 300; // 5 minut (?cas=20 pro rychlý test)
@@ -79,6 +116,7 @@ const MAX_WORDS = 42;
 const FADE_IN = 1.2, FADE_OUT = 1.0;
 const SCORE_GOOD = 1, SCORE_BAD = -1;   // skóre může jít i do záporu
 const LS_KEYS = { strelba: 'smartoped-vr-top3', mece: 'smartoped-vr-mece-top3', karty: 'smartoped-vr-karty-top3', bludiste: 'smartoped-vr-bludiste-top3' }; // každý režim má svou tabulku
+const lsTopKey = () => sada.id === 'vyjmenovana' ? LS_KEYS[mode] : `vrskola-${sada.id}-${mode}-top3`;   // vyjmenovaná si nechají staré rekordy
 const MODES = ['strelba', 'mece', 'karty', 'bludiste'];
 let mode = (() => { const q = new URLSearchParams(location.search).get('rezim'); if (MODES.includes(q)) return q;
   try { const v = localStorage.getItem('smartoped-vr-rezim'); return MODES.includes(v) ? v : 'strelba'; } catch { return 'strelba'; } })();
@@ -98,7 +136,8 @@ let duel = (() => { if (practice) return false; const q = new URLSearchParams(lo
   try { return localStorage.getItem('smartoped-vr-souboj') === '1'; } catch { return false; } })();
 let duelName = (() => { try { return localStorage.getItem('smartoped-vr-jmeno') || ''; } catch { return ''; } })();
 let duelCas = 300, duelTicket = null, duelAnswers = [], duelResult = null, duelError = '', duelRetry = null, duelMsg = '';
-const duelTop = {};   // režim → { list, err, t, loading }
+const duelTop = {};   // "sada:režim" → { list, err, t, loading }
+const duelKey = () => `${sada.id}:${mode}`;
 function setDuel(){ duel = true; practice = false; try { localStorage.setItem('smartoped-vr-cviceni', '0'); localStorage.setItem('smartoped-vr-souboj', '1'); } catch {} refreshDuelTop(true); redrawPanel(); }
 function setScoring(){ duel = false; setPractice(false); }
 async function api(path, body){
@@ -108,19 +147,19 @@ async function api(path, body){
   return j;
 }
 function refreshDuelTop(force = false){   // sama se brzdí: nejvýš jednou za 10 s pro režim
-  const m = mode, e = duelTop[m] || (duelTop[m] = { list: null, err: '', t: -Infinity, loading: false });
+  const m = mode, k = duelKey(), e = duelTop[k] || (duelTop[k] = { list: null, err: '', t: -Infinity, loading: false });
   if (e.loading || (!force && performance.now() - e.t < 10000)) return;
   e.loading = true; e.t = performance.now();
-  api(`top?rezim=${m}`).then(j => { e.list = j.top; e.err = ''; duelCas = j.cas || duelCas; })
+  api(`top?rezim=${m}&sada=${sada.id}`).then(j => { e.list = j.top; e.err = ''; duelCas = j.cas || duelCas; })
     .catch(() => { e.err = 'Server souboje teď není dostupný.'; })
-    .finally(() => { e.loading = false; if (state === 'menu' && duel && m === mode) redrawPanel(); });
+    .finally(() => { e.loading = false; if (state === 'menu' && duel && k === duelKey()) redrawPanel(); });
 }
 function logDuel(text, act){ if (duel && duelTicket && state === 'playing') duelAnswers.push([Math.round((gameTime - timeLeft)*1000), text, act]); }
 function startDuel(){
   if (!duelName){ askName(startDuel); return; }
   audio();
   state = 'connecting'; duelMsg = 'Připojuji se k souboji…'; showPanel(drawDuelMsg);
-  api('souboj/start', { rezim: mode }).then(j => {
+  api('souboj/start', { rezim: mode, sada: sada.id }).then(j => {
     if (state !== 'connecting') return;
     duelTicket = j.listek; duelCas = j.cas; duelAnswers = []; duelResult = null;
     startGame();
@@ -128,8 +167,8 @@ function startDuel(){
 }
 function submitDuel(){
   state = 'sending'; duelMsg = 'Posílám výsledek…'; showPanel(drawDuelMsg);
-  api('souboj/konec', { rezim: mode, listek: duelTicket, jmeno: duelName, odpovedi: duelAnswers }).then(j => {
-    duelTicket = null; duelResult = j; (duelTop[mode] || (duelTop[mode] = {})).list = j.top;
+  api('souboj/konec', { rezim: mode, sada: sada.id, listek: duelTicket, jmeno: duelName, odpovedi: duelAnswers }).then(j => {
+    duelTicket = null; duelResult = j; (duelTop[duelKey()] || (duelTop[duelKey()] = {})).list = j.top;
     state = 'results'; showPanel(drawDuelResults);
   }).catch(e => duelFail(e.message, submitDuel));
 }
@@ -401,8 +440,8 @@ const music = (() => {
 })();
 
 /* ================= TABULKA SKÓRE ================= */
-function loadTop(){ try { const v = JSON.parse(localStorage.getItem(LS_KEYS[mode])); return Array.isArray(v) ? v : []; } catch { return []; } }
-function saveTop(list){ try { localStorage.setItem(LS_KEYS[mode], JSON.stringify(list)); } catch {} }
+function loadTop(){ try { const v = JSON.parse(localStorage.getItem(lsTopKey())); return Array.isArray(v) ? v : []; } catch { return []; } }
+function saveTop(list){ try { localStorage.setItem(lsTopKey(), JSON.stringify(list)); } catch {} }
 function qualifies(score){ const t = loadTop(); return t.length < 3 || score > t[t.length-1].score; }
 
 /* ================= PANEL (menu / zápis / výsledky) ================= */
@@ -436,8 +475,10 @@ function redrawPanel(){
   drawPanelFn && drawPanelFn(g);
   panelTex.needsUpdate = true;
 }
-function txt(g, s, x, y, { px=40, color='#fff', align='center', weight='bold' } = {}){
-  g.font = `${weight} ${px}px ${FONT}`; g.fillStyle = color; g.textAlign = align; g.textBaseline = 'middle'; g.fillText(s, x, y);
+function txt(g, s, x, y, { px=40, color='#fff', align='center', weight='bold', maxW = PW - 70 } = {}){
+  g.font = `${weight} ${px}px ${FONT}`;
+  while (px > 14 && g.measureText(s).width > maxW){ px -= 2; g.font = `${weight} ${px}px ${FONT}`; }   // dlouhý text ze sady se zmenší
+  g.fillStyle = color; g.textAlign = align; g.textBaseline = 'middle'; g.fillText(s, x, y);
 }
 function button(g, id, label, x, y, w, h, onClick, { color='#1d5bd8', px=40 } = {}){
   const hov = hoverBtn === id;
@@ -459,37 +500,40 @@ function drawTop(g, y0, highlightIdx = -1){
 }
 
 function drawMenu(g){
-  txt(g, 'Vyjmenovaná slova', PW/2, 56, { px: 58, color: '#7fe3ff' });
+  if (SADY.length > 1){   // výběr zadání
+    const i = SADY.indexOf(sada), go = (d) => setSada(SADY[(i + d + SADY.length) % SADY.length].id);
+    button(g, 'sada-prev', '◄', 24, 20, 80, 64, () => go(-1), { color: '#25335e', px: 36 });
+    button(g, 'sada-next', '►', PW-104, 20, 80, 64, () => go(1), { color: '#25335e', px: 36 });
+  }
+  txt(g, sada.nazev, PW/2, 56, { px: 58, color: '#7fe3ff', maxW: PW - 260 });
   [['strelba', 'Střelnice'], ['mece', 'Meče'], ['karty', 'Doplňovačka'], ['bludiste', 'Bludiště']].forEach(([m, label], i) =>
     button(g, 'm-' + m, label, 67 + i*225, 96, 215, 64, () => setMode(m), { color: mode === m ? '#2f7cff' : '#25335e', px: 32 }));
   button(g, 'p-hra', 'Hra na body', PW/2-320, 176, 200, 56, setScoring, { color: !practice && !duel ? '#b8860b' : '#25335e', px: 28 });
   button(g, 'p-cviceni', 'Cvičení', PW/2-100, 176, 200, 56, () => setPractice(true), { color: practice ? '#15803d' : '#25335e', px: 28 });
   button(g, 'p-souboj', 'Souboj třídy', PW/2+120, 176, 200, 56, setDuel, { color: duel ? '#b4237a' : '#25335e', px: 28 });
   if (mode === 'karty'){
-    txt(g, 'Na kartách chybí písmeno. Doplň Y, nebo I?', PW/2, 272, { px: 34, color: '#7fe3ff' });
-    txt(g, 'Vystřel správné písmeno pod slovem, klidně kteroukoli rukou.', PW/2, 314, { px: 30, color: '#ffd23f' });
+    txt(g, T('karty')[0], PW/2, 272, { px: 34, color: '#7fe3ff' });
+    txt(g, T('karty')[1] || '', PW/2, 314, { px: 30, color: '#ffd23f' });
     txt(g, 'Karty se objevují kolem tebe a časem mizí. ' + gameLenText(), PW/2, 354, { px: 28, weight: 'normal' });
   } else if (mode === 'bludiste'){
-    txt(g, 'Na křižovatce jdi tam, kam ukazuje slovo napsané SPRÁVNĚ.', PW/2, 272, { px: 32, color: '#5dff8a' });
-    txt(g, 'Špatná cesta končí u příšery – rozsekni ji mečem, nebo uteč!', PW/2, 314, { px: 32, color: '#ff6b6b' });
+    txt(g, T('bludiste')[0], PW/2, 272, { px: 32, color: '#5dff8a' });
+    txt(g, T('bludiste')[1] || '', PW/2, 314, { px: 32, color: '#ff6b6b' });
     txt(g, (xrSession ? 'Levá páčka chůze, pravá otáčí, mečem se máchá. ' : usedTouch ? 'Tlačítka ▲▼ chůze, ◄► otáčení, ⚔ nebo klepnutí seká. ' : 'W/S chůze, A/D otáčení, klik nebo mezerník seká. ') + gameLenText(), PW/2, 354, { px: 26, weight: 'normal' });
   } else if (mode === 'mece'){
-    txt(g, 'ZELENÝ meč (pravá ruka) seká slova SPRÁVNĚ', PW/2, 272, { px: 34, color: '#5dff8a' });
-    txt(g, 'ČERVENÝ meč (levá ruka) seká slova ŠPATNĚ', PW/2, 314, { px: 34, color: '#ff6b6b' });
+    txt(g, T('mece')[0], PW/2, 272, { px: 34, color: '#5dff8a' });
+    txt(g, T('mece')[1] || '', PW/2, 314, { px: 34, color: '#ff6b6b' });
     txt(g, 'Slova letí proti tobě, rozsekni je, než proletí. ' + gameLenText(), PW/2, 354, { px: 28, weight: 'normal' });
   } else {
-    txt(g, 'PRAVÁ ruka střílí slova napsaná SPRÁVNĚ', PW/2, 272, { px: 34, color: '#5dff8a' });
-    txt(g, 'LEVÁ ruka střílí slova napsaná ŠPATNĚ', PW/2, 314, { px: 34, color: '#ff6b6b' });
+    txt(g, T('strelba')[0], PW/2, 272, { px: 34, color: '#5dff8a' });
+    txt(g, T('strelba')[1] || '', PW/2, 314, { px: 34, color: '#ff6b6b' });
     txt(g, 'Slova jsou všude kolem tebe, rozhlížej se! ' + gameLenText(), PW/2, 354, { px: 28, weight: 'normal' });
   }
   if (practice){
     roundRect(g, 150, 396, 724, 176, 20); g.fillStyle = 'rgba(21,128,61,0.18)'; g.fill(); g.lineWidth = 3; g.strokeStyle = '#5dff8a'; g.stroke();
     txt(g, 'Cvičení', PW/2, 428, { px: 40, color: '#5dff8a' });
-    if (mode === 'karty') txt(g, 'Správné písmeno svítí ZELENĚ, špatné ČERVENĚ.', PW/2, 480, { px: 30 });
-    else if (mode === 'bludiste'){ txt(g, 'Šipka se slovem napsaným správně je ZELENÁ,', PW/2, 470, { px: 30, color: '#5dff8a' });
-      txt(g, 'šipka se slovem napsaným špatně je ČERVENÁ.', PW/2, 506, { px: 30, color: '#ff6b6b' }); }
-    else { txt(g, 'Slova napsaná správně jsou ZELENÁ,', PW/2, 470, { px: 30, color: '#5dff8a' });
-      txt(g, 'slova napsaná špatně jsou ČERVENÁ.', PW/2, 506, { px: 30, color: '#ff6b6b' }); }
+    if (mode === 'karty') txt(g, T('cviceniKarty')[0], PW/2, 480, { px: 30 });
+    else { const l = T(mode === 'bludiste' ? 'cviceniBludiste' : 'cviceni');
+      txt(g, l[0], PW/2, 470, { px: 30, color: '#5dff8a' }); txt(g, l[1] || '', PW/2, 506, { px: 30, color: '#ff6b6b' }); }
     txt(g, 'Body se nepočítají, uvidíš jen, kolik máš správně a kolik špatně.', PW/2, 548, { px: 24, weight: 'normal', color: '#bcd' });
   } else if (duel) drawDuelBox(g);
   else drawTop(g, 400);
@@ -560,7 +604,7 @@ function drawResults(g){
 }
 function gameLenText(){ const t = duel ? duelCas : GAME_TIME; return duel ? `Souboj trvá ${t >= 60 && t % 60 === 0 ? t/60 + ' min' : t + ' s'}.` : t === 300 ? 'Hra trvá 5 minut.' : `Hra trvá ${t} s.`; }
 function drawOnlineTop(g, y0, hlName = null, rows = 5, gap = 34, px = 30){
-  const e = duelTop[mode] || {};
+  const e = duelTop[duelKey()] || {};
   if (!e.list){ txt(g, e.err || 'Načítám tabulku…', PW/2, y0 + 70, { px: 28, weight: 'normal', color: e.err ? '#ff9b9b' : '#bcd' }); return; }
   if (!e.list.length){ txt(g, 'Zatím nikdo nehrál. Buď první!', PW/2, y0 + 70, { px: 30, weight: 'normal' }); return; }
   for (let i = 0; i < rows; i++){
@@ -648,11 +692,11 @@ function updateHud(){
 let state = 'menu';       // menu | playing | paused | over | name | results
 let score = 0, goodCount = 0, badCount = 0, missCount = 0, timeLeft = GAME_TIME, spawnTimer = 0, lastTick = -1;
 const words = [];         // { mesh, correct, info, age, life, phase:'live'|'out'|'hit'|'bad', t }
-let bag = [];
+let bag = [];   // zamíchané položky sady, losuje se bez opakování
 
 function nextWord(){
-  if (!bag.length){ bag = WORDS.map((_,i)=>i); for (let i=bag.length-1;i>0;i--){ const j = Math.random()*(i+1)|0; [bag[i],bag[j]] = [bag[j],bag[i]]; } }
-  return WORDS[bag.pop()];
+  if (!bag.length) bag = shuffle([...sada.items]);
+  return drawItem(bag.pop());
 }
 
 const _v = new THREE.Vector3();
@@ -687,11 +731,11 @@ function spawnWord(){
 function removeWord(w){ scene.remove(w.mesh); disposeMesh(w.mesh); words.splice(words.indexOf(w), 1); }
 
 /* ================= REŽIM DOPLŇOVAČKA (KARTY) =================
-   V prostoru se objevují karty se slovem, kde místo y/i je prázdný čtverec, a pod ním dvě tlačítka y / i
-   (u dlouhých ý / í). Hráč kteroukoli pistolí vystřelí správné písmeno. Čas karty ukazuje pásek kolem ní. */
+   V prostoru se objevují karty se slovem, kde místo odpovědi je prázdné okénko, a pod ním 2–4 tlačítka s možnostmi
+   (u vyjmenovaných slov y / i, u dlouhých ý / í). Hráč kteroukoli pistolí vystřelí správnou možnost. Čas karty ukazuje pásek kolem ní. */
 const CARD_K = 220;                       // pixelů textury na metr
 const CARD_H = 1.3, CARD_BTN = 0.5, MAX_CARDS = 7;
-const cards = [];        // { mesh, ring, btns:[{mesh, letter}], info, redraw(fill), age, life, phase:'live'|'out'|'hit'|'bad', t }
+const cards = [];        // { mesh, ring, btns:[{mesh, option}], info, redraw(fill), age, life, phase:'live'|'out'|'hit'|'bad', t }
 let cardBase = { x: 0, z: 0, a: -Math.PI/2, y: 1.6 };
 function screenHalfFovX(){ return Math.atan(Math.tan(THREE.MathUtils.degToRad(camera.fov)/2)*camera.aspect); }
 function setCardFrame(){
@@ -700,23 +744,31 @@ function setCardFrame(){
   if (d.lengthSq() < 1e-4) d.set(0,0,-1); d.normalize();
   cardBase = { x: p.x, z: p.z, a: Math.atan2(d.z, d.x), y: renderer.xr.isPresenting ? Math.min(2.0, Math.max(1.0, p.y)) : 1.6 };
 }
-function makeCardButton(letter, hint = null){   // hint: null | 'good' | 'bad' (cvičení)
-  const c = document.createElement('canvas'); c.width = c.height = 192; const g = c.getContext('2d');
-  roundRect(g, 8, 8, 176, 176, 34); g.fillStyle = hint === 'good' ? '#15803d' : hint === 'bad' ? '#b91c1c' : '#1d5bd8'; g.fill();
+const CARD_BTN_GAP = 0.22;
+function makeCardButton(label, hint = null){   // hint: null | 'good' | 'bad' (cvičení); písmeno = čtverec, slovo = širší tlačítko
+  const c = document.createElement('canvas'), g = c.getContext('2d'), px = [...label].length <= 2 ? 130 : 92;
+  g.font = `bold ${px}px ${FONT}`;
+  c.width = Math.max(192, Math.ceil(g.measureText(label).width + 70)); c.height = 192;
+  roundRect(g, 8, 8, c.width - 16, 176, 34); g.fillStyle = hint === 'good' ? '#15803d' : hint === 'bad' ? '#b91c1c' : '#1d5bd8'; g.fill();
   g.lineWidth = 8; g.strokeStyle = hint === 'good' ? '#5dff8a' : hint === 'bad' ? '#ff8a8a' : '#bfe6ff'; g.stroke();
-  g.font = `bold 130px ${FONT}`; g.fillStyle = '#fff'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(letter, 96, 104);
+  g.font = `bold ${px}px ${FONT}`; g.fillStyle = '#fff'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(label, c.width/2, 104);
   const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4;
-  const m = new THREE.Mesh(new THREE.PlaneGeometry(CARD_BTN, CARD_BTN),
+  const w = CARD_BTN * c.width / 192;
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(w, CARD_BTN),
     new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity: 0, depthWrite: false, fog: false }));
-  m.renderOrder = 1;
+  m.renderOrder = 1; m.userData.w = w;
   return m;
 }
 function makeCard(info){
   const px = 100, f = `bold ${px}px ${FONT}`, c = document.createElement('canvas'), g = c.getContext('2d');
+  // tlačítka s možnostmi (pořadí určuje sada, u vyjmenovaných vždy y vlevo, i vpravo)
+  const btnMeshes = info.options.map(o => makeCardButton(o, practice ? (o === info.answer ? 'good' : 'bad') : null));
+  const btnsW = btnMeshes.reduce((s, m) => s + m.userData.w, 0) + CARD_BTN_GAP*(btnMeshes.length - 1);
   g.font = f;
-  const preW = g.measureText(info.pre).width, postW = g.measureText(info.post).width, gapW = px*0.78, padX = px*0.5;
+  const optW = Math.max(...info.options.map(o => g.measureText(o).width));
+  const preW = g.measureText(info.pre).width, postW = g.measureText(info.post).width, gapW = Math.max(px*0.78, optW + px*0.3), padX = px*0.5;
   const textW = preW + gapW + postW + (info.pre ? px*0.06 : 0) + (info.post ? px*0.06 : 0);
-  c.width = Math.ceil(Math.max(textW + padX*2, 1.5*CARD_K)); c.height = Math.round(CARD_H*CARD_K);
+  c.width = Math.ceil(Math.max(textW + padX*2, 1.5*CARD_K, (btnsW + 0.3)*CARD_K)); c.height = Math.round(CARD_H*CARD_K);
   const rowY = c.height*0.27;
   const gx = (c.width - textW)/2 + preW + (info.pre ? px*0.06 : 0);   // levý okraj čtverečku
   function redraw(fill){   // fill: null | { ok: bool }
@@ -730,7 +782,7 @@ function makeCard(info){
     const sy = rowY - px*0.48, sh = px*0.96;
     roundRect(g, gx, sy, gapW, sh, 12);
     if (fill){ g.fillStyle = fill.ok ? '#1a9d4a' : '#c0392b'; g.fill(); g.lineWidth = 5; g.strokeStyle = '#fff'; g.stroke();
-      g.textAlign = 'center'; g.fillStyle = '#fff'; g.fillText(info.letter, gx + gapW/2, rowY + px*0.04); }
+      g.textAlign = 'center'; g.fillStyle = '#fff'; g.fillText(info.answer, gx + gapW/2, rowY + px*0.04); }
     else { g.fillStyle = 'rgba(255,255,255,0.08)'; g.fill(); g.lineWidth = 6; g.strokeStyle = '#ffd23f'; g.setLineDash([16, 10]); g.stroke(); g.setLineDash([]); }
     tex.needsUpdate = true;
   }
@@ -740,11 +792,10 @@ function makeCard(info){
   const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, CARD_H),
     new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity: 0, depthWrite: false, fog: false }));
   mesh.userData.w = w;
-  // tlačítka: vždy y vlevo, i vpravo (u velkého písmene velká, u dlouhého ý / í)
-  const yL = /[yýYÝ]/.test(info.letter) ? info.letter : SWAP[info.letter], iL = SWAP[yL];
-  const btns = [yL, iL].map((letter, k) => {
-    const b = makeCardButton(letter, practice ? (letter === info.letter ? 'good' : 'bad') : null); b.position.set((k ? 1 : -1)*0.36, -CARD_H/2 + 0.08 + CARD_BTN/2, 0.01);
-    mesh.add(b); return { mesh: b, letter };
+  let bx = -btnsW/2;
+  const btns = btnMeshes.map((b, k) => {
+    b.position.set(bx + b.userData.w/2, -CARD_H/2 + 0.08 + CARD_BTN/2, 0.01); bx += b.userData.w + CARD_BTN_GAP;
+    mesh.add(b); return { mesh: b, option: info.options[k] };
   });
   return { mesh, btns, redraw };
 }
@@ -776,12 +827,12 @@ function spawnCard(){
 }
 function removeCard(c){ scene.remove(c.mesh); disposeMesh(c.mesh); cards.splice(cards.indexOf(c), 1); }
 function cardTargets(){ return cards.filter(c => c.phase === 'live' || c.phase === 'out'); }
-function answerCard(c, letter, haptic){
-  const right = letter === c.info.letter;
-  logDuel(c.info.correct, letter);
+function answerCard(c, option, haptic){
+  const right = option === c.info.answer;
+  logDuel(c.info.correct, option);
   c.phase = right ? 'hit' : 'bad'; c.t = 0;
   c.redraw({ ok: right });
-  for (const b of c.btns) b.mesh.visible = b.letter === c.info.letter;   // zůstane jen správné písmeno
+  for (const b of c.btns) b.mesh.visible = b.option === c.info.answer;   // zůstane jen správná možnost
   const top = c.mesh.position.clone().add(new THREE.Vector3(0, CARD_H/2 + 0.35, 0));
   if (right){
     score += SCORE_GOOD; goodCount++;
@@ -1022,7 +1073,7 @@ function shoot(hand, origin, dir, haptic){
     const hit = raycaster.intersectObjects(live.flatMap(c => [c.mesh, ...c.btns.map(b => b.mesh)]), false)[0];
     laser(origin, hit ? hit.point : origin.clone().addScaledVector(dir, 30), HAND_COLOR[hand]);
     if (!hit) return;
-    for (const c of live){ const b = c.btns.find(x => x.mesh === hit.object); if (b){ answerCard(c, b.letter, haptic); break; } }
+    for (const c of live){ const b = c.btns.find(x => x.mesh === hit.object); if (b){ answerCard(c, b.option, haptic); break; } }
     return;
   }
   const live = words.filter(w => w.phase === 'live' || w.phase === 'out');  // i mizící slovo se počítá
@@ -1361,16 +1412,8 @@ const MZ_MAT = (() => {
   };
 })();
 /* ---- portréty velikánů češtiny na zdech (kresby Jana Vilímka, volné dílo; zdroje v portrety/ZDROJE.md) ---- */
-const PORTRETY = [
-  { f: 'hus',       n: 'Mistr Jan Hus',      y: 'asi 1370–1415', t: 'zavedl háčky a čárky' },
-  { f: 'dobrovsky', n: 'Josef Dobrovský',    y: '1753–1829',     t: 'první velká mluvnice češtiny' },
-  { f: 'jungmann',  n: 'Josef Jungmann',     y: '1773–1847',     t: 'Slovník česko-německý' },
-  { f: 'safarik',   n: 'Pavel Josef Šafařík', y: '1795–1861',    t: 'Slovanské starožitnosti' },
-  { f: 'palacky',   n: 'František Palacký',  y: '1798–1876',     t: 'Dějiny národu českého' },
-  { f: 'macha',     n: 'Karel Hynek Mácha',  y: '1810–1836',     t: 'básník, Máj' },
-  { f: 'nemcova',   n: 'Božena Němcová',     y: '1820–1862',     t: 'spisovatelka, Babička' },
-];
-const MZ_PORT = { list: [], bag: [], W: 0.8 };   // připravené portréty { mat, geo }, sáček pro losování bez opakování
+// Které portréty visí, určuje sada ("portrety": [{ obrazek, jmeno, roky, popis }]); sada bez portrétů = holé zdi.
+const MZ_PORT = { list: [], bag: [], W: 0.8, gen: 0 };   // připravené portréty { mat, geo }, sáček pro losování bez opakování
 function makePortrait(p, img){
   const W = 512, F = 44, iw = W - 2*F, ih = Math.round(iw * img.height / img.width), PH = 128, H = F + ih + 14 + PH + F;
   const c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d');
@@ -1388,17 +1431,25 @@ function makePortrait(p, img){
   roundRect(g, px, py, pw, PH - 8, 10); g.fillStyle = pg; g.fill(); g.lineWidth = 3; g.strokeStyle = '#5a4210'; g.stroke();
   g.fillStyle = '#2b1d05'; g.textAlign = 'center'; g.textBaseline = 'middle';
   const fit = (txt, px0, wt) => { let s = px0; do { g.font = `${wt} ${s}px Georgia, "Times New Roman", serif`; s -= 2; } while (g.measureText(txt).width > pw - 24 && s > 12); };
-  fit(p.n, 40, 'bold'); g.fillText(p.n, W/2, py + 34);
-  fit(`${p.y} · ${p.t}`, 29, 'normal'); g.fillText(`${p.y} · ${p.t}`, W/2, py + 82);
+  const sub = [p.roky, p.popis].filter(Boolean).join(' · ');
+  fit(p.jmeno || '', 40, 'bold'); g.fillText(p.jmeno || '', W/2, py + 34);
+  fit(sub, 29, 'normal'); g.fillText(sub, W/2, py + 82);
   const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
   const w = MZ_PORT.W;
   return { mat: new THREE.MeshBasicMaterial({ map: tex, color: 0xd8d8d8 }), geo: new THREE.PlaneGeometry(w, w * H / W), h: w * H / W };
 }
-for (const p of PORTRETY){   // načíst na pozadí; když se obrázek nenačte, bludiště je prostě bez něj
-  const img = new Image();
-  img.onload = () => MZ_PORT.list.push(makePortrait(p, img));
-  img.src = 'portrety/' + p.f + '.jpg';
+function loadPortraits(){   // načíst na pozadí; když se obrázek nenačte, bludiště je prostě bez něj
+  const gen = ++MZ_PORT.gen;
+  for (const o of MZ_PORT.list){ o.mat.map.dispose(); o.mat.dispose(); o.geo.dispose(); }
+  MZ_PORT.list = []; MZ_PORT.bag = [];
+  for (const p of sada.portrety){
+    if (!p || typeof p.obrazek !== 'string') continue;
+    const img = new Image();
+    img.onload = () => { if (gen === MZ_PORT.gen) MZ_PORT.list.push(makePortrait(p, img)); };
+    img.src = p.obrazek;
+  }
 }
+loadPortraits();
 function mzNextPortrait(){
   if (!MZ_PORT.list.length) return null;
   if (!MZ_PORT.bag.length){ MZ_PORT.bag = [...MZ_PORT.list]; for (let i = MZ_PORT.bag.length - 1; i > 0; i--){ const k = Math.random()*(i+1)|0; [MZ_PORT.bag[i], MZ_PORT.bag[k]] = [MZ_PORT.bag[k], MZ_PORT.bag[i]]; } }
@@ -2008,7 +2059,7 @@ async function initVR(){
 initVR();
 
 /* ================= HLAVNÍ SMYČKA ================= */
-window.__vs = { mz, mzPlace, MZ_PORT, MZ_PLAQUE, dolly, words, blocks, cards, pauseGame, resumeGame, quitGame, rigs, track, camera, mouseHeld, setMode, setPractice, setDuel, setScoring, startGame, get practice(){ return practice; }, get duel(){ return duel; }, get duelAnswers(){ return duelAnswers; }, get duelResult(){ return duelResult; }, get mode(){ return mode; }, get state(){ return state; }, get score(){ return score; }, get good(){ return goodCount; }, get bad(){ return badCount; } }; // pro testování
+window.__vs = { SADY, setSada, startDuel, get sada(){ return sada; }, mz, mzPlace, MZ_PORT, MZ_PLAQUE, dolly, words, blocks, cards, pauseGame, resumeGame, quitGame, rigs, track, camera, mouseHeld, setMode, setPractice, setDuel, setScoring, startGame, get practice(){ return practice; }, get duel(){ return duel; }, get duelAnswers(){ return duelAnswers; }, get duelResult(){ return duelResult; }, get mode(){ return mode; }, get state(){ return state; }, get score(){ return score; }, get good(){ return goodCount; }, get bad(){ return badCount; } }; // pro testování
 track.visible = mode === 'mece';
 showPanel(drawMenu);
 const clock = new THREE.Clock();

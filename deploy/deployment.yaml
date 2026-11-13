@@ -50,6 +50,9 @@ spec:
             - name: portrety
               mountPath: /usr/share/nginx/portrety
               readOnly: true
+            - name: sady
+              mountPath: /usr/share/nginx/sady
+              readOnly: true
             - name: nginx-conf
               mountPath: /etc/nginx/conf.d
               readOnly: true
@@ -62,6 +65,9 @@ spec:
         - name: portrety
           configMap:
             name: vrskola-portrety
+        - name: sady
+          configMap:
+            name: vrskola-sady
         - name: nginx-conf
           configMap:
             name: vrskola-nginx
