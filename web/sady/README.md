@@ -12,7 +12,7 @@ Stejné soubory čte i server Souboje třídy, takže body počítá podle stejn
 | `vyjmenovana.json` | vyjmenovaná slova (y/i po obojetných souhláskách) |
 | `vybrane-slova.json` | slovenské vybrané slová |
 | `shoda.json` | shoda přísudku s podmětem: koncovka -i/-y (`psi štěkal[i]`, `děti si hrál[y]`, `kluci a holky běhal[i]`); rod střední (-a) vynechán |
-| `nasobilka.json` | malá násobilka 1–10 (`7 · 8 = [56|48|64|63|49]`, špatné výsledky = sousední násobky a ±1), vygenerovaná |
+| `nasobilka.json` | malá násobilka 1–10 (`7 · 8 = [56\|48\|64\|63\|49]`, špatné výsledky = sousední násobky a ±1), vygenerovaná |
 
 ## Formát
 
