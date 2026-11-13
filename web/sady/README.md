@@ -25,7 +25,7 @@ Stejné soubory čte i server Souboje třídy, takže body počítá podle stejn
 |---|---|---|
 | `id` | ano | malá písmena, číslice a pomlčky; musí sedět s názvem souboru a být v `index.json` |
 | `nazev` | ano | nadpis v menu a v názvu stránky |
-| `jazyk` | ne | `lang` stránky (výchozí `cs`) |
+| `jazyk` | ne | jazyk rozhraní hry i `lang` stránky: `cs` (výchozí) nebo `sk`; nápisy jsou ve slovníku `UI` v `index.html`, další jazyk = další větev slovníku |
 | `skupiny` | ano | seznam skupin `{ nazev, polozky }`; skupina je jen pro pořádek a pro losování špatných možností |
 | `zamena` | ne | automatické špatné možnosti, např. `{ "y": "i", "ý": "í" }` (hodnota může být i pole) |
 | `pocetMoznosti` | ne | kolik tlačítek má karta v Doplňovačce, 2–4 (výchozí 3) |
