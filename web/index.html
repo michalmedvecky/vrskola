@@ -10,6 +10,12 @@
   #vr{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);padding:14px 30px;font-size:20px;font-weight:700;border-radius:14px;border:2px solid #6cf;background:#0a1a33;color:#fff;cursor:pointer;z-index:2}
   #vr[disabled]{opacity:.6;cursor:default}
   #help{position:fixed;left:12px;top:10px;font-size:13px;line-height:1.45;opacity:.8;max-width:min(440px,calc(100% - 24px));z-index:2;pointer-events:none}
+  #dotyk{position:fixed;left:0;right:0;bottom:96px;display:none;justify-content:center;gap:14px;z-index:3;pointer-events:none}
+  #dotyk button{pointer-events:auto;font:700 20px system-ui,"Segoe UI",Arial,sans-serif;color:#fff;padding:14px 20px;border-radius:16px;border:3px solid transparent;background:#1a2340;opacity:.75;touch-action:manipulation}
+  #dotyk button.on{opacity:1}
+  #dotyk #d-ok.on{background:#15803d;border-color:#5dff8a}
+  #dotyk #d-bad.on{background:#b91c1c;border-color:#ff8a8a}
+  #dotyk #d-pauza{background:#25335e;border-color:#6cf;opacity:1}
 </style>
 <script type="importmap">{"imports":{"three":"./three.module.min.js"}}</script>
 </head>
@@ -22,7 +28,10 @@
   <b>Doplňovačka:</b> na kartách chybí písmeno, kteroukoli pistolí vystřel správné <b>y</b> nebo <b>i</b> pod slovem.<br>
   <b>Pauza:</b> tlačítko <b>B</b> nebo <b>Y</b> na ovladači (na počítači <b>Esc</b>) – pokračovat, ukončit hru, nebo opustit VR.<br>
   Na počítači (zkouška): myš míří, <b>levé tlačítko</b> = levá ruka, <b>pravé tlačítko</b> = pravá ruka (u mečů drž tlačítko a táhni myší), šipky nebo WASD otáčí pohled.<br>
-  Na tabletu: <b>tažením prstu</b> se rozhlížíš, <b>klepnutím</b> střílíš.
+  Na tabletu: <b>tažením prstu</b> se rozhlížíš, <b>klepnutím</b> střílíš (u mečů drž prst a táhni); tlačítky dole volíš zbraň <b>✔ správně</b> / <b>✘ špatně</b>, ⏸ je pauza.
+</div>
+<div id="dotyk">
+  <button id="d-bad">✘ špatně</button><button id="d-pauza">⏸</button><button id="d-ok" class="on">✔ správně</button>
 </div>
 <button id="vr" disabled>Načítám…</button>
 
@@ -451,7 +460,7 @@ function updateHud(){
   hg.textAlign = 'left'; hg.fillStyle = t <= 10 ? '#ff6b6b' : '#fff'; hg.fillText(`${mm}:${ss}`, 28, 50);
   hg.textAlign = 'right'; hg.fillStyle = '#ffd23f'; hg.fillText(`${score} b.`, 484, 50);
   hg.font = `bold 20px ${FONT}`; hg.textAlign = 'center'; hg.fillStyle = 'rgba(255,255,255,0.6)';
-  hg.fillText(renderer.xr.isPresenting ? 'B/Y = pauza' : 'Esc = pauza', 262, 50);
+  hg.fillText(renderer.xr.isPresenting ? 'B/Y = pauza' : usedTouch ? '⏸ = pauza' : 'Esc = pauza', 262, 50);
   hudTex.needsUpdate = true;
 }
 
@@ -1089,7 +1098,19 @@ renderer.domElement.addEventListener('pointermove', e => {
   mouse.set(e.clientX/innerWidth*2-1, -(e.clientY/innerHeight)*2+1); mouseIn = true;
 });
 // dotyk (tablet, telefon): tažení prstem otáčí pohled, krátké klepnutí vystřelí
-let touchDrag = null;
+// zbraň (pravá = správně, levá = špatně) se na dotyku volí tlačítky dole, ⏸ = pauza
+let touchDrag = null, usedTouch = false, touchHand = 'right';
+const dotyk = document.getElementById('dotyk'), dOk = document.getElementById('d-ok'), dBad = document.getElementById('d-bad');
+function setTouchHand(h){ touchHand = h; dOk.classList.toggle('on', h === 'right'); dBad.classList.toggle('on', h === 'left'); }
+dOk.addEventListener('click', () => setTouchHand('right'));
+dBad.addEventListener('click', () => setTouchHand('left'));
+document.getElementById('d-pauza').addEventListener('click', () => { if (state === 'playing') pauseGame(); });
+function pointerHand(e){ return e.pointerType !== 'mouse' ? touchHand : e.button === 2 ? 'right' : 'left'; }
+function updateTouchUi(){
+  const show = usedTouch && !renderer.xr.isPresenting && state === 'playing';
+  dotyk.style.display = show ? 'flex' : 'none';
+  if (show){ const guns = mode !== 'karty'; dOk.style.display = dBad.style.display = guns ? '' : 'none'; }
+}
 const TAP_MOVE = 12;   // px, větší pohyb už je tažení
 renderer.domElement.addEventListener('pointermove', e => {
   if (!touchDrag || e.pointerId !== touchDrag.id) return;
@@ -1108,6 +1129,7 @@ addEventListener('pointerup', e => {
 addEventListener('pointercancel', e => { if (touchDrag && e.pointerId === touchDrag.id) touchDrag = null; });
 renderer.domElement.addEventListener('pointerdown', e => {
   if (renderer.xr.isPresenting) return;
+  if (e.pointerType !== 'mouse' && !usedTouch){ usedTouch = true; hudKey = ''; }
   if (e.pointerType !== 'mouse' && !(mode === 'mece' && !panel.visible)){
     if (!touchDrag) touchDrag = { id: e.pointerId, x0: e.clientX, y0: e.clientY, x: e.clientX, y: e.clientY, moved: false };
     mouse.set(e.clientX/innerWidth*2-1, -(e.clientY/innerHeight)*2+1); mouseIn = true;
@@ -1115,7 +1137,7 @@ renderer.domElement.addEventListener('pointerdown', e => {
   }
   if (mode === 'mece' && !panel.visible){   // meč se drží tlačítkem a seká tahem myši
     mouse.set(e.clientX/innerWidth*2-1, -(e.clientY/innerHeight)*2+1); mouseIn = true;
-    mouseHeld[e.button === 2 ? 'right' : 'left'] = true; audio(); return;
+    mouseHeld[pointerHand(e)] = true; audio(); return;
   }
   desktopShoot(e);
 });
@@ -1123,7 +1145,7 @@ function desktopShoot(e){
   audio();
   mouse.set(e.clientX/innerWidth*2-1, -(e.clientY/innerHeight)*2+1);
   raycaster.setFromCamera(mouse, camera);
-  const hand = e.button === 2 ? 'right' : 'left';
+  const hand = pointerHand(e);
   const origin = camera.position.clone().add(new THREE.Vector3(hand==='right'?0.25:-0.25, -0.3, 0).applyQuaternion(camera.quaternion));
   // směr: od pistole k bodu, kam míří kurzor
   const target = raycaster.ray.origin.clone().addScaledVector(raycaster.ray.direction, 12);
@@ -1132,7 +1154,7 @@ function desktopShoot(e){
   if (pick) target.copy(pick.point);
   shoot(hand, origin, target.sub(origin).normalize(), null);
 }
-addEventListener('pointerup', e => { mouseHeld[e.button === 2 ? 'right' : 'left'] = false; });
+addEventListener('pointerup', e => { if (e.pointerType !== 'mouse') mouseHeld.left = mouseHeld.right = false; else mouseHeld[e.button === 2 ? 'right' : 'left'] = false; });
 addEventListener('blur', () => { mouseHeld.left = mouseHeld.right = false; });
 addEventListener('keydown', e => { keys[e.key.toLowerCase()] = true;
   if (e.key === 'Escape' || e.key.toLowerCase() === 'p'){ if (state === 'playing') pauseGame(); else if (state === 'paused') resumeGame(); } });
@@ -1183,6 +1205,7 @@ const _o = new THREE.Vector3(), _q = new THREE.Quaternion(), _d = new THREE.Vect
 renderer.setAnimationLoop(() => {
   const dt = Math.min(clock.getDelta(), 0.05);
   if (!renderer.xr.isPresenting) updateDesktop(dt);
+  updateTouchUi();
   const vp = viewPos().clone();
 
   // hra
