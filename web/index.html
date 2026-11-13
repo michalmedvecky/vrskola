@@ -78,7 +78,7 @@ const API = 'api/';
 let duel = (() => { if (practice) return false; const q = new URLSearchParams(location.search).get('souboj'); if (q !== null) return q !== '0';
   try { return localStorage.getItem('smartoped-vr-souboj') === '1'; } catch { return false; } })();
 let duelName = (() => { try { return localStorage.getItem('smartoped-vr-jmeno') || ''; } catch { return ''; } })();
-let duelCas = 120, duelTicket = null, duelAnswers = [], duelResult = null, duelError = '', duelRetry = null, duelMsg = '';
+let duelCas = 300, duelTicket = null, duelAnswers = [], duelResult = null, duelError = '', duelRetry = null, duelMsg = '';
 const duelTop = {};   // režim → { list, err, t, loading }
 function setDuel(){ duel = true; practice = false; try { localStorage.setItem('smartoped-vr-cviceni', '0'); localStorage.setItem('smartoped-vr-souboj', '1'); } catch {} refreshDuelTop(true); redrawPanel(); }
 function setScoring(){ duel = false; setPractice(false); }

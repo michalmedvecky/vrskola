@@ -14,7 +14,7 @@ jsou zelená, špatně napsaná červená (v Doplňovačce je zelené správné 
 do tabulky, na konci je jen statistika správně / nesprávně.
 
 **Souboj třídy** (třetí přepínač v menu, `?souboj=1`): online tabulka TOP 5 pro každý režim, společná pro všechny děti.
-Dítě zadá přezdívku (headset si ji pamatuje), všichni hrají stejně dlouho (`SOUBOJ_CAS`, výchozí 2 min) a výsledek se
+Dítě zadá přezdívku (headset si ji pamatuje), všichni hrají stejně dlouho (`SOUBOJ_CAS`, výchozí 5 min) a výsledek se
 pošle na mini server v `server/` (viz níže). V tabulce má každé jméno jen svůj nejlepší výsledek.
 
 Hra trvá 5 minut (`?cas=30` zkrátí), tabulka 3 nejlepších se ukládá v prohlížeči headsetu. Pauza: B/Y (Esc na počítači).

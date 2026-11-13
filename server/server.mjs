@@ -5,7 +5,7 @@
 // server ověří lístek, délku hry a tempo odpovědí. Cílem je, aby dítě skóre nepodvrhlo z konzole prohlížeče.
 //
 // Proměnné prostředí:
-//   PORT=8081, DATA_DIR=/data (výsledky + tajný klíč pro podpis lístků), SOUBOJ_CAS=120 (délka souboje v s),
+//   PORT=8081, DATA_DIR=/data (výsledky + tajný klíč pro podpis lístků), SOUBOJ_CAS=300 (délka souboje v s),
 //   ADMIN_TOKEN (heslo učitele pro mazání; bez něj je mazání vypnuté), SLOVA=./slova.js,
 //   STATIC_DIR (jen pro lokální zkoušení: servíruje i soubory hry, např. STATIC_DIR=../web)
 import http from 'node:http';
@@ -16,7 +16,7 @@ import { pathToFileURL } from 'node:url';
 
 const PORT = Number(process.env.PORT) || 8081;
 const DATA_DIR = process.env.DATA_DIR || './data';
-const CAS = Math.max(10, Number(process.env.SOUBOJ_CAS) || 120);
+const CAS = Math.max(10, Number(process.env.SOUBOJ_CAS) || 300);
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || '';
 const STATIC_DIR = process.env.STATIC_DIR ? resolve(process.env.STATIC_DIR) : '';
 const MODES = ['strelba', 'mece', 'karty'];

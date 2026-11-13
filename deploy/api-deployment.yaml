@@ -39,7 +39,7 @@ spec:
             - name: SLOVA
               value: /app/slova.js
             - name: SOUBOJ_CAS          # délka souboje v sekundách, stejná pro všechny děti
-              value: "120"
+              value: "300"
             - name: ADMIN_TOKEN         # heslo učitele pro mazání tabulky; Secret je nepovinný (bez něj mazání nejde)
               valueFrom:
                 secretKeyRef:
