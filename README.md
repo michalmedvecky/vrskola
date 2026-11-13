@@ -1,6 +1,9 @@
 # VR škola
 
 VR hry pro Oculus Quest 2 na procvičování vyjmenovaných slov (WebXR, three.js 0.160 přibalené).
+Hry jsou „framework“: co se procvičuje, určuje vyměnitelná **sada zadání** v `web/sady/` (vyjmenovaná slova jsou
+jedna z nich, `web/sady/vyjmenovana.json`). Novou sadu (jiný jazyk, slovíčka, předmět) jde přidat bez programování,
+viz [`web/sady/README.md`](web/sady/README.md). Sada určuje i texty v menu a portréty na zdech Bludiště.
 Přesunuto z repa `smartoped` (`web/vr/`), stav včetně pauzy a tlačítka Opustit VR.
 
 ## Režimy
@@ -17,8 +20,8 @@ Přesunuto z repa `smartoped` (`web/vr/`), stav včetně pauzy a tlačítka Opus
   Meč se ukáže, až když příšera honí hráče. Chůze má zvuk kroků a jemné pohupování (ve VR jen náznak), držením
   páčky / klávesy se krok během ~2 s zrychlí (VR 2,8 → 4,6 m/s, počítač 3,6 → 6,5 m/s). Zdi jsou cihlové, podlaha
   kamenná (textury se kreslí v prohlížeči, žádné soubory). Proti nevolnosti: otáčení po skocích a při chůzi se zúží zorné pole.
-  Po zdech náhodně visí portréty velikánů češtiny (Hus, Dobrovský, Jungmann, Šafařík, Palacký, Mácha, Němcová)
-  v rámu s mosaznou jmenovkou; jsou to volná díla Jana Vilímka, zdroje v `web/portrety/ZDROJE.md`. V k3s jsou
+  Po zdech náhodně visí portréty (určuje je sada; u vyjmenovaných slov velikáni češtiny (Hus, Dobrovský, Jungmann, Šafařík, Palacký, Mácha, Němcová)
+  v rámu s mosaznou jmenovkou); jsou to volná díla Jana Vilímka, zdroje v `web/portrety/ZDROJE.md`. V k3s jsou
   ve vlastní ConfigMapě `vrskola-portrety` (nginx je servíruje z `/portrety/`).
   Když hráč zvolí správnou cestu, na boční zeď chodby za zatáčkou (z křižovatky není vidět) se občas pověsí malá
   cedulka se správně napsaným slovem: vždy to, které hráč právě spletl, jinak některé z už odehraných (každé nejvýš
@@ -40,25 +43,27 @@ Na počítači jde hrát myší (levé/pravé tlačítko, šipky otáčí).
 | Cesta | Co to je |
 |---|---|
 | `web/index.html` | celá hra |
-| `web/slova.js` | seznam vyjmenovaných slov (kopie `smartoped/web/slova.js`) |
+| `web/sady/` | sady zadání (`index.json` = nabídka, `vyjmenovana.json`, formát v `README.md`) |
+| `web/sada.js` | parser sad, sdílený hrou i serverem |
 | `web/three.module.min.js` | three.js 0.160 |
 | `server/server.mjs` | mini server pro Souboj třídy (Node.js 22, bez závislostí) |
 | `kustomization.yaml`, `deploy/` | nasazení do k3s |
 
 Lokálně: `cd web && python3 -m http.server 8000` → http://localhost:8000/ (WebXR v headsetu potřebuje https).
-Se soubojem: `cd server && SLOVA=../web/slova.js STATIC_DIR=../web SOUBOJ_CAS=20 node server.mjs` → http://localhost:8081/.
+Se soubojem: `cd server && STATIC_DIR=../web SOUBOJ_CAS=20 node server.mjs` → http://localhost:8081/.
 
 ## Server pro Souboj třídy
 
 `server/server.mjs` běží na stejné doméně jako hra pod `/api` (Ingress posílá `/api` na Service `vrskola-api`).
 Výsledky ukládá do `/data/vysledky.json` na PVC `vrskola-api-data`, takže přežijí restart.
 
-- `GET /api/top?rezim=strelba|mece|karty|bludiste` – TOP 5 a délka souboje
-- `POST /api/souboj/start` `{rezim}` – podepsaný jednorázový lístek
-- `POST /api/souboj/konec` `{rezim, listek, jmeno, odpovedi}` – vyhodnocení, vrací skóre, pořadí a TOP 5
+- `GET /api/top?rezim=strelba|mece|karty|bludiste&sada=<id>` – TOP 5 a délka souboje (bez `sada` platí první sada z `index.json`)
+- `POST /api/souboj/start` `{rezim, sada}` – podepsaný jednorázový lístek
+- `POST /api/souboj/konec` `{rezim, sada, listek, jmeno, odpovedi}` – vyhodnocení, vrací skóre, pořadí a TOP 5
 
 Proti podvádění: hra neposílá skóre, ale seznam odpovědí (čas, slovo, co dítě zvolilo) a body spočítá server podle
-`slova.js`. Lístek je podepsaný (HMAC, klíč se vygeneruje do `/data/klic`), jde použít jen jednou a jen když od startu
+stejné sady zadání (`web/sady/`, parser `web/sada.js`). TOP 5 je pro každou sadu a režim zvlášť
+(starší výsledky z doby před sadami server při startu přesune k vyjmenovaným slovům). Lístek je podepsaný (HMAC, klíč se vygeneruje do `/data/klic`), jde použít jen jednou a jen když od startu
 uběhla celá délka souboje. Moc rychlé odpovědi (méně než 60 ms po sobě, víc než 2,5 správných za sekundu) se nezapočítají.
 Zkušený programátor by to obejít uměl, dítě s vývojářskými nástroji v prohlížeči ne.
 
@@ -69,7 +74,7 @@ kubectl -n vrskola create secret generic vrskola-api-admin --from-literal=token=
 kubectl -n vrskola rollout restart deploy/vrskola-api
 H="Authorization: Bearer <token>"
 curl -H "$H" https://<host>/api/admin/top                                  # všechny výsledky
-curl -H "$H" -X DELETE "https://<host>/api/admin/top?rezim=strelba"        # smazat tabulku Střelnice (bez rezim = všechny)
+curl -H "$H" -X DELETE "https://<host>/api/admin/top?rezim=strelba"        # smazat tabulku Střelnice (bez rezim = všechny; &sada=<id> jen jedna sada)
 curl -H "$H" -X DELETE "https://<host>/api/admin/top?jmeno=Pepa"           # odebrat jedno jméno ze všech režimů
 ```
 

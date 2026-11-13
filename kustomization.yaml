@@ -23,8 +23,12 @@ configMapGenerator:
   - name: vrskola-web
     files:
       - web/index.html
-      - web/slova.js
+      - web/sada.js
       - web/three.module.min.js
+  - name: vrskola-sady      # sady zadání (co se procvičuje); hra je čte z /sady/, server souboje z /sady
+    files:
+      - web/sady/index.json
+      - web/sady/vyjmenovana.json
   - name: vrskola-portrety   # portréty do bludiště (~220 kB), zvlášť kvůli limitu 1 MiB na ConfigMapu
     files:
       - web/portrety/hus.jpg
@@ -40,4 +44,4 @@ configMapGenerator:
   - name: vrskola-api
     files:
       - server/server.mjs
-      - web/slova.js
+      - web/sada.js

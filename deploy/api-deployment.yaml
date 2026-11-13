@@ -1,5 +1,5 @@
-# Mini server pro online souboje (TOP 5). Žádný image se nestaví: server.mjs a slova.js jsou v ConfigMapě vrskola-api
-# a spouští je neupravený node:22-alpine. Výsledky a klíč pro podpis lístků leží na PVC vrskola-api-data.
+# Mini server pro online souboje (TOP 5). Žádný image se nestaví: server.mjs a sada.js jsou v ConfigMapě vrskola-api,
+# sady zadání v ConfigMapě vrskola-sady (stejná jako pro hru), spouští je neupravený node:22-alpine. Výsledky a klíč pro podpis lístků leží na PVC vrskola-api-data.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -36,8 +36,10 @@ spec:
               value: "8081"
             - name: DATA_DIR
               value: /data
-            - name: SLOVA
-              value: /app/slova.js
+            - name: SADA_JS
+              value: /app/sada.js
+            - name: SADY
+              value: /sady
             - name: SOUBOJ_CAS          # délka souboje v sekundách, stejná pro všechny děti
               value: "300"
             - name: ADMIN_TOKEN         # heslo učitele pro mazání tabulky; Secret je nepovinný (bez něj mazání nejde)
@@ -72,12 +74,18 @@ spec:
             - name: app
               mountPath: /app
               readOnly: true
+            - name: sady
+              mountPath: /sady
+              readOnly: true
             - name: data
               mountPath: /data
       volumes:
         - name: app
           configMap:
             name: vrskola-api
+        - name: sady
+          configMap:
+            name: vrskola-sady
         - name: data
           persistentVolumeClaim:
             claimName: vrskola-api-data
