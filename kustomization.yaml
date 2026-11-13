@@ -30,6 +30,15 @@ configMapGenerator:
       - web/sady/index.json
       - web/sady/vyjmenovana.json
       - web/sady/vybrane-slova.json
+      - web/sady/sk-s-z.json
+      - web/sady/sk-spodobovanie.json
+      - web/sady/sk-ae.json
+      - web/sady/sk-y-i.json
+      - web/sady/sk-koncovky.json
+      - web/sady/sk-makcene.json
+      - web/sady/sk-dlzne.json
+      - web/sady/sk-dvojhlasky.json
+      - web/sady/sk-velke-pismena.json
       - web/sady/shoda.json
       - web/sady/nasobilka.json
   - name: vrskola-portrety   # portréty do bludiště (~440 kB, české i slovenské), zvlášť kvůli limitu 1 MiB na ConfigMapu

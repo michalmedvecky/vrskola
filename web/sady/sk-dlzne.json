@@ -1,0 +1,129 @@
+{
+  "id": "sk-dlzne",
+  "nazev": "Dĺžne a rytmický zákon",
+  "jazyk": "sk",
+  "popis": "Rytmický zákon: v slovenčine nesmú ísť dve dlhé slabiky za sebou, preto krásny (nie krásný), dve čísla (nie číslá), číta (nie čítá).",
+  "poznamka": "Dlhá slabika je slabika s dĺžňom (á, é, í, ó, ú, ý, ŕ, ĺ) alebo s dvojhláskou (ia, ie, iu, ô). Za dlhou slabikou sa koncovka skracuje: krásny, biely, čísla, miesta, číta, chváli. Za krátkou slabikou ostáva dlhá: pekný, mestá, volá, robí. Výnimky z rytmického zákona (páví, vtáčí, básnia…) sú vynechané.",
+  "zamena": {
+    "y": "ý",
+    "ý": "y",
+    "a": "á",
+    "á": "a",
+    "i": "í",
+    "í": "i"
+  },
+  "pocetMoznosti": 2,
+  "poradiMoznosti": [
+    "a",
+    "á",
+    "i",
+    "í",
+    "y",
+    "ý"
+  ],
+  "texty": {
+    "strelba": [
+      "PRAVÁ ruka strieľa slová napísané SPRÁVNE",
+      "ĽAVÁ ruka strieľa slová napísané NESPRÁVNE"
+    ],
+    "mece": [
+      "ZELENÝ meč (pravá ruka) seká slová napísané SPRÁVNE",
+      "ČERVENÝ meč (ľavá ruka) seká slová napísané NESPRÁVNE"
+    ],
+    "karty": [
+      "Na kartách chýba samohláska. Krátka, alebo dlhá?",
+      "Vystreľ správnu možnosť pod slovom, hoci ktoroukoľvek rukou."
+    ],
+    "bludiste": [
+      "Na križovatke choď tam, kam ukazuje slovo napísané SPRÁVNE.",
+      "Zlá cesta končí pri príšere – rozsekni ju mečom, alebo uteč!"
+    ],
+    "cviceni": [
+      "Slová napísané správne sú ZELENÉ,",
+      "slová napísané nesprávne sú ČERVENÉ."
+    ],
+    "cviceniKarty": [
+      "Správna možnosť svieti NAZELENO, nesprávna NAČERVENO."
+    ],
+    "cviceniBludiste": [
+      "Šípka so slovom napísaným správne je ZELENÁ,",
+      "šípka so slovom napísaným nesprávne je ČERVENÁ."
+    ]
+  },
+  "portrety": [
+    {
+      "obrazek": "portrety/bernolak.jpg",
+      "jmeno": "Anton Bernolák",
+      "roky": "1762–1813",
+      "popis": "prvá spisovná slovenčina"
+    },
+    {
+      "obrazek": "portrety/stur.jpg",
+      "jmeno": "Ľudovít Štúr",
+      "roky": "1815–1856",
+      "popis": "spisovná slovenčina 1843"
+    },
+    {
+      "obrazek": "portrety/hurban.jpg",
+      "jmeno": "Jozef Miloslav Hurban",
+      "roky": "1817–1888",
+      "popis": "štúrovec, spisovateľ"
+    },
+    {
+      "obrazek": "portrety/hodza.jpg",
+      "jmeno": "Michal Miloslav Hodža",
+      "roky": "1811–1870",
+      "popis": "štúrovec, jazykovedec"
+    },
+    {
+      "obrazek": "portrety/hattala.jpg",
+      "jmeno": "Martin Hattala",
+      "roky": "1821–1903",
+      "popis": "reforma pravopisu 1852"
+    }
+  ],
+  "skupiny": [
+    { "nazev": "Prídavné mená", "polozky": [
+      "krásn[y]",
+      "múdr[y]",
+      "biel[y]",
+      "čiern[y]",
+      "rýchl[y]",
+      "krátk[y]",
+      "slávn[y]",
+      "hlúp[y]",
+      "pekn[ý]",
+      "dobr[ý]",
+      "zelen[ý]",
+      "mal[ý]",
+      "tich[ý]",
+      "dlh[ý]",
+      "hned[ý]",
+      "tmav[ý]"
+    ] },
+    { "nazev": "Podstatné mená v množnom čísle", "polozky": [
+      "dve čísl[a]",
+      "dve krídl[a]",
+      "dve miest[a]",
+      "dve slov[á]",
+      "dve mest[á]",
+      "dve kolen[á]",
+      "dve jablk[á]",
+      "dve vreck[á]"
+    ] },
+    { "nazev": "Slovesá", "polozky": [
+      "ona čít[a]",
+      "ona spiev[a]",
+      "on chvál[i]",
+      "on vrát[i]",
+      "on kúp[i] chlieb",
+      "on rob[í]",
+      "on vid[í]",
+      "on nos[í]",
+      "ona vol[á]",
+      "on hľad[á]",
+      "on čak[á]",
+      "ona hr[á]"
+    ] }
+  ]
+}

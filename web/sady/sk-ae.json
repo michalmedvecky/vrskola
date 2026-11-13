@@ -1,0 +1,114 @@
+{
+  "id": "sk-ae",
+  "nazev": "Ä, alebo E?",
+  "jazyk": "sk",
+  "popis": "Ä (široké e) sa píše len po b, m, p, v: mäso, päť, väčší. Po iných spoluhláskach a vo väčšine slov je e.",
+  "poznamka": "Nesprávny tvar vznikne zámenou ä↔e. Chytáky sú slová, kde po b, m, p, v stojí obyčajné e (meno, pero, veľký).",
+  "zamena": {
+    "ä": "e",
+    "e": "ä"
+  },
+  "pocetMoznosti": 2,
+  "poradiMoznosti": [
+    "ä",
+    "e"
+  ],
+  "texty": {
+    "strelba": [
+      "PRAVÁ ruka strieľa slová napísané SPRÁVNE",
+      "ĽAVÁ ruka strieľa slová napísané NESPRÁVNE"
+    ],
+    "mece": [
+      "ZELENÝ meč (pravá ruka) seká slová napísané SPRÁVNE",
+      "ČERVENÝ meč (ľavá ruka) seká slová napísané NESPRÁVNE"
+    ],
+    "karty": [
+      "Na kartách chýba Ä, alebo E. Čo tam patrí?",
+      "Vystreľ správnu možnosť pod slovom, hoci ktoroukoľvek rukou."
+    ],
+    "bludiste": [
+      "Na križovatke choď tam, kam ukazuje slovo napísané SPRÁVNE.",
+      "Zlá cesta končí pri príšere – rozsekni ju mečom, alebo uteč!"
+    ],
+    "cviceni": [
+      "Slová napísané správne sú ZELENÉ,",
+      "slová napísané nesprávne sú ČERVENÉ."
+    ],
+    "cviceniKarty": [
+      "Správna možnosť svieti NAZELENO, nesprávna NAČERVENO."
+    ],
+    "cviceniBludiste": [
+      "Šípka so slovom napísaným správne je ZELENÁ,",
+      "šípka so slovom napísaným nesprávne je ČERVENÁ."
+    ]
+  },
+  "portrety": [
+    {
+      "obrazek": "portrety/bernolak.jpg",
+      "jmeno": "Anton Bernolák",
+      "roky": "1762–1813",
+      "popis": "prvá spisovná slovenčina"
+    },
+    {
+      "obrazek": "portrety/stur.jpg",
+      "jmeno": "Ľudovít Štúr",
+      "roky": "1815–1856",
+      "popis": "spisovná slovenčina 1843"
+    },
+    {
+      "obrazek": "portrety/hurban.jpg",
+      "jmeno": "Jozef Miloslav Hurban",
+      "roky": "1817–1888",
+      "popis": "štúrovec, spisovateľ"
+    },
+    {
+      "obrazek": "portrety/hodza.jpg",
+      "jmeno": "Michal Miloslav Hodža",
+      "roky": "1811–1870",
+      "popis": "štúrovec, jazykovedec"
+    },
+    {
+      "obrazek": "portrety/hattala.jpg",
+      "jmeno": "Martin Hattala",
+      "roky": "1821–1903",
+      "popis": "reforma pravopisu 1852"
+    }
+  ],
+  "skupiny": [
+    { "nazev": "Ä po b, m, p, v", "polozky": [
+      "m[ä]so",
+      "m[ä]siar",
+      "m[ä]kký",
+      "čaj z m[ä]ty",
+      "p[ä]ť",
+      "p[ä]ta",
+      "p[ä]tnásť",
+      "p[ä]ťdesiat",
+      "sp[ä]ť",
+      "op[ä]ť",
+      "pam[ä]ť",
+      "dev[ä]ť",
+      "dev[ä]tnásť",
+      "v[ä]čší",
+      "v[ä]zeň",
+      "sv[ä]tý",
+      "hov[ä]dzie mäso",
+      "žrieb[ä]",
+      "holúb[ä]"
+    ] },
+    { "nazev": "Chytáky s e", "polozky": [
+      "m[e]no",
+      "m[e]sto",
+      "p[e]ro",
+      "p[e]s",
+      "v[e]ľký",
+      "v[e]čer",
+      "b[e]hať",
+      "b[e]tón",
+      "v[e]da",
+      "p[e]kný",
+      "m[e]dveď",
+      "p[e]rie"
+    ] }
+  ]
+}

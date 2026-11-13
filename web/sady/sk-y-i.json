@@ -1,0 +1,114 @@
+{
+  "id": "sk-y-i",
+  "nazev": "Y/I po tvrdých a mäkkých",
+  "jazyk": "sk",
+  "popis": "Po tvrdých spoluhláskach h, ch, k, g píšeme y/ý, po mäkkých č, š, ž, c, dz, j píšeme i/í.",
+  "poznamka": "V domácich slovách je po h, ch, k, g vždy y, po mäkkých spoluhláskach vždy i. Spoluhlásky d, t, n, l sú v sade vynechané (dym × div, tyč × ticho sa treba naučiť), rovnako cudzie slová s i po k, g, h, ch (kino, gitara, história).",
+  "zamena": {
+    "y": "i",
+    "i": "y",
+    "ý": "í",
+    "í": "ý"
+  },
+  "pocetMoznosti": 2,
+  "poradiMoznosti": [
+    "y",
+    "ý",
+    "i",
+    "í"
+  ],
+  "texty": {
+    "strelba": [
+      "PRAVÁ ruka strieľa slová napísané SPRÁVNE",
+      "ĽAVÁ ruka strieľa slová napísané NESPRÁVNE"
+    ],
+    "mece": [
+      "ZELENÝ meč (pravá ruka) seká slová napísané SPRÁVNE",
+      "ČERVENÝ meč (ľavá ruka) seká slová napísané NESPRÁVNE"
+    ],
+    "karty": [
+      "Na kartách chýba Y, alebo I. Čo tam patrí?",
+      "Vystreľ správnu možnosť pod slovom, hoci ktoroukoľvek rukou."
+    ],
+    "bludiste": [
+      "Na križovatke choď tam, kam ukazuje slovo napísané SPRÁVNE.",
+      "Zlá cesta končí pri príšere – rozsekni ju mečom, alebo uteč!"
+    ],
+    "cviceni": [
+      "Slová napísané správne sú ZELENÉ,",
+      "slová napísané nesprávne sú ČERVENÉ."
+    ],
+    "cviceniKarty": [
+      "Správna možnosť svieti NAZELENO, nesprávna NAČERVENO."
+    ],
+    "cviceniBludiste": [
+      "Šípka so slovom napísaným správne je ZELENÁ,",
+      "šípka so slovom napísaným nesprávne je ČERVENÁ."
+    ]
+  },
+  "portrety": [
+    {
+      "obrazek": "portrety/bernolak.jpg",
+      "jmeno": "Anton Bernolák",
+      "roky": "1762–1813",
+      "popis": "prvá spisovná slovenčina"
+    },
+    {
+      "obrazek": "portrety/stur.jpg",
+      "jmeno": "Ľudovít Štúr",
+      "roky": "1815–1856",
+      "popis": "spisovná slovenčina 1843"
+    },
+    {
+      "obrazek": "portrety/hurban.jpg",
+      "jmeno": "Jozef Miloslav Hurban",
+      "roky": "1817–1888",
+      "popis": "štúrovec, spisovateľ"
+    },
+    {
+      "obrazek": "portrety/hodza.jpg",
+      "jmeno": "Michal Miloslav Hodža",
+      "roky": "1811–1870",
+      "popis": "štúrovec, jazykovedec"
+    },
+    {
+      "obrazek": "portrety/hattala.jpg",
+      "jmeno": "Martin Hattala",
+      "roky": "1821–1903",
+      "popis": "reforma pravopisu 1852"
+    }
+  ],
+  "skupiny": [
+    { "nazev": "Po h, ch, k, g píšeme y", "polozky": [
+      "ch[y]ba",
+      "ch[y]tať",
+      "ch[y]trý",
+      "ch[y]stať",
+      "h[ý]bať",
+      "h[y]dina",
+      "k[y]slý",
+      "k[y]tica",
+      "k[ý]chať",
+      "dve ruk[y]",
+      "dve noh[y]",
+      "tich[ý]",
+      "drah[ý]",
+      "krátk[y]"
+    ] },
+    { "nazev": "Po č, š, ž, c, dz, j píšeme i", "polozky": [
+      "č[i]stý",
+      "č[í]tať",
+      "š[i]roký",
+      "š[i]ť",
+      "š[í]pka",
+      "ž[i]vot",
+      "ž[i]ť",
+      "ž[i]rafa",
+      "c[i]buľa",
+      "c[i]trón",
+      "c[í]tiť",
+      "medz[i]",
+      "kraj[i]na"
+    ] }
+  ]
+}

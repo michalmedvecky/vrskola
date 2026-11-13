@@ -1,0 +1,155 @@
+{
+  "id": "sk-s-z",
+  "nazev": "S, alebo Z?",
+  "jazyk": "sk",
+  "popis": "Predložky s/so (s kým, s čím: inštrumentál) a z/zo (odkiaľ, z čoho: genitív) a predpony s-, z-, vz-.",
+  "poznamka": "Predložka s/so sa viaže so 7. pádom (s kým? s čím?), z/zo s 2. pádom (odkiaľ? z čoho?). Predpona s- znamená pohyb zhora nadol alebo spájanie (spadnúť, spojiť) a píše sa aj pred k, p, t, ch pri zmene stavu (skaziť, spáliť, stratiť, schudnúť); predpona z- znamená zmenu stavu (zničiť, zmeniť); vz- pohyb nahor alebo je súčasťou slova (vzlietnuť, vzduch). Do sady sú vybrané len slová, pri ktorých je jediná správna podoba; slová, kde sa obe podoby používajú s iným významom (zísť/sísť a pod.), sú vynechané. Pri vz- je nesprávna možnosť vs-.",
+  "zamena": {
+    "s": "z",
+    "z": "s",
+    "so": "zo",
+    "zo": "so",
+    "vz": "vs"
+  },
+  "pocetMoznosti": 2,
+  "poradiMoznosti": [
+    "s",
+    "so",
+    "z",
+    "zo",
+    "vz",
+    "vs"
+  ],
+  "texty": {
+    "strelba": [
+      "PRAVÁ ruka strieľa slová napísané SPRÁVNE",
+      "ĽAVÁ ruka strieľa slová napísané NESPRÁVNE"
+    ],
+    "mece": [
+      "ZELENÝ meč (pravá ruka) seká slová napísané SPRÁVNE",
+      "ČERVENÝ meč (ľavá ruka) seká slová napísané NESPRÁVNE"
+    ],
+    "karty": [
+      "Na kartách chýba S, alebo Z. Čo tam patrí?",
+      "Vystreľ správnu možnosť pod slovom, hoci ktoroukoľvek rukou."
+    ],
+    "bludiste": [
+      "Na križovatke choď tam, kam ukazuje slovo napísané SPRÁVNE.",
+      "Zlá cesta končí pri príšere – rozsekni ju mečom, alebo uteč!"
+    ],
+    "cviceni": [
+      "Slová napísané správne sú ZELENÉ,",
+      "slová napísané nesprávne sú ČERVENÉ."
+    ],
+    "cviceniKarty": [
+      "Správna možnosť svieti NAZELENO, nesprávna NAČERVENO."
+    ],
+    "cviceniBludiste": [
+      "Šípka so slovom napísaným správne je ZELENÁ,",
+      "šípka so slovom napísaným nesprávne je ČERVENÁ."
+    ]
+  },
+  "portrety": [
+    {
+      "obrazek": "portrety/bernolak.jpg",
+      "jmeno": "Anton Bernolák",
+      "roky": "1762–1813",
+      "popis": "prvá spisovná slovenčina"
+    },
+    {
+      "obrazek": "portrety/stur.jpg",
+      "jmeno": "Ľudovít Štúr",
+      "roky": "1815–1856",
+      "popis": "spisovná slovenčina 1843"
+    },
+    {
+      "obrazek": "portrety/hurban.jpg",
+      "jmeno": "Jozef Miloslav Hurban",
+      "roky": "1817–1888",
+      "popis": "štúrovec, spisovateľ"
+    },
+    {
+      "obrazek": "portrety/hodza.jpg",
+      "jmeno": "Michal Miloslav Hodža",
+      "roky": "1811–1870",
+      "popis": "štúrovec, jazykovedec"
+    },
+    {
+      "obrazek": "portrety/hattala.jpg",
+      "jmeno": "Martin Hattala",
+      "roky": "1821–1903",
+      "popis": "reforma pravopisu 1852"
+    }
+  ],
+  "skupiny": [
+    { "nazev": "Predložka s/so (s kým, s čím)", "polozky": [
+      "chlieb [s] maslom",
+      "čaj [s] citrónom",
+      "káva [s] mliekom",
+      "idem von [s] kamarátom",
+      "hrám sa [s] loptou",
+      "rozprávam sa [s] učiteľkou",
+      "dievča [s] bábikou",
+      "rožok [s] džemom",
+      "idem [so] sestrou",
+      "tancujem [so] Zuzkou",
+      "poď [so] mnou",
+      "pes [so] zlatým obojkom"
+    ] },
+    { "nazev": "Predložka z/zo (odkiaľ, z čoho)", "polozky": [
+      "vrátil sa [z] obchodu",
+      "vyšiel [z] domu",
+      "list [z] Bratislavy",
+      "pozerá sa [z] okna",
+      "voda [z] potoka",
+      "šaty [z] hodvábu",
+      "polievka [z] fazule",
+      "vlak prišiel [z] Košíc",
+      "vrátila sa [zo] školy",
+      "spadol [zo] stola",
+      "jablko [zo] stromu",
+      "vybral sveter [zo] skrine",
+      "mrkva [zo] záhrady",
+      "vystúpil [z] autobusu"
+    ] },
+    { "nazev": "Predpona s-", "polozky": [
+      "[s]padnúť",
+      "[s]kočiť do vody",
+      "[s]chádzať po schodoch",
+      "[s]pojiť",
+      "[s]tretnúť sa",
+      "[s]tiahnuť",
+      "[s]páliť",
+      "[s]kaziť",
+      "[s]tratiť kľúče",
+      "[s]chudnúť",
+      "[s]plniť sľub",
+      "[s]počítať"
+    ] },
+    { "nazev": "Predpona z-", "polozky": [
+      "[z]ničiť",
+      "[z]meniť",
+      "[z]lepšiť",
+      "[z]väčšiť",
+      "[z]jesť",
+      "[z]hodiť",
+      "[z]obrať",
+      "[z]ostať doma",
+      "[z]bierať",
+      "[z]voniť",
+      "[z]mrzlina",
+      "[z]mýliť sa"
+    ] },
+    { "nazev": "Vz-", "polozky": [
+      "[vz]duch",
+      "[vz]lietnuť",
+      "[vz]ťah",
+      "[vz]rast",
+      "[vz]or",
+      "[vz]delanie",
+      "[vz]bura",
+      "[vz]ácny",
+      "[vz]dialený"
+    ] }
+  ]
+}

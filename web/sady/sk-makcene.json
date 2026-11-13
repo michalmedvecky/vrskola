@@ -1,0 +1,123 @@
+{
+  "id": "sk-makcene",
+  "nazev": "Mäkčeň, alebo nie?",
+  "jazyk": "sk",
+  "popis": "Mäkčeň na ď, ť, ň, ľ píšeme, keď za nimi nie je e, i, í, ie, ia, iu. V slabikách de, te, ne, le, di, ti, ni, li sa mäkčeň nepíše, aj keď ich vyslovujeme mäkko.",
+  "poznamka": "Nesprávny tvar vznikne pridaním alebo vynechaním mäkčeňa (ď↔d, ť↔t, ň↔n, ľ↔l). Chytáky sú slová s mäkkou výslovnosťou pred e, i, ie (deti, ticho, leto), kde sa mäkčeň nepíše; slová s tvrdou výslovnosťou de, te, ne, le (ten, teraz, jeden) sú vynechané.",
+  "zamena": {
+    "ď": "d",
+    "d": "ď",
+    "ť": "t",
+    "t": "ť",
+    "ň": "n",
+    "n": "ň",
+    "ľ": "l",
+    "l": "ľ"
+  },
+  "pocetMoznosti": 2,
+  "texty": {
+    "strelba": [
+      "PRAVÁ ruka strieľa slová napísané SPRÁVNE",
+      "ĽAVÁ ruka strieľa slová napísané NESPRÁVNE"
+    ],
+    "mece": [
+      "ZELENÝ meč (pravá ruka) seká slová napísané SPRÁVNE",
+      "ČERVENÝ meč (ľavá ruka) seká slová napísané NESPRÁVNE"
+    ],
+    "karty": [
+      "Na kartách chýba spoluhláska. S mäkčeňom, alebo bez?",
+      "Vystreľ správnu možnosť pod slovom, hoci ktoroukoľvek rukou."
+    ],
+    "bludiste": [
+      "Na križovatke choď tam, kam ukazuje slovo napísané SPRÁVNE.",
+      "Zlá cesta končí pri príšere – rozsekni ju mečom, alebo uteč!"
+    ],
+    "cviceni": [
+      "Slová napísané správne sú ZELENÉ,",
+      "slová napísané nesprávne sú ČERVENÉ."
+    ],
+    "cviceniKarty": [
+      "Správna možnosť svieti NAZELENO, nesprávna NAČERVENO."
+    ],
+    "cviceniBludiste": [
+      "Šípka so slovom napísaným správne je ZELENÁ,",
+      "šípka so slovom napísaným nesprávne je ČERVENÁ."
+    ]
+  },
+  "portrety": [
+    {
+      "obrazek": "portrety/bernolak.jpg",
+      "jmeno": "Anton Bernolák",
+      "roky": "1762–1813",
+      "popis": "prvá spisovná slovenčina"
+    },
+    {
+      "obrazek": "portrety/stur.jpg",
+      "jmeno": "Ľudovít Štúr",
+      "roky": "1815–1856",
+      "popis": "spisovná slovenčina 1843"
+    },
+    {
+      "obrazek": "portrety/hurban.jpg",
+      "jmeno": "Jozef Miloslav Hurban",
+      "roky": "1817–1888",
+      "popis": "štúrovec, spisovateľ"
+    },
+    {
+      "obrazek": "portrety/hodza.jpg",
+      "jmeno": "Michal Miloslav Hodža",
+      "roky": "1811–1870",
+      "popis": "štúrovec, jazykovedec"
+    },
+    {
+      "obrazek": "portrety/hattala.jpg",
+      "jmeno": "Martin Hattala",
+      "roky": "1821–1903",
+      "popis": "reforma pravopisu 1852"
+    }
+  ],
+  "skupiny": [
+    { "nazev": "Ď, Ť", "polozky": [
+      "[ď]akujem",
+      "[ď]aleko",
+      "lo[ď]",
+      "[ď]atelina",
+      "[ť]ava",
+      "[ť]ažký",
+      "[ť]ahať",
+      "robi[ť]",
+      "spieva[ť]"
+    ] },
+    { "nazev": "Ň, Ľ", "polozky": [
+      "kô[ň]",
+      "de[ň]",
+      "pe[ň]",
+      "ba[ň]a",
+      "[ľ]ad",
+      "[ľ]avý",
+      "[ľ]úbiť",
+      "ko[ľ]ko",
+      "[ľ]udia",
+      "poste[ľ]",
+      "ú[ľ]",
+      "priate[ľ]",
+      "cie[ľ]",
+      "ma[ľ]ovať"
+    ] },
+    { "nazev": "Pred e, i, ie bez mäkčeňa", "polozky": [
+      "[d]eti",
+      "[d]edo",
+      "[d]ievča",
+      "[t]icho",
+      "[t]elo",
+      "[t]eplo",
+      "[n]ebo",
+      "[n]ič",
+      "[n]ikto",
+      "[l]eto",
+      "[l]ietadlo",
+      "[l]ipa",
+      "po[l]e"
+    ] }
+  ]
+}

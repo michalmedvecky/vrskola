@@ -1,0 +1,127 @@
+{
+  "id": "sk-koncovky",
+  "nazev": "Koncovky i/y",
+  "jazyk": "sk",
+  "popis": "I/Y v koncovkách: množné číslo podstatných mien (chlapi × duby × ženy × kosti) a prídavné mená podľa pekný (ý) a cudzí (í).",
+  "poznamka": "Mužský životný rod má v 1. páde množného čísla -i (chlapi), neživotný -y (duby), vzor žena -y (ženy), vzor kosť -i (kosti). Prídavné mená podľa vzoru pekný majú -ý, podľa cudzí -í (kozí, rybí); všetky spojenia sú v mužskom rode. Zvieratá sú v sade vynechané, lebo pri nich sa používajú obe podoby (vlci aj vlky).",
+  "zamena": {
+    "y": "i",
+    "i": "y",
+    "ý": "í",
+    "í": "ý"
+  },
+  "pocetMoznosti": 2,
+  "poradiMoznosti": [
+    "y",
+    "ý",
+    "i",
+    "í",
+    "e"
+  ],
+  "texty": {
+    "strelba": [
+      "PRAVÁ ruka strieľa slová napísané SPRÁVNE",
+      "ĽAVÁ ruka strieľa slová napísané NESPRÁVNE"
+    ],
+    "mece": [
+      "ZELENÝ meč (pravá ruka) seká slová napísané SPRÁVNE",
+      "ČERVENÝ meč (ľavá ruka) seká slová napísané NESPRÁVNE"
+    ],
+    "karty": [
+      "Na kartách chýba koncovka. Čo tam patrí?",
+      "Vystreľ správnu možnosť pod slovom, hoci ktoroukoľvek rukou."
+    ],
+    "bludiste": [
+      "Na križovatke choď tam, kam ukazuje slovo napísané SPRÁVNE.",
+      "Zlá cesta končí pri príšere – rozsekni ju mečom, alebo uteč!"
+    ],
+    "cviceni": [
+      "Slová napísané správne sú ZELENÉ,",
+      "slová napísané nesprávne sú ČERVENÉ."
+    ],
+    "cviceniKarty": [
+      "Správna možnosť svieti NAZELENO, nesprávna NAČERVENO."
+    ],
+    "cviceniBludiste": [
+      "Šípka so slovom napísaným správne je ZELENÁ,",
+      "šípka so slovom napísaným nesprávne je ČERVENÁ."
+    ]
+  },
+  "portrety": [
+    {
+      "obrazek": "portrety/bernolak.jpg",
+      "jmeno": "Anton Bernolák",
+      "roky": "1762–1813",
+      "popis": "prvá spisovná slovenčina"
+    },
+    {
+      "obrazek": "portrety/stur.jpg",
+      "jmeno": "Ľudovít Štúr",
+      "roky": "1815–1856",
+      "popis": "spisovná slovenčina 1843"
+    },
+    {
+      "obrazek": "portrety/hurban.jpg",
+      "jmeno": "Jozef Miloslav Hurban",
+      "roky": "1817–1888",
+      "popis": "štúrovec, spisovateľ"
+    },
+    {
+      "obrazek": "portrety/hodza.jpg",
+      "jmeno": "Michal Miloslav Hodža",
+      "roky": "1811–1870",
+      "popis": "štúrovec, jazykovedec"
+    },
+    {
+      "obrazek": "portrety/hattala.jpg",
+      "jmeno": "Martin Hattala",
+      "roky": "1821–1903",
+      "popis": "reforma pravopisu 1852"
+    }
+  ],
+  "skupiny": [
+    { "nazev": "Mužský rod životný: -i", "polozky": [
+      "dvaja chlap[i]",
+      "dvaja kamarát[i]",
+      "dvaja študent[i]",
+      "dvaja policajt[i]",
+      "dvaja pilot[i]",
+      "dvaja športovc[i]"
+    ] },
+    { "nazev": "Mužský rod neživotný: -y", "polozky": [
+      "dva dub[y]",
+      "dva strom[y]",
+      "dva plot[y]",
+      "dva most[y]",
+      "dva dom[y]",
+      "dva hrad[y]",
+      "dva hrnc[e|i|y]"
+    ] },
+    { "nazev": "Ženský rod: žena -y, kosť -i", "polozky": [
+      "dve žen[y]",
+      "dve ryb[y]",
+      "dve mam[y]",
+      "dve sestr[y]",
+      "dve lavic[e|i|y]",
+      "dve kost[i]",
+      "dve myš[i]",
+      "dve noc[i]"
+    ] },
+    { "nazev": "Prídavné mená: pekný -ý, cudzí -í", "polozky": [
+      "mal[ý] pes",
+      "veľk[ý] dom",
+      "nov[ý] bicykel",
+      "dobr[ý] kamarát",
+      "star[ý] dub",
+      "zelen[ý] list",
+      "cudz[í] pes",
+      "koz[í] syr",
+      "ryb[í] chvost",
+      "hus[í] krk",
+      "včel[í] med",
+      "medved[í] brloh",
+      "orl[í] zrak",
+      "baran[í] kožuch"
+    ] }
+  ]
+}

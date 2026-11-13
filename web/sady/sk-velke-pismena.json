@@ -1,0 +1,113 @@
+{
+  "id": "sk-velke-pismena",
+  "nazev": "Veľké písmená",
+  "jazyk": "sk",
+  "popis": "Veľké písmeno: mená, mestá, štáty, rieky, pohoria, obyvatelia a národnosti, sviatky. Malé: dni, mesiace, ročné obdobia, jazyky, prídavné mená od miest a štátov.",
+  "poznamka": "Nesprávny tvar vznikne zámenou veľkého a malého začiatočného písmena. Sporné slová (Slnko/slnko, Zem/zem, Mesiac/mesiac, Nový rok) sú vynechané.",
+  "pocetMoznosti": 2,
+  "texty": {
+    "strelba": [
+      "PRAVÁ ruka strieľa slová napísané SPRÁVNE",
+      "ĽAVÁ ruka strieľa slová napísané NESPRÁVNE"
+    ],
+    "mece": [
+      "ZELENÝ meč (pravá ruka) seká slová napísané SPRÁVNE",
+      "ČERVENÝ meč (ľavá ruka) seká slová napísané NESPRÁVNE"
+    ],
+    "karty": [
+      "Na kartách chýba prvé písmeno. Veľké, alebo malé?",
+      "Vystreľ správnu možnosť pod slovom, hoci ktoroukoľvek rukou."
+    ],
+    "bludiste": [
+      "Na križovatke choď tam, kam ukazuje slovo napísané SPRÁVNE.",
+      "Zlá cesta končí pri príšere – rozsekni ju mečom, alebo uteč!"
+    ],
+    "cviceni": [
+      "Slová napísané správne sú ZELENÉ,",
+      "slová napísané nesprávne sú ČERVENÉ."
+    ],
+    "cviceniKarty": [
+      "Správna možnosť svieti NAZELENO, nesprávna NAČERVENO."
+    ],
+    "cviceniBludiste": [
+      "Šípka so slovom napísaným správne je ZELENÁ,",
+      "šípka so slovom napísaným nesprávne je ČERVENÁ."
+    ]
+  },
+  "portrety": [
+    {
+      "obrazek": "portrety/bernolak.jpg",
+      "jmeno": "Anton Bernolák",
+      "roky": "1762–1813",
+      "popis": "prvá spisovná slovenčina"
+    },
+    {
+      "obrazek": "portrety/stur.jpg",
+      "jmeno": "Ľudovít Štúr",
+      "roky": "1815–1856",
+      "popis": "spisovná slovenčina 1843"
+    },
+    {
+      "obrazek": "portrety/hurban.jpg",
+      "jmeno": "Jozef Miloslav Hurban",
+      "roky": "1817–1888",
+      "popis": "štúrovec, spisovateľ"
+    },
+    {
+      "obrazek": "portrety/hodza.jpg",
+      "jmeno": "Michal Miloslav Hodža",
+      "roky": "1811–1870",
+      "popis": "štúrovec, jazykovedec"
+    },
+    {
+      "obrazek": "portrety/hattala.jpg",
+      "jmeno": "Martin Hattala",
+      "roky": "1821–1903",
+      "popis": "reforma pravopisu 1852"
+    }
+  ],
+  "skupiny": [
+    { "nazev": "Mestá, štáty, rieky, pohoria", "polozky": [
+      "[B|b]ratislava",
+      "[S|s]lovensko",
+      "[Ž|ž]ilina",
+      "[K|k]ošice",
+      "[D|d]unaj",
+      "[T|t]atry",
+      "[Č|č]esko",
+      "[A|a]nglicko",
+      "rieka [V|v]áh",
+      "mesto [N|n]itra",
+      "Banská [B|b]ystrica",
+      "[V|v]ysoké Tatry"
+    ] },
+    { "nazev": "Mená a obyvatelia", "polozky": [
+      "[M|m]ária",
+      "[P|p]eter",
+      "[J|j]ánošík",
+      "pes [B|b]obík",
+      "[S|s]lovák",
+      "[B|b]ratislavčan",
+      "[Č|č]ech",
+      "[A|a]ngličan"
+    ] },
+    { "nazev": "Sviatky", "polozky": [
+      "[V|v]ianoce",
+      "[V|v]eľká noc",
+      "sv. [M|m]ikuláš"
+    ] },
+    { "nazev": "Malé písmeno", "polozky": [
+      "[p|P]ondelok",
+      "[n|N]edeľa",
+      "[j|J]anuár",
+      "[d|D]ecember",
+      "[l|L]eto",
+      "[j|J]ar",
+      "[s|S]lovenčina",
+      "[a|A]ngličtina",
+      "[s|S]lovenský jazyk",
+      "[s|S]lovenské hory",
+      "[č|Č]eský film"
+    ] }
+  ]
+}
