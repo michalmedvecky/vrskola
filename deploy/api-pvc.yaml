@@ -1,0 +1,10 @@
+# Výsledky soubojů (pár kB). k3s má v základu StorageClass local-path.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vrskola-api-data
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 64Mi
