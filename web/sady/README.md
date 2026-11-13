@@ -12,7 +12,7 @@ Stejné soubory čte i server Souboje třídy, takže body počítá podle stejn
 | `vyjmenovana.json` | vyjmenovaná slova (y/i po obojetných souhláskách) |
 | `vybrane-slova.json` | slovenské vybrané slová |
 | `shoda.json` | shoda přísudku s podmětem: koncovka -i/-y (`psi štěkal[i]`, `děti si hrál[y]`, `kluci a holky běhal[i]`); rod střední (-a) vynechán |
-| `nasobilka.json` | malá násobilka 1–10 (`7 · 8 = [56\|48\|64\|63\|49]`, špatné výsledky = sousední násobky a ±1), vygenerovaná |
+| `nasobilka.json` | malá násobilka 1–10 (`7 · 8 = [56\|48\|64\|63\|49]`, špatné výsledky = sousední násobky a ±1), vygenerovaná; v bludišti visí portréty 13 velkých matematiků (`portrety-matematici/`) |
 
 ## Formát
 
@@ -40,7 +40,7 @@ Stejné soubory čte i server Souboje třídy, takže body počítá podle stejn
 | `pocetMoznosti` | ne | kolik tlačítek má karta v Doplňovačce, 2–4 (výchozí 3) |
 | `poradiMoznosti` | ne | pevné pořadí tlačítek, např. `["y", "ý", "i", "í"]` (jinak náhodně) |
 | `texty` | ne | vlastní řádky návodu v menu: `strelba`, `mece`, `karty`, `bludiste`, `cviceni`, `cviceniKarty`, `cviceniBludiste` (pole 1–2 řádků) |
-| `portrety` | ne | obrazy na zdech Bludiště: `{ "obrazek": "portrety/hus.jpg", "jmeno": "…", "roky": "…", "popis": "…" }` |
+| `portrety` | ne | obrazy na zdech Bludiště: `{ "obrazek": "portrety/hus.jpg", "jmeno": "…", "roky": "…", "popis": "…" }`; obrázky musí být v některé ConfigMapě s portréty v `kustomization.yaml` (každá má limit 1 MiB, matematici jsou v `portrety-matematici/`) |
 
 ## Položka
 

@@ -14,6 +14,21 @@
     "cviceniKarty": ["Správný výsledek svítí ZELENĚ, špatný ČERVENĚ."],
     "cviceniBludiste": ["Šipka s příkladem, který platí, je ZELENÁ,", "šipka s příkladem, který neplatí, je ČERVENÁ."]
   },
+  "portrety": [
+    { "obrazek": "portrety-matematici/pythagoras.jpg", "jmeno": "Pýthagorás", "roky": "6. stol. př. n. l.", "popis": "Pythagorova věta" },
+    { "obrazek": "portrety-matematici/eukleides.jpg", "jmeno": "Eukleidés", "roky": "asi 300 př. n. l.", "popis": "Základy geometrie" },
+    { "obrazek": "portrety-matematici/archimedes.jpg", "jmeno": "Archimédés", "roky": "287–212 př. n. l.", "popis": "číslo π, páka" },
+    { "obrazek": "portrety-matematici/fibonacci.jpg", "jmeno": "Leonardo Fibonacci", "roky": "asi 1170–1250", "popis": "arabské číslice" },
+    { "obrazek": "portrety-matematici/descartes.jpg", "jmeno": "René Descartes", "roky": "1596–1650", "popis": "souřadnice x a y" },
+    { "obrazek": "portrety-matematici/pascal.jpg", "jmeno": "Blaise Pascal", "roky": "1623–1662", "popis": "Pascalův trojúhelník" },
+    { "obrazek": "portrety-matematici/newton.jpg", "jmeno": "Isaac Newton", "roky": "1643–1727", "popis": "zákon gravitace" },
+    { "obrazek": "portrety-matematici/leibniz.jpg", "jmeno": "Gottfried Wilhelm Leibniz", "roky": "1646–1716", "popis": "dvojková soustava" },
+    { "obrazek": "portrety-matematici/euler.jpg", "jmeno": "Leonhard Euler", "roky": "1707–1783", "popis": "značky π, e, f(x)" },
+    { "obrazek": "portrety-matematici/gauss.jpg", "jmeno": "Carl Friedrich Gauss", "roky": "1777–1855", "popis": "kníže matematiků" },
+    { "obrazek": "portrety-matematici/bolzano.jpg", "jmeno": "Bernard Bolzano", "roky": "1781–1848", "popis": "pražský matematik" },
+    { "obrazek": "portrety-matematici/lovelace.jpg", "jmeno": "Ada Lovelace", "roky": "1815–1852", "popis": "první program" },
+    { "obrazek": "portrety-matematici/noether.jpg", "jmeno": "Emmy Noether", "roky": "1882–1935", "popis": "moderní algebra" }
+  ],
   "skupiny": [
     { "nazev": "Násobilka 1", "polozky": [
       "1 · 1 = [1|2|11]",
