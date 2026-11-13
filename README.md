@@ -9,10 +9,11 @@ Přesunuto z repa `smartoped` (`web/vr/`), stav včetně pauzy a tlačítka Opus
 - **Meče** – slova letí po dráze proti hráči, zelený meč seká správná, červený špatná (`?rezim=mece`).
 - **Doplňovačka** – karty s mezerou místo y/i, hráč vystřelí správné písmeno (`?rezim=karty`).
 - **Bludiště** – hráč chodí 3D bludištěm; na každé křižovatce jsou dvě šipky se slovem (jedno napsané správně,
-  druhé špatně). Správná cesta vede dál, špatná do slepé uličky, kde čeká příšera a honí hráče zpátky ke křižovatce
+  druhé špatně). Správná cesta vede dál, špatná do slepé uličky, kde čeká příšera a honí hráče. Příšeru jde
+  rozseknout mečem, pak z ní vyletí správně napsané slovo; nebo se dá utéct zpátky ke křižovatce
   (`?rezim=bludiste`). Správná volba +1, špatná −1. Ovládání: ve VR levá páčka chůze, pravá páčka otáčení
-  po 30° skocích; na počítači W/S nebo ↑/↓ chůze, A/D nebo ←/→ otáčení (Q/E úkrok); na tabletu tlačítka ▲▼ a ◄►,
-  rozhlížet se jde i tažením prstu. Proti nevolnosti: stálá rychlost bez houpání a při chůzi se zúží zorné pole.
+  po 30° skocích, meče v rukou; na počítači W/S nebo ↑/↓ chůze, A/D nebo ←/→ otáčení (Q/E úkrok), klik nebo
+  mezerník seká; na tabletu tlačítka ▲▼ a ◄►, seká ⚔ nebo klepnutí, rozhlížet se jde i tažením prstu. Proti nevolnosti: stálá rychlost bez houpání a při chůzi se zúží zorné pole.
 
 Každý režim jde hrát **na body**, nebo jako **Cvičení** (přepínač v menu, `?cviceni=1`): správně napsaná slova
 jsou zelená, špatně napsaná červená (v Doplňovačce je zelené správné písmeno). Body se nepočítají ani nezapisují
