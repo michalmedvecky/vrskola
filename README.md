@@ -1,8 +1,8 @@
 # VR škola
 
-VR hry pro Oculus Quest 2 na procvičování vyjmenovaných slov, shody přísudku s podmětem , malé násobilky a čínských slovíček (WebXR, three.js 0.160 přibalené).
+VR hry pro Oculus Quest 2 na procvičování vyjmenovaných slov, shody přísudku s podmětem, malé násobilky a čínských slovíček (WebXR, three.js 0.160 přibalené).
 Hry jsou „framework“: co se procvičuje, určuje vyměnitelná **sada zadání** v `web/sady/` (vyjmenovaná slova jsou
-jedna z nich, `web/sady/vyjmenovana.json`; dál slovenská vybrané slová, shoda přísudku s podmětem `shoda.json` , malá násobilka
+jedna z nich, `web/sady/vyjmenovana.json`; dál slovenská vybrané slová, shoda přísudku s podmětem `shoda.json`, malá násobilka
 `nasobilka.json` a čínská slovíčka `cinstina.json`). Novou sadu (jiný jazyk, slovíčka, předmět) jde přidat bez programování,
 viz [`web/sady/README.md`](web/sady/README.md). Sada určuje i texty v menu a portréty na zdech Bludiště.
 Přesunuto z repa `smartoped` (`web/vr/`), stav včetně pauzy a tlačítka Opustit VR.
