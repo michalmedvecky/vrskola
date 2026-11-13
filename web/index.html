@@ -1415,8 +1415,55 @@ function mzHangPortraits(seg, cells, skipFirst){
     // posun podél zdi: kolmo na směr d
     m.position.set(c.x*MZ_C + DIRX[d]*o + DIRZ[d]*off, Math.max(P.h/2 + 0.5, mz.signY - 0.1), c.z*MZ_C + DIRZ[d]*o - DIRX[d]*off);
     m.rotation.y = dirYaw(d);
-    seg.group.add(m); seg.portraits = (seg.portraits || 0) + 1;
+    seg.group.add(m); seg.portraits = (seg.portraits || 0) + 1; (seg.used || (seg.used = new Set())).add(mzKey(c.x, c.z) + ',' + d);
   }
+}
+
+/* ---- cedulky se správnými slovy na zdech (nenápadné opakování) ----
+   Když hráč zvolí správnou cestu, na boční zeď za zatáčkou (z křižovatky není vidět) se pověsí malá
+   cedulka se správně napsaným slovem: přednostně to, které hráč spletl, jinak některé z už odehraných.
+   V Souboji se nevěší, aby měly všechny děti stejné podmínky. */
+function makePlaque(text){
+  const px = 72, f = `bold ${px}px ${FONT}`, c = document.createElement('canvas'), g = c.getContext('2d'); g.font = f;
+  const tw = Math.ceil(g.measureText(text).width), pad = px*0.55;
+  c.width = tw + pad*2; c.height = Math.round(px*1.6);
+  const gr = g.createLinearGradient(0, 0, 0, c.height); gr.addColorStop(0, '#f6ecd2'); gr.addColorStop(1, '#d9c79c');
+  roundRect(g, 4, 4, c.width-8, c.height-8, px*0.18); g.fillStyle = gr; g.fill(); g.lineWidth = 6; g.strokeStyle = '#6b4f1d'; g.stroke();
+  g.fillStyle = '#6b4f1d'; for (const x of [pad*0.45, c.width - pad*0.45]){ g.beginPath(); g.arc(x, c.height/2, px*0.07, 0, Math.PI*2); g.fill(); }   // šroubky
+  g.font = f; g.fillStyle = '#1f3a1a'; g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.fillText(text, c.width/2, c.height/2 + px*0.05);
+  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4;
+  const h = MZ_PLAQUE.H, w = Math.min(h*c.width/c.height, MZ_C - 2*MZ_T - 0.8);
+  return new THREE.Mesh(new THREE.PlaneGeometry(w, w*c.height/c.width), new THREE.MeshBasicMaterial({ map: tex, color: 0xdddddd }));
+}
+const MZ_PLAQUE = { H: 0.26, on: true };
+function mzPlaqueWord(J){
+  if (J.wasWrong) return mzPlaqueMark(J);   // právě spletené slovo
+  const done = mz.juncs.filter(o => o !== J && (o.status === 'done' || o.status === 'escaped') && (o.plaques || 0) < 2);
+  const wrong = done.filter(o => o.wasWrong);
+  if (wrong.length && Math.random() < 0.5) return mzPlaqueMark(wrong[Math.random()*wrong.length|0]);
+  if (Math.random() < 0.6) return null;   // ať cedulek není moc a dítě nezahltí
+  if (done.length && Math.random() < 0.6) return mzPlaqueMark(done[Math.random()*done.length|0]);
+  return J.info.correct;
+}
+function mzPlaqueMark(o){ o.plaques = (o.plaques || 0) + 1; return o.info.correct; }
+function mzHangPlaque(J){
+  if (duel || !MZ_PLAQUE.on) return;
+  // jen za zatáčkou (první dvě políčka a roh jsou vidět z křižovatky) a jen boční zdi chodby, ne zeď, kam se hráč dívá
+  const side = [];
+  for (let i = 2; i < J.cPath.length; i++){
+    const c = J.cPath[i], p = J.cPath[i-1], dx = c.x - p.x;
+    for (const d of dx ? [0, 2] : [1, 3]) if (!c.open[d] && !(J.seg.used && J.seg.used.has(mzKey(c.x, c.z) + ',' + d))) side.push([c, d]);
+  }
+  if (!side.length) return;
+  const text = mzPlaqueWord(J); if (!text) return;
+  const [c, d] = side[Math.random()*side.length|0], m = makePlaque(text);
+  const off = (Math.random() - 0.5) * 1.6, o = MZ_C/2 - MZ_T - 0.012;
+  m.position.set(c.x*MZ_C + DIRX[d]*o + DIRZ[d]*off, mz.signY - 0.15, c.z*MZ_C + DIRZ[d]*o - DIRX[d]*off);
+  m.rotation.y = dirYaw(d);
+  J.seg.group.add(m); J.seg.extra.push(() => disposeMesh(m));
+  (J.seg.used || (J.seg.used = new Set())).add(mzKey(c.x, c.z) + ',' + d);
+  (mz.plaques || (mz.plaques = [])).push({ text, j: J.i, mesh: m });
 }
 
 // spojí víc geometrií (zdi jednoho kusu bludiště) do jedné, ať má Quest málo volání kreslení
@@ -1618,7 +1665,7 @@ function startMaze(){
 function leaveMaze(){
   mzRemoveMonster();
   for (const s of [...mz.segs]) mzDisposeSeg(s);
-  mz.cells.clear(); mz.juncs.length = 0; mz.walls = []; mz.fade = null; mz.vig = 0;
+  mz.cells.clear(); mz.juncs.length = 0; mz.plaques = []; mz.walls = []; mz.fade = null; mz.vig = 0;
   vignette.visible = fader.visible = false;
   if (mz.active){ dolly.position.set(0, 0, 0); dolly.rotation.set(0, 0, 0); stars.position.set(0, 0, 0); if (!renderer.xr.isPresenting) camera.position.set(0, 1.6, 0); }
   mz.run = mz.bob = mz.stepDist = 0;
@@ -1644,6 +1691,7 @@ function mzRight(J){   // hráč vešel do správné cesty
   } else sfx.click();
   J.status = 'done';
   mzGate(J, J.cDir, 'one');
+  mzHangPlaque(J);
   mz.cur = J.i + 1;
   mzEnsure(); mzCleanup();
 }
@@ -1960,7 +2008,7 @@ async function initVR(){
 initVR();
 
 /* ================= HLAVNÍ SMYČKA ================= */
-window.__vs = { mz, mzPlace, MZ_PORT, dolly, words, blocks, cards, pauseGame, resumeGame, quitGame, rigs, track, camera, mouseHeld, setMode, setPractice, setDuel, setScoring, startGame, get practice(){ return practice; }, get duel(){ return duel; }, get duelAnswers(){ return duelAnswers; }, get duelResult(){ return duelResult; }, get mode(){ return mode; }, get state(){ return state; }, get score(){ return score; }, get good(){ return goodCount; }, get bad(){ return badCount; } }; // pro testování
+window.__vs = { mz, mzPlace, MZ_PORT, MZ_PLAQUE, dolly, words, blocks, cards, pauseGame, resumeGame, quitGame, rigs, track, camera, mouseHeld, setMode, setPractice, setDuel, setScoring, startGame, get practice(){ return practice; }, get duel(){ return duel; }, get duelAnswers(){ return duelAnswers; }, get duelResult(){ return duelResult; }, get mode(){ return mode; }, get state(){ return state; }, get score(){ return score; }, get good(){ return goodCount; }, get bad(){ return badCount; } }; // pro testování
 track.visible = mode === 'mece';
 showPanel(drawMenu);
 const clock = new THREE.Clock();
