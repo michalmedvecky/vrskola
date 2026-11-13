@@ -30,6 +30,8 @@ configMapGenerator:
       - web/sady/index.json
       - web/sady/vyjmenovana.json
       - web/sady/vybrane-slova.json
+      - web/sady/shoda.json
+      - web/sady/nasobilka.json
   - name: vrskola-portrety   # portréty do bludiště (~440 kB, české i slovenské), zvlášť kvůli limitu 1 MiB na ConfigMapu
     files:
       - web/portrety/hus.jpg
