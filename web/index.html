@@ -8,8 +8,13 @@
   html,body{margin:0;height:100%;background:#05060f;overflow:hidden;font-family:system-ui,"Segoe UI",Arial,sans-serif;color:#fff}
   canvas{display:block;cursor:crosshair;touch-action:none;-webkit-user-select:none;user-select:none}
   #vr{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);padding:14px 30px;font-size:20px;font-weight:700;border-radius:14px;border:2px solid #6cf;background:#0a1a33;color:#fff;cursor:pointer;z-index:2}
-  #vr[disabled]{opacity:.6;cursor:default}
+  #vr[hidden]{display:none}
   #help{position:fixed;left:12px;top:10px;font-size:13px;line-height:1.45;opacity:.8;max-width:min(440px,calc(100% - 24px));z-index:2;pointer-events:none}
+  /* návod: na velké obrazovce otevřený v menu, na mobilu schovaný za tlačítkem „?“; během hry vždy schovaný */
+  #help[hidden]{display:none}
+  #help.panel{top:62px;max-height:calc(100% - 76px);background:rgba(5,6,15,.94);opacity:1;overflow:auto;pointer-events:auto;padding:10px 12px;border-radius:12px;border:1px solid #6cf;box-sizing:border-box;max-width:calc(100% - 24px)}
+  #navod{position:fixed;right:12px;top:10px;width:44px;height:44px;border-radius:22px;border:2px solid #6cf;background:#0a1a33;color:#fff;font:700 22px system-ui,"Segoe UI",Arial,sans-serif;z-index:4;cursor:pointer;touch-action:manipulation}
+  #navod[hidden]{display:none}
   #dotyk{position:fixed;left:0;right:0;bottom:96px;display:none;justify-content:center;gap:14px;z-index:3;pointer-events:none}
   #dotyk button{pointer-events:auto;font:700 20px system-ui,"Segoe UI",Arial,sans-serif;color:#fff;padding:14px 20px;border-radius:16px;border:3px solid transparent;background:#1a2340;opacity:.75;touch-action:manipulation}
   #dotyk button.on{opacity:1}
@@ -27,7 +32,8 @@
 <script type="importmap">{"imports":{"three":"./three.module.min.js"}}</script>
 </head>
 <body>
-<div id="help">
+<button id="navod" title="Návod" hidden>?</button>
+<div id="help" hidden>
   <b>Vyjmenovaná slova VR</b><br>
   V headsetu: klikni na <b>Vstoupit do VR</b> a v menu vyber režim.<br>
   <b>Střelnice:</b> pravá ruka střílí slova napsaná <b>správně</b>, levá ruka slova napsaná <b>špatně</b>.<br>
@@ -48,7 +54,7 @@
   <div class="pl"><button data-k="f">▲</button><button data-k="b">▼</button></div>
   <div class="pr"><button data-k="l">◄</button><button id="pad-mec">⚔</button><button data-k="r">►</button></div>
 </div>
-<button id="vr" disabled>Načítám…</button>
+<button id="vr" hidden>Vstoupit do VR</button>
 
 <script type="module">
 import * as THREE from 'three';
@@ -1717,7 +1723,20 @@ dOk.addEventListener('click', () => setTouchHand('right'));
 dBad.addEventListener('click', () => setTouchHand('left'));
 document.getElementById('d-pauza').addEventListener('click', () => { if (state === 'playing') pauseGame(); });
 function pointerHand(e){ return e.pointerType !== 'mouse' ? touchHand : e.button === 2 ? 'right' : 'left'; }
+// návod: velká obrazovka = otevřený v menu (jako dřív), malá (mobil) = jen tlačítko „?“, návod jako posuvný panel
+const helpEl = document.getElementById('help'), navodBtn = document.getElementById('navod');
+const bigScreen = matchMedia('(min-width: 760px) and (min-height: 560px)');
+let helpOpen = bigScreen.matches;
+bigScreen.addEventListener?.('change', e => { helpOpen = e.matches; });
+navodBtn.addEventListener('click', () => { helpOpen = !helpOpen; navodBtn.textContent = helpOpen && !bigScreen.matches ? '✕' : '?'; });
+function updateHelpUi(){
+  const inMenu = !renderer.xr.isPresenting && state !== 'playing';
+  helpEl.hidden = !(inMenu && helpOpen);
+  helpEl.classList.toggle('panel', !bigScreen.matches);
+  navodBtn.hidden = !inMenu || bigScreen.matches;
+}
 function updateTouchUi(){
+  updateHelpUi();
   const show = usedTouch && !renderer.xr.isPresenting && state === 'playing';
   dotyk.style.display = show ? 'flex' : 'none';
   if (show){ const guns = mode === 'strelba' || mode === 'mece'; dOk.style.display = dBad.style.display = guns ? '' : 'none'; }
@@ -1807,10 +1826,11 @@ function viewPos(){ return viewCamera().getWorldPosition(_vp); }
 const vrBtn = document.getElementById('vr');
 let xrSession = null;
 async function initVR(){
-  if (!('xr' in navigator)){ vrBtn.textContent = 'VR není v tomto prohlížeči dostupné'; return; }
+  // tlačítko se ukáže jen tam, kde VR opravdu jde (headset); na mobilu a počítači zůstane schované
+  if (!('xr' in navigator)) return;
   let ok = false; try { ok = await navigator.xr.isSessionSupported('immersive-vr'); } catch {}
-  if (!ok){ vrBtn.textContent = window.isSecureContext ? 'VR není dostupné' : 'VR vyžaduje https://'; return; }
-  vrBtn.disabled = false; vrBtn.textContent = 'Vstoupit do VR';
+  if (!ok) return;
+  vrBtn.hidden = false; vrBtn.textContent = 'Vstoupit do VR';
   vrBtn.onclick = async () => {
     audio();
     if (xrSession){ xrSession.end(); return; }
