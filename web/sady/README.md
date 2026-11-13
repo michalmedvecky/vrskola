@@ -13,6 +13,7 @@ Stejné soubory čte i server Souboje třídy, takže body počítá podle stejn
 | `vybrane-slova.json` | slovenské vybrané slová |
 | `shoda.json` | shoda přísudku s podmětem: koncovka -i/-y (`psi štěkal[i]`, `děti si hrál[y]`, `kluci a holky běhal[i]`); rod střední (-a) vynechán |
 | `nasobilka.json` | malá násobilka 1–10 (`7 · 8 = [56\|48\|64\|63\|49]`, špatné výsledky = sousední násobky a ±1), vygenerovaná |
+| `cinstina.json` | čínská slovíčka pro začátečníky (`狗 gǒu = [pes]`, 128 slovíček ve 13 tematických skupinách: pozdravy, čísla, lidé, rodina, zvířata, jídlo, barvy, tělo, příroda, čas, slovesa, přídavná jména, škola a doma); znaky kreslí přibalené písmo `pisma/cinstina.woff2` |
 
 ## Formát
 
@@ -41,6 +42,7 @@ Stejné soubory čte i server Souboje třídy, takže body počítá podle stejn
 | `poradiMoznosti` | ne | pevné pořadí tlačítek, např. `["y", "ý", "i", "í"]` (jinak náhodně) |
 | `texty` | ne | vlastní řádky návodu v menu: `strelba`, `mece`, `karty`, `bludiste`, `cviceni`, `cviceniKarty`, `cviceniBludiste` (pole 1–2 řádků) |
 | `portrety` | ne | obrazy na zdech Bludiště: `{ "obrazek": "portrety/hus.jpg", "jmeno": "…", "roky": "…", "popis": "…" }` |
+| `pismo` | ne | přibalené písmo pro znaky, které headset nemusí umět (čínština): cesta k `.woff2`, např. `"pisma/cinstina.woff2"`; hra ho načte předem a použije jen pro znaky CJK. Po přidání nového znaku do sady se písmo musí přegenerovat: `nastroje/pismo-podmnozina.sh cinstina` (podmnožina Noto Sans SC, licence OFL v `web/pisma/OFL.txt`), a nový soubor písma přidat do ConfigMapy `vrskola-pisma` v `kustomization.yaml` |
 
 ## Položka
 

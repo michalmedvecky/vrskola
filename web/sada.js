@@ -52,6 +52,7 @@ export function pripravSadu(json){
     pocetMoznosti: Math.min(4, Math.max(2, Number(json.pocetMoznosti) || 3)),
     poradiMoznosti: Array.isArray(json.poradiMoznosti) ? json.poradiMoznosti : null,
     texty: json.texty || {}, portrety: Array.isArray(json.portrety) ? json.portrety : [],
+    pismo: typeof json.pismo === 'string' && /^[\w./-]+\.woff2?$/.test(json.pismo) ? json.pismo : null,
     items: usable, byCorrect, byWrong, chyby,
   };
 }
