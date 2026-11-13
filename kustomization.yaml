@@ -33,6 +33,7 @@ configMapGenerator:
       - web/sady/shoda.json
       - web/sady/nasobilka.json
       - web/sady/anglictina.json
+      - web/sady/cinstina.json
   - name: vrskola-portrety   # portréty do bludiště (~440 kB, české i slovenské), zvlášť kvůli limitu 1 MiB na ConfigMapu
     files:
       - web/portrety/hus.jpg
@@ -47,6 +48,9 @@ configMapGenerator:
       - web/portrety/hurban.jpg
       - web/portrety/hodza.jpg
       - web/portrety/hattala.jpg
+  - name: vrskola-pisma      # přibalená písma sad (čínské znaky, podmnožina Noto Sans SC, OFL), hra je čte z /pisma/
+    files:
+      - web/pisma/cinstina.woff2
   - name: vrskola-nginx
     files:
       - deploy/default.conf

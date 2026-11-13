@@ -1,9 +1,9 @@
 # VR škola
 
-VR hry pro Oculus Quest 2 na procvičování vyjmenovaných slov, shody přísudku s podmětem a malé násobilky (WebXR, three.js 0.160 přibalené).
+VR hry pro Oculus Quest 2 na procvičování vyjmenovaných slov, shody přísudku s podmětem, malé násobilky a čínských slovíček (WebXR, three.js 0.160 přibalené).
 Hry jsou „framework“: co se procvičuje, určuje vyměnitelná **sada zadání** v `web/sady/` (vyjmenovaná slova jsou
-jedna z nich, `web/sady/vyjmenovana.json`; dál slovenská vybrané slová, shoda přísudku s podmětem `shoda.json` a malá násobilka
-`nasobilka.json`). Novou sadu (jiný jazyk, slovíčka, předmět) jde přidat bez programování,
+jedna z nich, `web/sady/vyjmenovana.json`; dál slovenská vybrané slová, shoda přísudku s podmětem `shoda.json`, malá násobilka
+`nasobilka.json` a čínská slovíčka `cinstina.json`). Novou sadu (jiný jazyk, slovíčka, předmět) jde přidat bez programování,
 viz [`web/sady/README.md`](web/sady/README.md). Sada určuje i texty v menu a portréty na zdech Bludiště.
 Přesunuto z repa `smartoped` (`web/vr/`), stav včetně pauzy a tlačítka Opustit VR.
 
@@ -44,7 +44,8 @@ Na počítači jde hrát myší (levé/pravé tlačítko, šipky otáčí).
 | Cesta | Co to je |
 |---|---|
 | `web/index.html` | celá hra |
-| `web/sady/` | sady zadání (`index.json` = nabídka, `vyjmenovana.json`, `vybrane-slova.json`, `shoda.json`, `nasobilka.json`, formát v `README.md`) |
+| `web/sady/` | sady zadání (`index.json` = nabídka, `vyjmenovana.json`, `vybrane-slova.json`, `shoda.json`, `nasobilka.json`, `anglictina.json`, `cinstina.json`, formát v `README.md`) |
+| `web/pisma/` | přibalená písma sad (čínské znaky: podmnožina Noto Sans SC, OFL), generuje `nastroje/pismo-podmnozina.sh` |
 | `web/sada.js` | parser sad, sdílený hrou i serverem |
 | `web/three.module.min.js` | three.js 0.160 |
 | `server/server.mjs` | mini server pro Souboj třídy (Node.js 22, bez závislostí) |

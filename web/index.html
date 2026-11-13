@@ -90,6 +90,14 @@ await (async () => {
     fetch(`sady/${id}.json`, { cache: 'no-cache' }).then(r => r.json()).then(pripravSadu)
       .catch(e => { console.error(`sada ${id}:`, e); return null; })));
   for (const s of loaded) if (s){ if (s.chyby.length) console.warn(`sada ${s.id}:`, s.chyby); SADY.push(s); }
+  // Přibalené písmo sady (čínské znaky): headset nemusí mít vlastní. Text se kreslí na canvas, a ten na písmo
+  // nepočká, proto se musí načíst předem. unicode-range = písmo se použije jen pro znaky CJK, latinka zůstane systémová.
+  await Promise.all(SADY.filter(s => s.pismo).map(async s => {
+    try {
+      const ff = new FontFace(`Pismo-${s.id}`, `url(${s.pismo})`, { unicodeRange: 'U+2E80-9FFF, U+F900-FAFF, U+FF00-FFEF' });
+      document.fonts.add(await ff.load()); s.pismoRodina = `"Pismo-${s.id}", `;
+    } catch (e) { console.error(`písmo sady ${s.id}:`, e); }
+  }));
 })();
 if (!SADY.length){
   const h = document.getElementById('help'); h.hidden = false; h.textContent = 'Nepodařilo se načíst žádnou sadu zadání (sady/index.json).';
@@ -97,6 +105,9 @@ if (!SADY.length){
 }
 let sada = (() => { const want = new URLSearchParams(location.search).get('sada') || (() => { try { return localStorage.getItem('smartoped-vr-sada'); } catch { return null; } })();
   return SADY.find(s => s.id === want) || SADY[0]; })();
+// písmo textů na canvasu (slova, karty, menu)
+const FONT_ZAKLAD = 'system-ui, "Segoe UI", Roboto, Arial, sans-serif';
+let FONT = FONT_ZAKLAD;   // + přibalené písmo vybrané sady (nastavuje applySadaUi)
 /* ---- nápisy hry podle jazyka sady ("jazyk": "cs" | "sk"); neznámý jazyk = čeština ----
    Hodnota je text, nebo funkce (pro text s čísly). Chybějící klíč se vezme z češtiny. */
 const UI = {
@@ -185,6 +196,7 @@ function setSada(id){
   redrawPanel();
 }
 function applySadaUi(){
+  FONT = (sada.pismoRodina || '') + FONT_ZAKLAD;
   document.title = `${sada.nazev} VR`; document.documentElement.lang = sada.jazyk; document.getElementById('help-nazev').textContent = `${sada.nazev} VR`;
   const jaz = UI[sada.jazyk] ? sada.jazyk : 'cs';
   for (const el of document.querySelectorAll('#help [data-jazyk]')) el.classList.toggle('on', el.dataset.jazyk === jaz);
@@ -321,7 +333,6 @@ function roundRect(g, x, y, w, h, r){
   g.lineTo(x+w,y+h-r); g.quadraticCurveTo(x+w,y+h,x+w-r,y+h); g.lineTo(x+r,y+h);
   g.quadraticCurveTo(x,y+h,x,y+h-r); g.lineTo(x,y+r); g.quadraticCurveTo(x,y,x+r,y); g.closePath();
 }
-const FONT = 'system-ui, "Segoe UI", Roboto, Arial, sans-serif';
 
 function makeLabel(text, { h=0.7, color='#ffffff', bg='rgba(8,16,40,0.82)', border='#7fd4ff', px=96 } = {}){
   const c = document.createElement('canvas'), g = c.getContext('2d');
