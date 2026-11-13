@@ -20,6 +20,9 @@ Přesunuto z repa `smartoped` (`web/vr/`), stav včetně pauzy a tlačítka Opus
   Po zdech náhodně visí portréty velikánů češtiny (Hus, Dobrovský, Jungmann, Šafařík, Palacký, Mácha, Němcová)
   v rámu s mosaznou jmenovkou; jsou to volná díla Jana Vilímka, zdroje v `web/portrety/ZDROJE.md`. V k3s jsou
   ve vlastní ConfigMapě `vrskola-portrety` (nginx je servíruje z `/portrety/`).
+  Když hráč zvolí správnou cestu, na boční zeď chodby za zatáčkou (z křižovatky není vidět) se občas pověsí malá
+  cedulka se správně napsaným slovem: vždy to, které hráč právě spletl, jinak některé z už odehraných (každé nejvýš
+  dvakrát). Nenápadné opakování; v Souboji třídy se cedulky nevěší, aby měly všechny děti stejné podmínky.
 
 Každý režim jde hrát **na body**, nebo jako **Cvičení** (přepínač v menu, `?cviceni=1`): správně napsaná slova
 jsou zelená, špatně napsaná červená (v Doplňovačce je zelené správné písmeno). Body se nepočítají ani nezapisují
