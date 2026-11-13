@@ -28,6 +28,7 @@
   <b>Doplňovačka:</b> na kartách chybí písmeno, kteroukoli pistolí vystřel správné <b>y</b> nebo <b>i</b> pod slovem.<br>
   <b>Pauza:</b> tlačítko <b>B</b> nebo <b>Y</b> na ovladači (na počítači <b>Esc</b>) – pokračovat, ukončit hru, nebo opustit VR.<br>
   Na počítači (zkouška): myš míří, <b>levé tlačítko</b> = levá ruka, <b>pravé tlačítko</b> = pravá ruka (u mečů drž tlačítko a táhni myší), šipky nebo WASD otáčí pohled.<br>
+  <b>Cvičení</b> (přepínač v menu): správná slova jsou <b style="color:#5dff8a">zelená</b>, špatná <b style="color:#ff6b6b">červená</b>, body se nepočítají, jen statistika.<br>
   Na tabletu: <b>tažením prstu</b> se rozhlížíš, <b>klepnutím</b> střílíš (u mečů drž prst a táhni); tlačítky dole volíš zbraň <b>✔ správně</b> / <b>✘ špatně</b>, ⏸ je pauza.
 </div>
 <div id="dotyk">
@@ -61,6 +62,11 @@ const LS_KEYS = { strelba: 'smartoped-vr-top3', mece: 'smartoped-vr-mece-top3', 
 const MODES = ['strelba', 'mece', 'karty'];
 let mode = (() => { const q = new URLSearchParams(location.search).get('rezim'); if (MODES.includes(q)) return q;
   try { const v = localStorage.getItem('smartoped-vr-rezim'); return MODES.includes(v) ? v : 'strelba'; } catch { return 'strelba'; } })();
+// Cvičení: správná slova zeleně, špatná červeně (u doplňovačky zelené správné písmeno); žádné body ani tabulka, jen statistika.
+let practice = (() => { const q = new URLSearchParams(location.search).get('cviceni'); if (q !== null) return q !== '0';
+  try { return localStorage.getItem('smartoped-vr-cviceni') === '1'; } catch { return false; } })();
+const PRACTICE_COLOR = { good: '#5dff8a', bad: '#ff6b6b', goodBg: 'rgba(6,46,22,0.88)', badBg: 'rgba(56,8,14,0.88)' };
+function setPractice(v){ practice = v; try { localStorage.setItem('smartoped-vr-cviceni', v ? '1' : '0'); } catch {} redrawPanel(); }
 
 /* ================= RENDERER / SCÉNA ================= */
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -184,7 +190,8 @@ function updateTimerRing(ring, frac, opacity){
   frac = Math.max(0, Math.min(1, frac));
   const keep = Math.ceil(RING_SEG*frac);
   ring.geometry.setDrawRange((RING_SEG - keep)*6, keep*6);
-  ring.material.color.copy(_rc.setHSL(0.33*frac, 1, 0.55));
+  // v cvičení je pásek modrobílý, ať se zelená/červená nepletou s barvou slova
+  if (practice) ring.material.color.setHSL(0.55, 0.9, 0.45 + 0.35*frac); else ring.material.color.copy(_rc.setHSL(0.33*frac, 1, 0.55));
   ring.material.opacity = opacity;
 }
 
@@ -364,24 +371,33 @@ function drawTop(g, y0, highlightIdx = -1){
 }
 
 function drawMenu(g){
-  txt(g, 'Vyjmenovaná slova', PW/2, 66, { px: 62, color: '#7fe3ff' });
-  button(g, 'm-strelba', 'Střelnice', PW/2-440, 112, 280, 70, () => setMode('strelba'), { color: mode === 'strelba' ? '#2f7cff' : '#25335e', px: 36 });
-  button(g, 'm-mece', 'Meče', PW/2-140, 112, 280, 70, () => setMode('mece'), { color: mode === 'mece' ? '#2f7cff' : '#25335e', px: 36 });
-  button(g, 'm-karty', 'Doplňovačka', PW/2+160, 112, 280, 70, () => setMode('karty'), { color: mode === 'karty' ? '#2f7cff' : '#25335e', px: 36 });
+  txt(g, 'Vyjmenovaná slova', PW/2, 56, { px: 58, color: '#7fe3ff' });
+  button(g, 'm-strelba', 'Střelnice', PW/2-440, 96, 280, 64, () => setMode('strelba'), { color: mode === 'strelba' ? '#2f7cff' : '#25335e', px: 36 });
+  button(g, 'm-mece', 'Meče', PW/2-140, 96, 280, 64, () => setMode('mece'), { color: mode === 'mece' ? '#2f7cff' : '#25335e', px: 36 });
+  button(g, 'm-karty', 'Doplňovačka', PW/2+160, 96, 280, 64, () => setMode('karty'), { color: mode === 'karty' ? '#2f7cff' : '#25335e', px: 36 });
+  button(g, 'p-hra', 'Hra na body', PW/2-290, 176, 280, 56, () => setPractice(false), { color: !practice ? '#b8860b' : '#25335e', px: 30 });
+  button(g, 'p-cviceni', 'Cvičení', PW/2+10, 176, 280, 56, () => setPractice(true), { color: practice ? '#15803d' : '#25335e', px: 30 });
   if (mode === 'karty'){
-    txt(g, 'Na kartách chybí písmeno. Doplň Y, nebo I?', PW/2, 230, { px: 34, color: '#7fe3ff' });
-    txt(g, 'Vystřel správné písmeno pod slovem, klidně kteroukoli rukou.', PW/2, 276, { px: 30, color: '#ffd23f' });
-    txt(g, 'Karty se objevují kolem tebe a časem mizí. Hra trvá 5 minut.', PW/2, 324, { px: 28, weight: 'normal' });
+    txt(g, 'Na kartách chybí písmeno. Doplň Y, nebo I?', PW/2, 272, { px: 34, color: '#7fe3ff' });
+    txt(g, 'Vystřel správné písmeno pod slovem, klidně kteroukoli rukou.', PW/2, 314, { px: 30, color: '#ffd23f' });
+    txt(g, 'Karty se objevují kolem tebe a časem mizí. Hra trvá 5 minut.', PW/2, 354, { px: 28, weight: 'normal' });
   } else if (mode === 'mece'){
-    txt(g, 'ZELENÝ meč (pravá ruka) seká slova SPRÁVNĚ', PW/2, 230, { px: 34, color: '#5dff8a' });
-    txt(g, 'ČERVENÝ meč (levá ruka) seká slova ŠPATNĚ', PW/2, 276, { px: 34, color: '#ff6b6b' });
-    txt(g, 'Slova letí proti tobě, rozsekni je, než proletí. Hra trvá 5 minut.', PW/2, 324, { px: 28, weight: 'normal' });
+    txt(g, 'ZELENÝ meč (pravá ruka) seká slova SPRÁVNĚ', PW/2, 272, { px: 34, color: '#5dff8a' });
+    txt(g, 'ČERVENÝ meč (levá ruka) seká slova ŠPATNĚ', PW/2, 314, { px: 34, color: '#ff6b6b' });
+    txt(g, 'Slova letí proti tobě, rozsekni je, než proletí. Hra trvá 5 minut.', PW/2, 354, { px: 28, weight: 'normal' });
   } else {
-    txt(g, 'PRAVÁ ruka střílí slova napsaná SPRÁVNĚ', PW/2, 230, { px: 34, color: '#5dff8a' });
-    txt(g, 'LEVÁ ruka střílí slova napsaná ŠPATNĚ', PW/2, 276, { px: 34, color: '#ff6b6b' });
-    txt(g, 'Slova jsou všude kolem tebe, rozhlížej se! Hra trvá 5 minut.', PW/2, 324, { px: 28, weight: 'normal' });
+    txt(g, 'PRAVÁ ruka střílí slova napsaná SPRÁVNĚ', PW/2, 272, { px: 34, color: '#5dff8a' });
+    txt(g, 'LEVÁ ruka střílí slova napsaná ŠPATNĚ', PW/2, 314, { px: 34, color: '#ff6b6b' });
+    txt(g, 'Slova jsou všude kolem tebe, rozhlížej se! Hra trvá 5 minut.', PW/2, 354, { px: 28, weight: 'normal' });
   }
-  drawTop(g, 390);
+  if (practice){
+    roundRect(g, 150, 396, 724, 176, 20); g.fillStyle = 'rgba(21,128,61,0.18)'; g.fill(); g.lineWidth = 3; g.strokeStyle = '#5dff8a'; g.stroke();
+    txt(g, 'Cvičení', PW/2, 428, { px: 40, color: '#5dff8a' });
+    if (mode === 'karty') txt(g, 'Správné písmeno svítí ZELENĚ, špatné ČERVENĚ.', PW/2, 480, { px: 30 });
+    else { txt(g, 'Slova napsaná správně jsou ZELENÁ,', PW/2, 470, { px: 30, color: '#5dff8a' });
+      txt(g, 'slova napsaná špatně jsou ČERVENÁ.', PW/2, 506, { px: 30, color: '#ff6b6b' }); }
+    txt(g, 'Body se nepočítají, uvidíš jen, kolik máš správně a kolik špatně.', PW/2, 548, { px: 24, weight: 'normal', color: '#bcd' });
+  } else drawTop(g, 400);
   button(g, 'start', 'START', PW/2-170, 600, 340, 100, startGame, { color: '#1a9d4a', px: 54 });
   exitVrButton(g);
   button(g, 'hudba', music.enabled ? 'Hudba: zap.' : 'Hudba: vyp.', PW-250, 625, 200, 60, () => { music.toggle(); redrawPanel(); }, { color: '#25335e', px: 28 });
@@ -427,6 +443,7 @@ function saveName(){
   showPanel(drawResults);
 }
 function drawResults(g){
+  if (practice) return drawPracticeResults(g);
   txt(g, 'Konec hry!', PW/2, 70, { px: 64, color: '#7fe3ff' });
   txt(g, `Tvoje skóre: ${score}`, PW/2, 145, { px: 48, color: '#ffd23f' });
   drawTop(g, 220, lastRank);
@@ -440,6 +457,20 @@ function drawResults(g){
   exitVrButton(g);
   button(g, 'again', 'Hrát znovu', PW/2-200, 620, 400, 100, startGame, { color: '#1a9d4a', px: 48 });
 }
+function drawPracticeResults(g){
+  txt(g, 'Konec cvičení!', PW/2, 80, { px: 64, color: '#7fe3ff' });
+  roundRect(g, 120, 150, 784, 300, 24); g.fillStyle = 'rgba(255,255,255,0.06)'; g.fill();
+  txt(g, 'Správně', 320, 205, { px: 40, color: '#5dff8a' });
+  txt(g, 'Nesprávně', 704, 205, { px: 40, color: '#ff6b6b' });
+  txt(g, String(goodCount), 320, 300, { px: 120, color: '#5dff8a' });
+  txt(g, String(badCount), 704, 300, { px: 120, color: '#ff6b6b' });
+  const total = goodCount + badCount;
+  const extra = [total ? `úspěšnost ${Math.round(goodCount/total*100)} %` : '', mode !== 'strelba' ? `propásnuto ${missCount}` : ''].filter(Boolean).join('  ·  ');
+  if (extra) txt(g, extra, PW/2, 400, { px: 30, weight: 'normal', color: '#bcd' });
+  exitVrButton(g);
+  button(g, 'again', 'Cvičit znovu', PW/2-200, 500, 400, 100, startGame, { color: '#1a9d4a', px: 48 });
+  button(g, 'menu', 'Menu', PW/2-120, 625, 240, 64, () => { state = 'menu'; showPanel(drawMenu); }, { color: '#25335e', px: 32 });
+}
 
 /* ================= HUD (čas + skóre před očima) ================= */
 const hudCanvas = document.createElement('canvas'); hudCanvas.width = 512; hudCanvas.height = 96;
@@ -451,16 +482,20 @@ hud.position.set(0, -0.3, -1); hud.renderOrder = 999; hud.visible = false;
 camera.add(hud);
 let hudKey = '';
 function updateHud(){
-  const t = Math.max(0, Math.ceil(timeLeft)), key = t + '|' + score;
+  const t = Math.max(0, Math.ceil(timeLeft)), key = t + '|' + score + '|' + goodCount + '|' + badCount + '|' + practice;
   if (key === hudKey) return; hudKey = key;
   hg.clearRect(0,0,512,96);
   roundRect(hg, 4, 4, 504, 88, 24); hg.fillStyle = 'rgba(0,0,0,0.55)'; hg.fill();
   const mm = Math.floor(t/60), ss = String(t%60).padStart(2,'0');
   hg.font = `bold 52px ${FONT}`; hg.textBaseline = 'middle';
   hg.textAlign = 'left'; hg.fillStyle = t <= 10 ? '#ff6b6b' : '#fff'; hg.fillText(`${mm}:${ss}`, 28, 50);
-  hg.textAlign = 'right'; hg.fillStyle = '#ffd23f'; hg.fillText(`${score} b.`, 484, 50);
+  if (practice){   // cvičení: místo bodů jen počet správně / špatně
+    hg.font = `bold 40px ${FONT}`; hg.textAlign = 'right';
+    const bad = `✘ ${badCount}`; hg.fillStyle = PRACTICE_COLOR.bad; hg.fillText(bad, 488, 50);
+    hg.fillStyle = PRACTICE_COLOR.good; hg.fillText(`✔ ${goodCount}`, 488 - hg.measureText(bad).width - 18, 50);
+  } else { hg.textAlign = 'right'; hg.fillStyle = '#ffd23f'; hg.fillText(`${score} b.`, 484, 50); }
   hg.font = `bold 20px ${FONT}`; hg.textAlign = 'center'; hg.fillStyle = 'rgba(255,255,255,0.6)';
-  hg.fillText(renderer.xr.isPresenting ? 'B/Y = pauza' : usedTouch ? '⏸ = pauza' : 'Esc = pauza', 262, 50);
+  hg.fillText(renderer.xr.isPresenting ? 'B/Y = pauza' : usedTouch ? '⏸ = pauza' : 'Esc = pauza', practice ? 236 : 262, 50);
   hudTex.needsUpdate = true;
 }
 
@@ -480,7 +515,9 @@ function spawnWord(){
   if (words.length >= MAX_WORDS) return;
   const info = nextWord(), isCorrect = Math.random() < 0.5;
   const text = isCorrect ? info.correct : info.wrong;
-  const mesh = makeLabel(text, { h: 0.75, border: null });
+  const mesh = makeLabel(text, practice
+    ? { h: 0.75, color: isCorrect ? PRACTICE_COLOR.good : PRACTICE_COLOR.bad, bg: isCorrect ? PRACTICE_COLOR.goodBg : PRACTICE_COLOR.badBg, border: isCorrect ? PRACTICE_COLOR.good : PRACTICE_COLOR.bad }
+    : { h: 0.75, border: null });
   const ring = makeTimerRing(mesh.userData.w, 0.75); mesh.add(ring);
   const w = mesh.userData.w;
   for (let attempt = 0; attempt < 30; attempt++){
@@ -518,9 +555,10 @@ function setCardFrame(){
   if (d.lengthSq() < 1e-4) d.set(0,0,-1); d.normalize();
   cardBase = { x: p.x, z: p.z, a: Math.atan2(d.z, d.x), y: renderer.xr.isPresenting ? Math.min(2.0, Math.max(1.0, p.y)) : 1.6 };
 }
-function makeCardButton(letter){
+function makeCardButton(letter, hint = null){   // hint: null | 'good' | 'bad' (cvičení)
   const c = document.createElement('canvas'); c.width = c.height = 192; const g = c.getContext('2d');
-  roundRect(g, 8, 8, 176, 176, 34); g.fillStyle = '#1d5bd8'; g.fill(); g.lineWidth = 8; g.strokeStyle = '#bfe6ff'; g.stroke();
+  roundRect(g, 8, 8, 176, 176, 34); g.fillStyle = hint === 'good' ? '#15803d' : hint === 'bad' ? '#b91c1c' : '#1d5bd8'; g.fill();
+  g.lineWidth = 8; g.strokeStyle = hint === 'good' ? '#5dff8a' : hint === 'bad' ? '#ff8a8a' : '#bfe6ff'; g.stroke();
   g.font = `bold 130px ${FONT}`; g.fillStyle = '#fff'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(letter, 96, 104);
   const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4;
   const m = new THREE.Mesh(new THREE.PlaneGeometry(CARD_BTN, CARD_BTN),
@@ -560,7 +598,7 @@ function makeCard(info){
   // tlačítka: vždy y vlevo, i vpravo (u velkého písmene velká, u dlouhého ý / í)
   const yL = /[yýYÝ]/.test(info.letter) ? info.letter : SWAP[info.letter], iL = SWAP[yL];
   const btns = [yL, iL].map((letter, k) => {
-    const b = makeCardButton(letter); b.position.set((k ? 1 : -1)*0.36, -CARD_H/2 + 0.08 + CARD_BTN/2, 0.01);
+    const b = makeCardButton(letter, practice ? (letter === info.letter ? 'good' : 'bad') : null); b.position.set((k ? 1 : -1)*0.36, -CARD_H/2 + 0.08 + CARD_BTN/2, 0.01);
     mesh.add(b); return { mesh: b, letter };
   });
   return { mesh, btns, redraw };
@@ -602,7 +640,7 @@ function answerCard(c, letter, haptic){
   if (right){
     score += SCORE_GOOD; goodCount++;
     burst(c.mesh.position, 0x5dff8a, 60, 3);
-    floatText(`+${SCORE_GOOD}`, top, '#ffe34d');
+    floatText(practice ? '✔' : `+${SCORE_GOOD}`, top, practice ? PRACTICE_COLOR.good : '#ffe34d');
     sfx.good(); haptic?.(0.8, 80);
   } else {
     score += SCORE_BAD; badCount++;
@@ -691,10 +729,10 @@ function quitGame(){   // ukončí rozehranou hru bez zápisu skóre a vrátí s
 }
 function drawPause(g){
   txt(g, 'Pauza', PW/2, 90, { px: 72, color: '#7fe3ff' });
-  txt(g, `Skóre ${score}  ·  zbývá ${Math.floor(Math.max(0, timeLeft)/60)}:${String(Math.ceil(Math.max(0, timeLeft))%60).padStart(2,'0')}`, PW/2, 175, { px: 38, color: '#ffd23f' });
+  txt(g, `${practice ? `✔ ${goodCount}  ✘ ${badCount}` : `Skóre ${score}`}  ·  zbývá ${Math.floor(Math.max(0, timeLeft)/60)}:${String(Math.ceil(Math.max(0, timeLeft))%60).padStart(2,'0')}`, PW/2, 175, { px: 38, color: '#ffd23f' });
   button(g, 'resume', 'Pokračovat', PW/2-220, 240, 440, 110, resumeGame, { color: '#1a9d4a', px: 50 });
   button(g, 'quit', 'Ukončit hru', PW/2-220, 380, 440, 100, quitGame, { color: '#8a2b2b', px: 44 });
-  txt(g, 'Ukončená hra se do tabulky nezapíše.', PW/2, 520, { px: 26, weight: 'normal', color: '#bcd' });
+  if (!practice) txt(g, 'Ukončená hra se do tabulky nezapíše.', PW/2, 520, { px: 26, weight: 'normal', color: '#bcd' });
   exitVrButton(g);
 }
 function endGame(){
@@ -705,7 +743,7 @@ function endGame(){
   sfx.end();
   music.stop();
   setTimeout(() => {
-    if (qualifies(score)){ state = 'name'; nameBuf = ''; showPanel(drawNameEntry); }
+    if (!practice && qualifies(score)){ state = 'name'; nameBuf = ''; showPanel(drawNameEntry); }
     else { state = 'results'; lastRank = -1; showPanel(drawResults); }
   }, 1200);
 }
@@ -840,7 +878,7 @@ function shoot(hand, origin, dir, haptic){
   if (right){
     w.phase = 'hit'; score += SCORE_GOOD; goodCount++;
     burst(w.mesh.position, w.correct ? 0x5dff8a : 0xffb13d);
-    floatText(`+${SCORE_GOOD}`, w.mesh.position.clone().add(new THREE.Vector3(0,0.6,0)), '#ffe34d');
+    floatText(practice ? '✔' : `+${SCORE_GOOD}`, w.mesh.position.clone().add(new THREE.Vector3(0,0.6,0)), practice ? PRACTICE_COLOR.good : '#ffe34d');
     sfx.good(); haptic?.(0.8, 80);
   } else {
     w.phase = 'bad'; score += SCORE_BAD; badCount++;
@@ -964,7 +1002,9 @@ function updateTrack(dt){
 const blocks = [];   // { mesh, slab, w, correct, info, phase:'fly'|'out', t }
 function spawnBlock(side = 0){   // side: −1 levá půlka, +1 pravá, 0 kdekoli
   const info = nextWord(), isCorrect = Math.random() < 0.5;
-  const mesh = makeLabel(isCorrect ? info.correct : info.wrong, { h: WORD_H, border: '#b49bff', bg: 'rgba(16,10,52,0.92)' });
+  const mesh = makeLabel(isCorrect ? info.correct : info.wrong, practice
+    ? { h: WORD_H, color: isCorrect ? PRACTICE_COLOR.good : PRACTICE_COLOR.bad, border: isCorrect ? PRACTICE_COLOR.good : PRACTICE_COLOR.bad, bg: isCorrect ? PRACTICE_COLOR.goodBg : PRACTICE_COLOR.badBg }
+    : { h: WORD_H, border: '#b49bff', bg: 'rgba(16,10,52,0.92)' });
   const w = mesh.userData.w;
   const slab = new THREE.Mesh(new THREE.BoxGeometry(w + 0.06, WORD_H + 0.06, 0.07),
     new THREE.MeshStandardMaterial({ color: 0x1a1450, emissive: 0x3a22a0, emissiveIntensity: 0.6, transparent: true, opacity: 0 }));
@@ -1061,7 +1101,7 @@ function slice(b, r){
   if (right){
     score += SCORE_GOOD; goodCount++;
     burst(wp, b.correct ? 0x5dff8a : 0xffb13d, 50, 1.6, { size: 0.045, ring: 0.8 });
-    floatText(`+${SCORE_GOOD}`, wp.clone().add(new THREE.Vector3(0, 0.3, 0)), '#ffe34d', 1.0, 0.25);
+    floatText(practice ? '✔' : `+${SCORE_GOOD}`, wp.clone().add(new THREE.Vector3(0, 0.3, 0)), practice ? PRACTICE_COLOR.good : '#ffe34d', 1.0, 0.25);
     sfx.good(); r.haptic?.(0.8, 80);
   } else {
     score += SCORE_BAD; badCount++;
@@ -1196,7 +1236,7 @@ async function initVR(){
 initVR();
 
 /* ================= HLAVNÍ SMYČKA ================= */
-window.__vs = { words, blocks, cards, pauseGame, resumeGame, quitGame, rigs, track, camera, mouseHeld, setMode, startGame, get mode(){ return mode; }, get state(){ return state; }, get score(){ return score; }, get good(){ return goodCount; }, get bad(){ return badCount; } }; // pro testování
+window.__vs = { words, blocks, cards, pauseGame, resumeGame, quitGame, rigs, track, camera, mouseHeld, setMode, setPractice, startGame, get practice(){ return practice; }, get mode(){ return mode; }, get state(){ return state; }, get score(){ return score; }, get good(){ return goodCount; }, get bad(){ return badCount; } }; // pro testování
 track.visible = mode === 'mece';
 showPanel(drawMenu);
 const clock = new THREE.Clock();
