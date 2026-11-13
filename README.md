@@ -8,6 +8,11 @@ Přesunuto z repa `smartoped` (`web/vr/`), stav včetně pauzy a tlačítka Opus
 - **Střelnice** – pravá (zelená) pistole střílí správně napsaná slova, levá (červená) špatně napsaná; max 42 slov ve 360°.
 - **Meče** – slova letí po dráze proti hráči, zelený meč seká správná, červený špatná (`?rezim=mece`).
 - **Doplňovačka** – karty s mezerou místo y/i, hráč vystřelí správné písmeno (`?rezim=karty`).
+- **Bludiště** – hráč chodí 3D bludištěm; na každé křižovatce jsou dvě šipky se slovem (jedno napsané správně,
+  druhé špatně). Správná cesta vede dál, špatná do slepé uličky, kde čeká příšera a honí hráče zpátky ke křižovatce
+  (`?rezim=bludiste`). Správná volba +1, špatná −1. Ovládání: ve VR levá páčka chůze, pravá páčka otáčení
+  po 30° skocích; na počítači W/S nebo ↑/↓ chůze, A/D nebo ←/→ otáčení (Q/E úkrok); na tabletu tlačítka ▲▼ a ◄►,
+  rozhlížet se jde i tažením prstu. Proti nevolnosti: stálá rychlost bez houpání a při chůzi se zúží zorné pole.
 
 Každý režim jde hrát **na body**, nebo jako **Cvičení** (přepínač v menu, `?cviceni=1`): správně napsaná slova
 jsou zelená, špatně napsaná červená (v Doplňovačce je zelené správné písmeno). Body se nepočítají ani nezapisují
@@ -38,7 +43,7 @@ Se soubojem: `cd server && SLOVA=../web/slova.js STATIC_DIR=../web SOUBOJ_CAS=20
 `server/server.mjs` běží na stejné doméně jako hra pod `/api` (Ingress posílá `/api` na Service `vrskola-api`).
 Výsledky ukládá do `/data/vysledky.json` na PVC `vrskola-api-data`, takže přežijí restart.
 
-- `GET /api/top?rezim=strelba|mece|karty` – TOP 5 a délka souboje
+- `GET /api/top?rezim=strelba|mece|karty|bludiste` – TOP 5 a délka souboje
 - `POST /api/souboj/start` `{rezim}` – podepsaný jednorázový lístek
 - `POST /api/souboj/konec` `{rezim, listek, jmeno, odpovedi}` – vyhodnocení, vrací skóre, pořadí a TOP 5
 
