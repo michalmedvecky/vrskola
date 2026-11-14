@@ -1,0 +1,445 @@
+{
+  "id": "anglictina",
+  "nazev": "Anglická slovíčka (1. stupeň)",
+  "jazyk": "cs",
+  "popis": "Základní anglická slovíčka pro 3.–5. třídu ZŠ podle témat běžných učebnic: pozdravy, barvy, čísla, rodina, škola, zvířata, jídlo, tělo, oblečení, dny a měsíce, počasí, domov, hračky, město, slovesa a přídavná jména.",
+  "poznamka": "Položka je anglické slovo = [český překlad]. Špatné překlady se losují z ostatních slovíček stejné skupiny, proto ve skupině nesmí být dvě slova se stejným nebo zaměnitelným překladem (proto chybí např. arm/hand – obojí „ruka“, mother/mum, cap/hat, cold × winter – „zima“). Přídavná jména jsou v mužském rodě, barvy v ženském (červená), slovesa v infinitivu.",
+  "pocetMoznosti": 3,
+  "texty": {
+    "strelba": [
+      "PRAVÁ ruka střílí SPRÁVNÉ překlady",
+      "LEVÁ ruka střílí ŠPATNÉ překlady"
+    ],
+    "mece": [
+      "ZELENÝ meč (pravá ruka) seká SPRÁVNÉ překlady",
+      "ČERVENÝ meč (levá ruka) seká ŠPATNÉ překlady"
+    ],
+    "karty": [
+      "Co znamená anglické slovo?",
+      "Vystřel správný překlad pod kartou, klidně kteroukoli rukou."
+    ],
+    "bludiste": [
+      "Na křižovatce jdi tam, kam ukazuje SPRÁVNÝ překlad.",
+      "Špatná cesta končí u příšery – rozsekni ji mečem, nebo uteč!"
+    ],
+    "cviceni": [
+      "Správné překlady jsou ZELENÉ,",
+      "špatné překlady jsou ČERVENÉ."
+    ],
+    "cviceniKarty": [
+      "Správný překlad svítí ZELENĚ, špatný ČERVENĚ."
+    ],
+    "cviceniBludiste": [
+      "Šipka se správným překladem je ZELENÁ,",
+      "šipka se špatným překladem je ČERVENÁ."
+    ]
+  },
+  "skupiny": [
+    {
+      "nazev": "Pozdravy a fráze",
+      "polozky": [
+        "hello = [ahoj]",
+        "goodbye = [na shledanou|prosím|děkuji|dobrou noc|ano]",
+        "please = [prosím]",
+        "thank you = [děkuji]",
+        "yes = [ano]",
+        "no = [ne]",
+        "sorry = [promiň]",
+        "good morning = [dobré ráno]",
+        "good night = [dobrou noc]",
+        "How are you? = [Jak se máš?]",
+        "What's your name? = [Jak se jmenuješ?]",
+        "How old are you? = [Kolik ti je?]"
+      ]
+    },
+    {
+      "nazev": "Barvy",
+      "polozky": [
+        "red = [červená]",
+        "blue = [modrá]",
+        "green = [zelená]",
+        "yellow = [žlutá]",
+        "orange = [oranžová]",
+        "pink = [růžová]",
+        "purple = [fialová]",
+        "brown = [hnědá]",
+        "black = [černá]",
+        "white = [bílá]",
+        "grey = [šedá]"
+      ]
+    },
+    {
+      "nazev": "Čísla 1–20",
+      "polozky": [
+        "one = [1]",
+        "two = [2]",
+        "three = [3]",
+        "four = [4]",
+        "five = [5]",
+        "six = [6]",
+        "seven = [7]",
+        "eight = [8]",
+        "nine = [9]",
+        "ten = [10]",
+        "eleven = [11]",
+        "twelve = [12]",
+        "thirteen = [13]",
+        "fourteen = [14]",
+        "fifteen = [15]",
+        "sixteen = [16]",
+        "seventeen = [17]",
+        "eighteen = [18]",
+        "nineteen = [19]",
+        "twenty = [20]"
+      ]
+    },
+    {
+      "nazev": "Desítky",
+      "polozky": [
+        "thirty = [30]",
+        "forty = [40]",
+        "fifty = [50]",
+        "sixty = [60]",
+        "seventy = [70]",
+        "eighty = [80]",
+        "ninety = [90]",
+        "one hundred = [100]"
+      ]
+    },
+    {
+      "nazev": "Rodina",
+      "polozky": [
+        "mum = [maminka]",
+        "dad = [tatínek]",
+        "brother = [bratr]",
+        "sister = [sestra]",
+        "grandma = [babička]",
+        "grandpa = [dědeček]",
+        "baby = [miminko]",
+        "uncle = [strýc]",
+        "aunt = [teta]",
+        "son = [syn]",
+        "daughter = [dcera]",
+        "family = [rodina]",
+        "parents = [rodiče]",
+        "friend = [kamarád]"
+      ]
+    },
+    {
+      "nazev": "Škola",
+      "polozky": [
+        "pen = [pero]",
+        "pencil = [tužka]",
+        "rubber = [guma]",
+        "ruler = [pravítko]",
+        "book = [kniha]",
+        "exercise book = [sešit]",
+        "schoolbag = [aktovka]",
+        "pencil case = [penál]",
+        "desk = [lavice]",
+        "chair = [židle]",
+        "board = [tabule]",
+        "teacher = [učitel]",
+        "pupil = [žák]",
+        "classroom = [třída]",
+        "crayon = [pastelka]",
+        "scissors = [nůžky]",
+        "glue = [lepidlo]"
+      ]
+    },
+    {
+      "nazev": "Zvířata doma a na statku",
+      "polozky": [
+        "dog = [pes]",
+        "cat = [kočka]",
+        "mouse = [myš]",
+        "rabbit = [králík]",
+        "hamster = [křeček]",
+        "parrot = [papoušek]",
+        "fish = [ryba]",
+        "horse = [kůň]",
+        "cow = [kráva]",
+        "pig = [prase]",
+        "sheep = [ovce]",
+        "goat = [koza]",
+        "duck = [kachna]",
+        "hen = [slepice]"
+      ]
+    },
+    {
+      "nazev": "Divoká zvířata",
+      "polozky": [
+        "elephant = [slon]",
+        "lion = [lev]",
+        "tiger = [tygr]",
+        "monkey = [opice]",
+        "giraffe = [žirafa]",
+        "snake = [had]",
+        "bear = [medvěd]",
+        "crocodile = [krokodýl]",
+        "frog = [žába]",
+        "bird = [pták]",
+        "spider = [pavouk]",
+        "turtle = [želva]",
+        "fox = [liška]",
+        "wolf = [vlk]"
+      ]
+    },
+    {
+      "nazev": "Jídlo a pití",
+      "polozky": [
+        "bread = [chléb]",
+        "butter = [máslo]",
+        "cheese = [sýr]",
+        "milk = [mléko]",
+        "egg = [vejce]",
+        "ham = [šunka]",
+        "sausage = [párek]",
+        "chicken = [kuře]",
+        "rice = [rýže]",
+        "soup = [polévka]",
+        "cake = [dort]",
+        "ice cream = [zmrzlina]",
+        "chocolate = [čokoláda]",
+        "biscuit = [sušenka]",
+        "sweets = [bonbony]",
+        "water = [voda]",
+        "juice = [džus]",
+        "tea = [čaj]",
+        "breakfast = [snídaně]",
+        "lunch = [oběd]",
+        "dinner = [večeře]"
+      ]
+    },
+    {
+      "nazev": "Ovoce a zelenina",
+      "polozky": [
+        "apple = [jablko]",
+        "banana = [banán]",
+        "orange = [pomeranč]",
+        "pear = [hruška]",
+        "plum = [švestka]",
+        "strawberry = [jahoda]",
+        "cherry = [třešeň]",
+        "grapes = [hrozny]",
+        "lemon = [citron]",
+        "pineapple = [ananas]",
+        "potato = [brambora]",
+        "tomato = [rajče]",
+        "carrot = [mrkev]",
+        "cucumber = [okurka]",
+        "onion = [cibule]",
+        "pepper = [paprika]",
+        "mushroom = [houba]"
+      ]
+    },
+    {
+      "nazev": "Tělo",
+      "polozky": [
+        "head = [hlava]",
+        "hair = [vlasy]",
+        "eye = [oko]",
+        "ear = [ucho]",
+        "nose = [nos]",
+        "mouth = [pusa]",
+        "face = [obličej]",
+        "neck = [krk]",
+        "shoulder = [rameno]",
+        "hand = [ruka]",
+        "finger = [prst]",
+        "leg = [noha]",
+        "knee = [koleno]",
+        "back = [záda]",
+        "tummy = [bříško]",
+        "tooth = [zub]"
+      ]
+    },
+    {
+      "nazev": "Oblečení",
+      "polozky": [
+        "T-shirt = [tričko]",
+        "shirt = [košile]",
+        "trousers = [kalhoty]",
+        "shorts = [kraťasy]",
+        "skirt = [sukně]",
+        "dress = [šaty]",
+        "jacket = [bunda]",
+        "coat = [kabát]",
+        "hat = [čepice]",
+        "scarf = [šála]",
+        "gloves = [rukavice]",
+        "socks = [ponožky]",
+        "shoes = [boty]",
+        "sweater = [svetr]",
+        "pyjamas = [pyžamo]"
+      ]
+    },
+    {
+      "nazev": "Dny v týdnu",
+      "polozky": [
+        "Monday = [pondělí]",
+        "Tuesday = [úterý]",
+        "Wednesday = [středa]",
+        "Thursday = [čtvrtek]",
+        "Friday = [pátek]",
+        "Saturday = [sobota]",
+        "Sunday = [neděle]",
+        "day = [den]",
+        "week = [týden]",
+        "today = [dnes]",
+        "tomorrow = [zítra]",
+        "yesterday = [včera]"
+      ]
+    },
+    {
+      "nazev": "Měsíce",
+      "polozky": [
+        "January = [leden]",
+        "February = [únor]",
+        "March = [březen]",
+        "April = [duben]",
+        "May = [květen]",
+        "June = [červen]",
+        "July = [červenec]",
+        "August = [srpen]",
+        "September = [září]",
+        "October = [říjen]",
+        "November = [listopad]",
+        "December = [prosinec]"
+      ]
+    },
+    {
+      "nazev": "Počasí a roční období",
+      "polozky": [
+        "spring = [jaro]",
+        "summer = [léto]",
+        "autumn = [podzim]",
+        "winter = [zima]",
+        "sun = [slunce]",
+        "rain = [déšť]",
+        "snow = [sníh]",
+        "wind = [vítr]",
+        "cloud = [mrak]",
+        "rainbow = [duha]",
+        "storm = [bouřka]",
+        "hot = [horko]",
+        "cold = [chladno]",
+        "sunny = [slunečno]",
+        "windy = [větrno]"
+      ]
+    },
+    {
+      "nazev": "Doma",
+      "polozky": [
+        "house = [dům]",
+        "flat = [byt]",
+        "room = [pokoj]",
+        "kitchen = [kuchyň]",
+        "bathroom = [koupelna]",
+        "bedroom = [ložnice]",
+        "living room = [obývák]",
+        "garden = [zahrada]",
+        "door = [dveře]",
+        "window = [okno]",
+        "table = [stůl]",
+        "bed = [postel]",
+        "sofa = [gauč]",
+        "lamp = [lampa]",
+        "wall = [zeď]",
+        "floor = [podlaha]",
+        "stairs = [schody]"
+      ]
+    },
+    {
+      "nazev": "Hračky a volný čas",
+      "polozky": [
+        "ball = [míč]",
+        "doll = [panenka]",
+        "teddy bear = [medvídek]",
+        "kite = [drak]",
+        "puzzle = [skládačka]",
+        "game = [hra]",
+        "balloon = [balónek]",
+        "scooter = [koloběžka]",
+        "computer = [počítač]",
+        "picture = [obrázek]",
+        "song = [písnička]"
+      ]
+    },
+    {
+      "nazev": "Město a doprava",
+      "polozky": [
+        "shop = [obchod]",
+        "school = [škola]",
+        "street = [ulice]",
+        "hospital = [nemocnice]",
+        "cinema = [kino]",
+        "library = [knihovna]",
+        "church = [kostel]",
+        "post office = [pošta]",
+        "playground = [hřiště]",
+        "swimming pool = [bazén]",
+        "bridge = [most]",
+        "station = [nádraží]",
+        "car = [auto]",
+        "bus = [autobus]",
+        "train = [vlak]",
+        "plane = [letadlo]",
+        "ship = [loď]",
+        "bike = [kolo]",
+        "tram = [tramvaj]",
+        "motorbike = [motorka]"
+      ]
+    },
+    {
+      "nazev": "Co děláme (slovesa)",
+      "polozky": [
+        "run = [běhat]",
+        "jump = [skákat]",
+        "swim = [plavat]",
+        "sing = [zpívat]",
+        "dance = [tancovat]",
+        "read = [číst]",
+        "write = [psát]",
+        "draw = [kreslit]",
+        "eat = [jíst]",
+        "drink = [pít]",
+        "sleep = [spát]",
+        "play = [hrát si]",
+        "walk = [chodit]",
+        "fly = [létat]",
+        "climb = [lézt]",
+        "ride = [jezdit]",
+        "cook = [vařit]",
+        "listen = [poslouchat]",
+        "speak = [mluvit]",
+        "open = [otevřít]",
+        "close = [zavřít]"
+      ]
+    },
+    {
+      "nazev": "Jaké to je (přídavná jména)",
+      "polozky": [
+        "big = [velký]",
+        "small = [malý]",
+        "long = [dlouhý]",
+        "short = [krátký|dlouhý|rychlý|starý|nový]",
+        "old = [starý]",
+        "new = [nový]",
+        "young = [mladý]",
+        "happy = [šťastný]",
+        "sad = [smutný]",
+        "fast = [rychlý]",
+        "slow = [pomalý]",
+        "good = [dobrý]",
+        "bad = [špatný]",
+        "tall = [vysoký|malý|starý|smutný|pomalý]",
+        "beautiful = [krásný]",
+        "hungry = [hladový]",
+        "tired = [unavený]",
+        "clean = [čistý]",
+        "dirty = [špinavý]"
+      ]
+    }
+  ]
+}
