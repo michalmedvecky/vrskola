@@ -1,0 +1,109 @@
+{
+  "id": "sk-dvojhlasky",
+  "nazev": "Dvojhlásky ie, ia, ô",
+  "jazyk": "sk",
+  "popis": "Dvojhlásky ie, ia, ô (chlieb, piatok, kôň) proti é, á, o, uo; chytáky sú slová s krátkou samohláskou (dom, sneh, kvet).",
+  "poznamka": "Dvojhláska sa píše ako ie, ia, iu, ô, nikdy ako é, á, uo. Chytáky sú slová, kde sa dvojhláska nepíše, hoci sa ponúka (dom, strom, sneh, kvet). Možnosti sú vypísané pri každej položke.",
+  "pocetMoznosti": 3,
+  "texty": {
+    "strelba": [
+      "PRAVÁ ruka strieľa slová napísané SPRÁVNE",
+      "ĽAVÁ ruka strieľa slová napísané NESPRÁVNE"
+    ],
+    "mece": [
+      "ZELENÝ meč (pravá ruka) seká slová napísané SPRÁVNE",
+      "ČERVENÝ meč (ľavá ruka) seká slová napísané NESPRÁVNE"
+    ],
+    "karty": [
+      "Na kartách chýba samohláska alebo dvojhláska. Čo tam patrí?",
+      "Vystreľ správnu možnosť pod slovom, hoci ktoroukoľvek rukou."
+    ],
+    "bludiste": [
+      "Na križovatke choď tam, kam ukazuje slovo napísané SPRÁVNE.",
+      "Zlá cesta končí pri príšere – rozsekni ju mečom, alebo uteč!"
+    ],
+    "cviceni": [
+      "Slová napísané správne sú ZELENÉ,",
+      "slová napísané nesprávne sú ČERVENÉ."
+    ],
+    "cviceniKarty": [
+      "Správna možnosť svieti NAZELENO, nesprávna NAČERVENO."
+    ],
+    "cviceniBludiste": [
+      "Šípka so slovom napísaným správne je ZELENÁ,",
+      "šípka so slovom napísaným nesprávne je ČERVENÁ."
+    ]
+  },
+  "portrety": [
+    {
+      "obrazek": "portrety/bernolak.jpg",
+      "jmeno": "Anton Bernolák",
+      "roky": "1762–1813",
+      "popis": "prvá spisovná slovenčina"
+    },
+    {
+      "obrazek": "portrety/stur.jpg",
+      "jmeno": "Ľudovít Štúr",
+      "roky": "1815–1856",
+      "popis": "spisovná slovenčina 1843"
+    },
+    {
+      "obrazek": "portrety/hurban.jpg",
+      "jmeno": "Jozef Miloslav Hurban",
+      "roky": "1817–1888",
+      "popis": "štúrovec, spisovateľ"
+    },
+    {
+      "obrazek": "portrety/hodza.jpg",
+      "jmeno": "Michal Miloslav Hodža",
+      "roky": "1811–1870",
+      "popis": "štúrovec, jazykovedec"
+    },
+    {
+      "obrazek": "portrety/hattala.jpg",
+      "jmeno": "Martin Hattala",
+      "roky": "1821–1903",
+      "popis": "reforma pravopisu 1852"
+    }
+  ],
+  "skupiny": [
+    { "nazev": "ie", "polozky": [
+      "chl[ie|é]b",
+      "r[ie|é]ka",
+      "b[ie|é]ly",
+      "m[ie|é]sto",
+      "d[ie|é]ťa",
+      "l[ie|é]tadlo",
+      "v[ie|é]tor",
+      "zv[ie|é]ra",
+      "kr[ie|é]da"
+    ] },
+    { "nazev": "ia", "polozky": [
+      "p[ia|á]tok",
+      "ž[ia|á]k",
+      "sv[ia|á]tok",
+      "pr[ia|á]teľ",
+      "č[ia|á]pka",
+      "kur[ia|á]tko"
+    ] },
+    { "nazev": "ô", "polozky": [
+      "k[ô|o|uo]ň",
+      "st[ô|o|uo]l",
+      "n[ô|o|uo]ž",
+      "v[ô|o|uo]ňa",
+      "m[ô|o|uo]j",
+      "tv[ô|o|uo]j",
+      "d[ô|o|uo]vod",
+      "p[ô|o|uo]jdem"
+    ] },
+    { "nazev": "Chytáky bez dvojhlásky", "polozky": [
+      "d[o|ô]m",
+      "str[o|ô]m",
+      "n[o|ô]s",
+      "sn[e|ie]h",
+      "kv[e|ie]t",
+      "m[e|ie]d",
+      "l[e|ie]s"
+    ] }
+  ]
+}

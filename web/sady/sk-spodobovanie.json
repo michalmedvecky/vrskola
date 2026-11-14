@@ -1,0 +1,127 @@
+{
+  "id": "sk-spodobovanie",
+  "nazev": "Píšeme inak, ako počujeme",
+  "jazyk": "sk",
+  "popis": "Spodobovanie: v vyslovujeme ako f (včela), znelé spoluhlásky na konci a vo vnútri slova ako neznelé (chlieb, sladký).",
+  "poznamka": "V spisovnej slovenčine sa píše pôvodná spoluhláska, aj keď ju vyslovujeme inak. Overí sa iným tvarom alebo príbuzným slovom: chlieb – chleba, sladký – sladučký, mráz – mrazy. V F-skupine sú slová, ktoré sa naozaj píšu s f. Neznelé h/ch nie je v sade, lebo sa zle overuje.",
+  "zamena": {
+    "v": "f",
+    "f": "v",
+    "b": "p",
+    "d": "t",
+    "ď": "ť",
+    "z": "s",
+    "ž": "š",
+    "h": "ch",
+    "s": "z"
+  },
+  "pocetMoznosti": 2,
+  "texty": {
+    "strelba": [
+      "PRAVÁ ruka strieľa slová napísané SPRÁVNE",
+      "ĽAVÁ ruka strieľa slová napísané NESPRÁVNE"
+    ],
+    "mece": [
+      "ZELENÝ meč (pravá ruka) seká slová napísané SPRÁVNE",
+      "ČERVENÝ meč (ľavá ruka) seká slová napísané NESPRÁVNE"
+    ],
+    "karty": [
+      "Na kartách chýba spoluhláska. Ako sa píše?",
+      "Vystreľ správnu možnosť pod slovom, hoci ktoroukoľvek rukou."
+    ],
+    "bludiste": [
+      "Na križovatke choď tam, kam ukazuje slovo napísané SPRÁVNE.",
+      "Zlá cesta končí pri príšere – rozsekni ju mečom, alebo uteč!"
+    ],
+    "cviceni": [
+      "Slová napísané správne sú ZELENÉ,",
+      "slová napísané nesprávne sú ČERVENÉ."
+    ],
+    "cviceniKarty": [
+      "Správna možnosť svieti NAZELENO, nesprávna NAČERVENO."
+    ],
+    "cviceniBludiste": [
+      "Šípka so slovom napísaným správne je ZELENÁ,",
+      "šípka so slovom napísaným nesprávne je ČERVENÁ."
+    ]
+  },
+  "portrety": [
+    {
+      "obrazek": "portrety/bernolak.jpg",
+      "jmeno": "Anton Bernolák",
+      "roky": "1762–1813",
+      "popis": "prvá spisovná slovenčina"
+    },
+    {
+      "obrazek": "portrety/stur.jpg",
+      "jmeno": "Ľudovít Štúr",
+      "roky": "1815–1856",
+      "popis": "spisovná slovenčina 1843"
+    },
+    {
+      "obrazek": "portrety/hurban.jpg",
+      "jmeno": "Jozef Miloslav Hurban",
+      "roky": "1817–1888",
+      "popis": "štúrovec, spisovateľ"
+    },
+    {
+      "obrazek": "portrety/hodza.jpg",
+      "jmeno": "Michal Miloslav Hodža",
+      "roky": "1811–1870",
+      "popis": "štúrovec, jazykovedec"
+    },
+    {
+      "obrazek": "portrety/hattala.jpg",
+      "jmeno": "Martin Hattala",
+      "roky": "1821–1903",
+      "popis": "reforma pravopisu 1852"
+    }
+  ],
+  "skupiny": [
+    { "nazev": "V, alebo F?", "polozky": [
+      "[v]čela",
+      "[v]ták",
+      "[v]táčik",
+      "[v]chod",
+      "[v]stať",
+      "[v]šetko",
+      "[v]pravo",
+      "[v]čera",
+      "[v]tedy",
+      "[v]stupenka",
+      "[v] kuchyni",
+      "[v] škole",
+      "[v] tráve",
+      "[f]arba",
+      "[f]azuľa",
+      "[f]utbal",
+      "[f]ľaša",
+      "[f]arma"
+    ] },
+    { "nazev": "Na konci slova", "polozky": [
+      "chlie[b]",
+      "du[b]",
+      "zu[b]",
+      "hra[d]",
+      "ľa[d]",
+      "hla[d]",
+      "lo[ď]",
+      "mrá[z]",
+      "vo[z]",
+      "nô[ž]",
+      "sne[h]",
+      "bre[h]",
+      "ro[h]"
+    ] },
+    { "nazev": "Vo vnútri slova", "polozky": [
+      "sla[d]ký",
+      "ry[b]ka",
+      "lô[ž]ko",
+      "kni[ž]ka",
+      "pro[s]ba",
+      "hla[d]ký",
+      "ťa[ž]ký",
+      "ní[z]ky"
+    ] }
+  ]
+}
