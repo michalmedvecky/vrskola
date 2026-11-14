@@ -48,6 +48,21 @@ configMapGenerator:
       - web/portrety/hurban.jpg
       - web/portrety/hodza.jpg
       - web/portrety/hattala.jpg
+  - name: vrskola-portrety-matematici   # portréty matematiků pro sadu Malá násobilka (~330 kB), vlastní ConfigMapa kvůli limitu 1 MiB
+    files:
+      - web/portrety-matematici/pythagoras.jpg
+      - web/portrety-matematici/eukleides.jpg
+      - web/portrety-matematici/archimedes.jpg
+      - web/portrety-matematici/fibonacci.jpg
+      - web/portrety-matematici/descartes.jpg
+      - web/portrety-matematici/pascal.jpg
+      - web/portrety-matematici/newton.jpg
+      - web/portrety-matematici/leibniz.jpg
+      - web/portrety-matematici/euler.jpg
+      - web/portrety-matematici/gauss.jpg
+      - web/portrety-matematici/bolzano.jpg
+      - web/portrety-matematici/lovelace.jpg
+      - web/portrety-matematici/noether.jpg
   - name: vrskola-pisma      # přibalená písma sad (čínské znaky, podmnožina Noto Sans SC, OFL), hra je čte z /pisma/
     files:
       - web/pisma/cinstina.woff2

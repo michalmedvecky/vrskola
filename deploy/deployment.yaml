@@ -50,6 +50,9 @@ spec:
             - name: portrety
               mountPath: /usr/share/nginx/portrety
               readOnly: true
+            - name: portrety-matematici
+              mountPath: /usr/share/nginx/portrety-matematici
+              readOnly: true
             - name: sady
               mountPath: /usr/share/nginx/sady
               readOnly: true
@@ -68,6 +71,9 @@ spec:
         - name: portrety
           configMap:
             name: vrskola-portrety
+        - name: portrety-matematici
+          configMap:
+            name: vrskola-portrety-matematici
         - name: sady
           configMap:
             name: vrskola-sady

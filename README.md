@@ -23,7 +23,9 @@ Přesunuto z repa `smartoped` (`web/vr/`), stav včetně pauzy a tlačítka Opus
   kamenná (textury se kreslí v prohlížeči, žádné soubory). Proti nevolnosti: otáčení po skocích a při chůzi se zúží zorné pole.
   Po zdech náhodně visí portréty (určuje je sada; u vyjmenovaných slov velikáni češtiny (Hus, Dobrovský, Jungmann, Šafařík, Palacký, Mácha, Němcová)
   v rámu s mosaznou jmenovkou); jsou to volná díla Jana Vilímka, zdroje v `web/portrety/ZDROJE.md`. V k3s jsou
-  ve vlastní ConfigMapě `vrskola-portrety` (nginx je servíruje z `/portrety/`).
+  ve vlastní ConfigMapě `vrskola-portrety` (nginx je servíruje z `/portrety/`). U Malé násobilky visí velcí matematici
+  (Pýthagorás, Eukleidés, Archimédés, Fibonacci, Descartes, Pascal, Newton, Leibniz, Euler, Gauss, Bolzano, Ada Lovelace,
+  Emmy Noether), zdroje ve `web/portrety-matematici/ZDROJE.md`, ConfigMapa `vrskola-portrety-matematici` (`/portrety-matematici/`).
   Když hráč zvolí správnou cestu, na boční zeď chodby za zatáčkou (z křižovatky není vidět) se občas pověsí malá
   cedulka se správně napsaným slovem: vždy to, které hráč právě spletl, jinak některé z už odehraných (každé nejvýš
   dvakrát). Nenápadné opakování; v Souboji třídy se cedulky nevěší, aby měly všechny děti stejné podmínky.
