@@ -1,15 +1,17 @@
-# Strážci klíčů
+# Strážcy klýčú
 
-(Ve složce `web/marketka/` a na adrese `/marketka/`, hra sama se jmenuje **Strážci klíčů**.)
-
-Samostatná hra pro tablet (bez VR, bez serveru) na `/marketka/`. Dítě si nastrojí postavičku, na hradě vidí
+Samostatná hra pro tablet (bez VR, bez serveru) na `/strazcy/`. Dítě si nastrojí postavičku, na hradě vidí
 zámky (výchozí 10) a vydá se po mapě kraje hledat klíče. V každé vesnici je truhlička (Berounsko má 24 vesnic): nejdřív krátká hádanka
 na zámku (2–3 možnosti), pak úloha. Za vyřešenou úlohu kousek klíče (výchozí jsou dvě truhly na jeden klíč, tedy 20 truhel na 10 zámků), za nevyřešenou se truhla zamkne
 na 1 minutu (nastavitelné) a postavička odejde do sousední vesnice. Klíče se kdykoli vkládají do zámků na hradě; když povolí
 všechny, dítě dostane nálepku do sbírky (36 druhů, pak zlaté verze) a hrad se zamkne znovu na další kolo.
 Za počet odemčených hradů roste hodnost (Poutník → … → Legenda).
 
-Postup se ukládá jen v prohlížeči tabletu (`localStorage`, klíč `marketka-v1`).
+Hra začíná úvodní obrazovkou s názvem (klepnutí na Hrát zároveň odemkne zvuk). Měří se, jak dlouho trvalo
+odemknout celý hrad: počítá se jen čas, kdy je hra otevřená a dítě v posledních 2 minutách sáhlo na obrazovku.
+Čas se ukáže u nové nálepky (s rekordem), v albu u každé nálepky a na úvodní obrazovce.
+
+Postup se ukládá jen v prohlížeči tabletu (`localStorage`, klíč `marketka-v1` z doby, kdy se hra jmenovala Marketka).
 
 **Pro rodiče:** ozubené kolečko vpravo nahoře, podržet 2 s. Počet zámků, truhliček na jeden klíč, pauza po chybě, počet srdíček
 v úloze (kolik chyb se odpustí), která témata se procvičují, zvuk, statistika po tématech a seznam posledních
@@ -68,7 +70,7 @@ Zámky truhel (`zamky`): `slova: ["p[y]tel", …]` (chybějící písmeno), `pol
 `generator: "pocty-zpameti"` (násobilka, sčítání a odčítání zpaměti) nebo `generator: "z-uloh"` (otázka se
 vyrobí z úloh tématu: jeden pád, jedno písmeno, správná věta ze dvou).
 
-Kontrola po úpravě: `node nastroje/marketka-test-ulohy.mjs` (vygeneruje stovky úloh a zámků z každého tématu
+Kontrola po úpravě: `node nastroje/strazcy-test-ulohy.mjs` (vygeneruje stovky úloh a zámků z každého tématu
 a ověří je; `-v` vypíše ukázky).
 
 ## Výměna mapy
@@ -87,17 +89,17 @@ a ověří je; `-v` vypíše ukázky).
 }
 ```
 
-Nejjednodušší je psát mapu v GPS a převést ji: `nastroje/marketka-berounsko.gps.json` je zdroj Berounska
+Nejjednodušší je psát mapu v GPS a převést ji: `nastroje/strazcy-berounsko.gps.json` je zdroj Berounska
 (souřadnice jsou přibližné, stačí z mapy.cz), převod:
 
 ```sh
-node nastroje/marketka-mapa.mjs nastroje/marketka-berounsko.gps.json > web/marketka/data/mapa-berounsko.json
+node nastroje/strazcy-mapa.mjs nastroje/strazcy-berounsko.gps.json > web/strazcy/data/mapa-berounsko.json
 ```
 
-Nový soubor v `data/` je potřeba zapsat i do `kustomization.yaml` (ConfigMapa `vrskola-marketka-data`).
+Nový soubor v `data/` je potřeba zapsat i do `kustomization.yaml` (ConfigMapa `vrskola-strazcy-data`).
 
 ## Lokálně
 
 ```sh
-cd web && python3 -m http.server 8000   # → http://localhost:8000/marketka/
+cd web && python3 -m http.server 8000   # → http://localhost:8000/strazcy/
 ```

@@ -59,11 +59,11 @@ spec:
             - name: pisma
               mountPath: /usr/share/nginx/pisma
               readOnly: true
-            - name: marketka
-              mountPath: /usr/share/nginx/marketka
+            - name: strazcy
+              mountPath: /usr/share/nginx/strazcy
               readOnly: true
-            - name: marketka-data
-              mountPath: /usr/share/nginx/marketka-data
+            - name: strazcy-data
+              mountPath: /usr/share/nginx/strazcy-data
               readOnly: true
             - name: nginx-conf
               mountPath: /etc/nginx/conf.d
@@ -86,12 +86,12 @@ spec:
         - name: pisma
           configMap:
             name: vrskola-pisma
-        - name: marketka
+        - name: strazcy
           configMap:
-            name: vrskola-marketka
-        - name: marketka-data
+            name: vrskola-strazcy
+        - name: strazcy-data
           configMap:
-            name: vrskola-marketka-data
+            name: vrskola-strazcy-data
         - name: nginx-conf
           configMap:
             name: vrskola-nginx

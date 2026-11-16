@@ -1,5 +1,5 @@
 // Úlohy: z dat témat (data/ukoly-*.json) vyrábí konkrétní úlohy a otázky na zámky truhliček.
-// Žádné DOM: modul jde použít i v Node (testy v nastroje/marketka-test-ulohy.mjs).
+// Žádné DOM: modul jde použít i v Node (testy v nastroje/strazcy-test-ulohy.mjs).
 //
 // Téma = JSON soubor: { id, nazev, kouzlo, zamena?, ulohy: [ {typ, vaha, ...} ], zamky: {...} }
 // Typy úloh (obecné „motory“, obsah dodává JSON):

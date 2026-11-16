@@ -1,4 +1,4 @@
-// Strážci klíčů – hlavní logika hry (obrazovky, postup, ukládání).
+// Strážcy klýčú – hlavní logika hry (obrazovky, postup, ukládání).
 // Postup se ukládá jen v prohlížeči (localStorage), žádný server.
 import { Mapa } from './mapa.js';
 import { nakresliPostavu, VOLBY, POPISY, VYCHOZI } from './postava.js';
@@ -7,7 +7,7 @@ import { spustUlohu, zobrazZamek } from './ulohy-ui.js';
 import { zvuk, nastavZtlumeni, umimMluvit } from './zvuky.js';
 import { NALEPKY, nalepka, vyberNalepku, hodnost } from './nalepky.js';
 
-const KLIC = 'marketka-v1';
+const KLIC = 'marketka-v1'; // původní název hry, ať se neztratí uložený postup
 const $ = (s) => document.querySelector(s);
 const params = new URLSearchParams(location.search);
 
@@ -62,7 +62,7 @@ const zapnutaTemata = () => {
 function noveKolo() {
   const cislo = (stav.kolo?.cislo || 0) + 1;
   const zamku = Math.min(stav.nastaveni.zamku, maxZamku());
-  stav.kolo = { cislo, zamku, otevreno: 0, klice: 0, kousky: 0, hotova: [], zamceno: {}, temata: {} };
+  stav.kolo = { cislo, zamku, otevreno: 0, klice: 0, kousky: 0, cas: 0, hotova: [], zamceno: {}, temata: {} };
   rozdelTemata();
   uloz();
 }
@@ -280,7 +280,9 @@ async function hradOtevren(svg) {
   await pauza(1600);
   stav.hradu++;
   const nova = vyberNalepku(stav.nalepky);
-  stav.nalepky.push({ ...nova, kdy: Date.now() });
+  const cas = stav.kolo.cas || 0;
+  const rekord = stav.nalepky.every((s) => !s.cas || cas < s.cas);
+  stav.nalepky.push({ ...nova, kdy: Date.now(), cas: Math.round(cas) });
   uloz();
   const n = nalepka(nova.id);
   const obal = div('darek');
@@ -295,6 +297,7 @@ async function hradOtevren(svg) {
     await pauza(700);
     krabice.replaceWith(div(`nalepka velka ${nova.zlata ? 'zlata' : ''} odhaleni`, `<span>${n.emoji}</span>`));
     const popis = div('pribeh', `<p>Nová nálepka: <b>${n.nazev}${nova.zlata ? ' (zlatá!)' : ''}</b></p>
+      <p class="cas-hradu">⏱ Odemčení hradu trvalo <b>${formatCas(cas)}</b>${rekord && stav.nalepky.length > 1 ? ' – <b>nový rekord!</b> 🏆' : ''}</p>
       <p>Ve sbírce máš ${stav.nalepky.length} ${stav.nalepky.length === 1 ? 'nálepku' : stav.nalepky.length < 5 ? 'nálepky' : 'nálepek'}. Tvoje hodnost: <b>${hodnost(stav.hradu)}</b></p>
       <p>Jenže… v noci přiletěl kouzelník a zamkl hrad znovu! Najdeš klíče i tentokrát?</p>`);
     obal.append(popis);
@@ -420,13 +423,19 @@ function zapisStatistiku(tema, uloha, v) {
 function album() {
   const obal = div('album');
   const mam = new Map();
-  for (const s of stav.nalepky) { const x = mam.get(s.id) || { pocet: 0, zlata: false }; x.pocet++; x.zlata ||= s.zlata; mam.set(s.id, x); }
+  for (const s of stav.nalepky) {
+    const x = mam.get(s.id) || { pocet: 0, zlata: false, cas: null };
+    x.pocet++; x.zlata ||= s.zlata;
+    if (s.cas && (!x.cas || s.cas < x.cas)) x.cas = s.cas;
+    mam.set(s.id, x);
+  }
+  const casy = stav.nalepky.filter((s) => s.cas).map((s) => s.cas);
   obal.append(div('nadpis', 'Moje sbírka nálepek'));
-  obal.append(div('pribeh', `Hodnost: <b>${hodnost(stav.hradu)}</b> · odemčených hradů: <b>${stav.hradu}</b> · nálepek: <b>${mam.size} / ${NALEPKY.length}</b>`));
+  obal.append(div('pribeh', `Hodnost: <b>${hodnost(stav.hradu)}</b> · odemčených hradů: <b>${stav.hradu}</b> · nálepek: <b>${mam.size} / ${NALEPKY.length}</b>${casy.length ? ` · nejrychlejší hrad: <b>${formatCas(Math.min(...casy))}</b>` : ''}`));
   const mriz = div('mriz-nalepek');
   for (const n of NALEPKY) {
     const m = mam.get(n.id);
-    mriz.append(div(`nalepka ${m ? '' : 'chybi'} ${m?.zlata ? 'zlata' : ''}`, m ? `<span>${n.emoji}</span><small>${n.nazev}</small>` : '<span>?</span><small>&nbsp;</small>'));
+    mriz.append(div(`nalepka ${m ? '' : 'chybi'} ${m?.zlata ? 'zlata' : ''}`, m ? `<span>${n.emoji}</span><small>${n.nazev}</small>${m.cas ? `<small class="cas">⏱ ${formatCas(m.cas)}</small>` : ''}${m.pocet > 1 ? `<b class="pocet">×${m.pocet}</b>` : ''}` : '<span>?</span><small>&nbsp;</small>'));
   }
   obal.append(mriz);
   otevriPanel(obal, { trida: 'siroky' });
@@ -531,6 +540,40 @@ function nastaveni() {
 
 // ---------- drobnosti ----------
 const pauza = (ms) => new Promise((r) => setTimeout(r, ms));
+// 754 000 ms → „12 min 34 s“
+function formatCas(ms) {
+  const s = Math.round(ms / 1000), h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), z = s % 60;
+  if (h) return `${h} h ${m} min`;
+  if (m) return `${m} min ${z} s`;
+  return `${z} s`;
+}
+
+// Měření času kola: počítá se jen čas, kdy je hra vidět a dítě v posledních 2 minutách sáhlo na obrazovku
+// (hraní přes několik dní se tak nesčítá s přestávkami).
+let posledniDotyk = Date.now(), posledniUlozeniCasu = 0;
+document.addEventListener('pointerdown', () => { posledniDotyk = Date.now(); }, true);
+function merCas(dt) {
+  if (!stav.kolo || document.hidden || !$('#splash').hidden || Date.now() - posledniDotyk > 120000) return;
+  stav.kolo.cas = (stav.kolo.cas || 0) + dt * 1000;
+  if (Date.now() - posledniUlozeniCasu > 5000) { posledniUlozeniCasu = Date.now(); uloz(); }
+}
+
+// Úvodní obrazovka: klepnutí zároveň odemkne zvuk (prohlížeče ho bez dotyku nepustí).
+function splash() {
+  return new Promise((hotovo) => {
+    const el = $('#splash');
+    const casy = stav.nalepky.filter((s) => s.cas).map((s) => s.cas);
+    el.querySelector('.splash-stat').innerHTML = stav.hradu
+      ? `Odemčených hradů: <b>${stav.hradu}</b> · hodnost: <b>${hodnost(stav.hradu)}</b>${casy.length ? ` · rekord: <b>${formatCas(Math.min(...casy))}</b>` : ''}`
+      : '';
+    el.hidden = false;
+    el.querySelector('.splash-hrat').onclick = () => {
+      zvuk.klic();
+      el.classList.add('pryc');
+      setTimeout(() => { el.hidden = true; el.classList.remove('pryc'); hotovo(); }, 500);
+    };
+  });
+}
 function konfety() {
   const el = $('#konfety');
   const barvy = ['#e74c3c', '#f1c40f', '#2ecc71', '#3498db', '#9b59b6', '#ff6fa8'];
@@ -574,7 +617,7 @@ async function start() {
   });
   mapa.postavaNa(stav.pozice);
   let posledni = performance.now();
-  const smycka = (t) => { mapa.snimek(Math.min(0.05, (t - posledni) / 1000)); posledni = t; requestAnimationFrame(smycka); };
+  const smycka = (t) => { const dt = Math.min(0.05, (t - posledni) / 1000); mapa.snimek(dt); merCas(dt); posledni = t; requestAnimationFrame(smycka); };
   requestAnimationFrame(smycka);
   $('#nacitani').hidden = true;
 
@@ -582,10 +625,11 @@ async function start() {
   $('#tl-nastaveni').onclick = () => { if (!mapa.postava.cesta) { zvuk.klik(); branaRodicu(); } };
   $('#brasna').onclick = () => { zvuk.klik(); napovez(); };
 
+  await splash();
   if (!stav.postava) obrazovkaPostavy(() => { obnovHud(); uvodHradu(napovez); });
   else { obnovHud(); napovez(); }
 }
 start();
 
 // háčky pro automatické testy
-window.__mk = { get stav() { return stav; }, get mapa() { return mapa; }, uloz, noveKolo, obnovHud, navstevaMesta, navstevaHradu };
+window.__mk = { formatCas, get stav() { return stav; }, get mapa() { return mapa; }, uloz, noveKolo, obnovHud, navstevaMesta, navstevaHradu };
