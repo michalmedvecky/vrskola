@@ -45,6 +45,14 @@ export function pripravSadu(json){
     byCorrect.set(it.correct, it);
     for (const w of it.wrongs) if (!byWrong.has(w)) byWrong.set(w, it);
   }
+  // příkladové věty (nepovinné): { "bydlet": "Babička b[y]dlí na vesnici." } – klíč = správný tvar položky,
+  // hodnota = věta nebo pole vět; část v [závorkách] se na tabuli chyb zvýrazní
+  const vety = new Map();
+  for (const [k, v] of Object.entries(json.vety || {})){
+    const list = [].concat(v).filter(s => typeof s === 'string' && s.trim());
+    if (!byCorrect.has(k)) chyby.push(`věta pro "${k}": taková položka v sadě není`);
+    else if (list.length) vety.set(k, list);
+  }
   const usable = items.filter(it => it.wrongs.length);
   if (!usable.length) throw new Error(`sada ${json.id} nemá žádnou použitelnou položku`);
   return {
@@ -53,7 +61,7 @@ export function pripravSadu(json){
     poradiMoznosti: Array.isArray(json.poradiMoznosti) ? json.poradiMoznosti : null,
     texty: json.texty || {}, portrety: Array.isArray(json.portrety) ? json.portrety : [],
     pismo: typeof json.pismo === 'string' && /^[\w./-]+\.woff2?$/.test(json.pismo) ? json.pismo : null,
-    items: usable, byCorrect, byWrong, chyby,
+    items: usable, byCorrect, byWrong, vety, chyby,
   };
 }
 

@@ -53,6 +53,7 @@ Stejné soubory čte i server Souboje třídy, takže body počítá podle stejn
 | `texty` | ne | vlastní řádky návodu v menu: `strelba`, `mece`, `karty`, `bludiste`, `cviceni`, `cviceniKarty`, `cviceniBludiste` (pole 1–2 řádků) |
 | `portrety` | ne | obrazy na zdech Bludiště: `{ "obrazek": "portrety/hus.jpg", "jmeno": "…", "roky": "…", "popis": "…" }`; obrázky musí být v některé ConfigMapě s portréty v `kustomization.yaml` (každá má limit 1 MiB, matematici jsou v `portrety-matematici/`) |
 | `pismo` | ne | přibalené písmo pro znaky, které headset nemusí umět (čínština): cesta k `.woff2`, např. `"pisma/cinstina.woff2"`; hra ho načte předem a použije jen pro znaky CJK. Po přidání nového znaku do sady se písmo musí přegenerovat: `nastroje/pismo-podmnozina.sh cinstina` (podmnožina Noto Sans SC, licence OFL v `web/pisma/OFL.txt`), a nový soubor písma přidat do ConfigMapy `vrskola-pisma` v `kustomization.yaml` |
+| `vety` | ne | příkladové věty pro tabuli chyb po hře: `{ "bydlet": "Moje babička b[y]dlí na vesnici." }`; klíč je správný tvar položky (před + odpověď + po), hodnota věta nebo pole vět (hra vybere náhodně). Část v `[závorkách]` se na tabuli podtrhne žlutou křídou. Položka bez věty (nebo sada bez `vety`) se na tabuli ukáže jen jako dvojice tvarů. Věty má zatím `vyjmenovana.json` (všech 211 položek) |
 
 ## Položka
 
@@ -74,3 +75,11 @@ odpověď: kde by záměna dala jiné skutečné slovo (pyl × pil), dejte do po
 Po úpravě sady stačí znovu nasadit (`kubectl apply --server-side -k .`), změní se ConfigMapa `vrskola-sady`
 a přerollují se hra i server. Nová sada se musí přidat do `index.json` a do `kustomization.yaml` (ConfigMapa `vrskola-sady`).
 Chyby v sadě (nesrozumitelná položka, položka bez špatné možnosti) hra vypíše do konzole prohlížeče a server do logu.
+
+## Tabule chyb
+
+Po každé hře (na body, cvičení i souboji) s aspoň jednou chybou se místo panelu objeví zelená školní tabule
+„Co se nepovedlo“: vlevo co hráč zvolil (zvolená možnost podtržená červeně), vpravo správný tvar (odpověď podtržená
+žlutě) a pod tím příkladová věta ze sady, když ji má. Ve Střelnici a Mečích jde chybovat i obráceně (správně napsané
+slovo vystřelené jako chyba), to se ukáže jako „označeno jako chyba“. Stejná chyba vícekrát = jeden řádek s „×2“.
+Tlačítkem Pokračovat se jde na zápis rekordu / výsledky; z výsledků jde tabule otevřít znovu tlačítkem „Chyby (n)“.
