@@ -343,21 +343,41 @@ function roundRect(g, x, y, w, h, r){
   g.quadraticCurveTo(x,y+h,x,y+h-r); g.lineTo(x,y+r); g.quadraticCurveTo(x,y,x+r,y); g.closePath();
 }
 
+// Dlouhý text ze sady (přísloví a jeho význam) se zalomí do řádků. "\n" v položce = vždy nový řádek,
+// jinak se láme jen text delší než WRAP_AT písma (krátká slova a spojení zůstávají na jednom řádku jako dřív).
+const WRAP_AT = 24, WRAP_W = 17, LINE_K = 0.62;   // v násobcích velikosti písma; LINE_K = výška řádku víceřádkového textu vůči jednořádkovému
+function wrapLines(g, text, px, force = false){
+  text = String(text);
+  if (!force && !text.includes('\n') && g.measureText(text).width <= px*WRAP_AT) return [text];
+  const out = [];
+  for (const para of text.split('\n')){
+    let line = '';
+    for (const word of para.split(' ')){
+      const t = line ? line + ' ' + word : word;
+      if (line && g.measureText(t).width > px*WRAP_W){ out.push(line); line = word; } else line = t;
+    }
+    out.push(line);
+  }
+  return out;
+}
+const oneLine = (s) => String(s).replace(/\s*\n\s*/g, ' ');   // text na místa, kde se nezalamuje
 function makeLabel(text, { h=0.7, color='#ffffff', bg='rgba(8,16,40,0.82)', border='#7fd4ff', px=96 } = {}){
   const c = document.createElement('canvas'), g = c.getContext('2d');
   const f = `bold ${px}px ${FONT}`; g.font = f;
-  const tw = Math.ceil(g.measureText(text).width), pad = px*0.45;
-  c.width = tw + pad*2; c.height = Math.round(px*1.45);
+  const lines = wrapLines(g, text, px), lh = px*1.15;
+  const tw = Math.ceil(Math.max(...lines.map(l => g.measureText(l).width))), pad = px*0.45;
+  c.width = tw + pad*2; c.height = Math.round(px*1.45 + lh*(lines.length - 1));
   g.font = f;
   if (bg){ roundRect(g, 4, 4, c.width-8, c.height-8, px*0.35); g.fillStyle = bg; g.fill();
     if (border){ g.lineWidth = 6; g.strokeStyle = border; g.stroke(); } }
   g.fillStyle = color; g.textAlign = 'center'; g.textBaseline = 'middle';
-  g.fillText(text, c.width/2, c.height/2 + px*0.04);
+  lines.forEach((l, i) => g.fillText(l, c.width/2, c.height/2 + px*0.04 + (i - (lines.length - 1)/2)*lh));
   const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4;
   const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity: 0, depthWrite: false, fog: false });
+  if (lines.length > 1) h *= LINE_K * c.height / (px*1.45);   // víc řádků: menší písmo, ať text není obří
   const w = h * c.width / c.height;
   const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat);
-  mesh.userData.w = w;
+  mesh.userData.w = w; mesh.userData.h = h;
   return mesh;
 }
 function disposeMesh(m){ for (const c of [...m.children]) if (c.isMesh) disposeMesh(c); m.geometry.dispose(); if (m.material.map) m.material.map.dispose(); m.material.dispose(); }
@@ -806,17 +826,20 @@ function segs(g, parts, x, y, { px = 40, maxW = 400, align = 'center', weight = 
 }
 // "Babička b[y]dlí na vesnici." → kousky se zvýrazněnou částí v závorkách
 function vetaParts(s){ return s.split(/\[([^\]]*)\]/).map((t, i) => ({ t, c: i % 2 ? CHALK.yellow : CHALK.dim, u: i % 2 === 1 })).filter(p => p.t); }
+// dlouhá položka (přísloví, význam) se na tabuli nevejde vedle sebe → řádky pod sebou
+const longMistake = (m) => /\n/.test(m.info.correct) || m.info.correct.length > 40;
 function drawMistakes(g){
-  const withVety = mistakes.some(m => m.veta);
-  const per = withVety ? 5 : 7, rowH = withVety ? 98 : 66, pages = Math.max(1, Math.ceil(mistakes.length/per));
+  const withVety = mistakes.some(m => m.veta), long = mistakes.some(longMistake);
+  const per = long ? 3 : withVety ? 5 : 7, rowH = long ? 150 : withVety ? 98 : 66, pages = Math.max(1, Math.ceil(mistakes.length/per));
   mistakesPage = Math.min(mistakesPage, pages - 1);
   g.save(); g.shadowColor = 'rgba(255,255,255,0.35)'; g.shadowBlur = 3;   // křída
   txt(g, L('coSeNepovedlo'), PW/2, 80, { px: 54, color: CHALK.yellow });
-  txt(g, L('tvojeVolba'), 270, 140, { px: 28, color: CHALK.dim, weight: 'normal' });
-  txt(g, L('spravne'), 750, 140, { px: 28, color: CHALK.dim, weight: 'normal' });
+  if (!long){ txt(g, L('tvojeVolba'), 270, 140, { px: 28, color: CHALK.dim, weight: 'normal' });
+    txt(g, L('spravne'), 750, 140, { px: 28, color: CHALK.dim, weight: 'normal' }); }
   g.fillStyle = 'rgba(243,241,231,0.35)'; g.fillRect(70, 162, PW-140, 3);
   mistakes.slice(mistakesPage*per, (mistakesPage + 1)*per).forEach((m, i) => {
     const it = m.info, y = 204 + i*rowH;
+    if (long){ drawLongMistake(g, m, y - 14); return; }
     const left = m.chosen === null ? [{ t: L('oznacenoSpatne'), c: CHALK.red }]
       : [{ t: '✘ ', c: CHALK.red }, { t: it.pre, c: CHALK.white }, { t: m.chosen, c: CHALK.red, u: true }, { t: it.post, c: CHALK.white }];
     segs(g, left, 270, y, { px: 40, maxW: 410 });
@@ -837,6 +860,20 @@ function drawMistakes(g){
   }, { color: '#1a7d3e', px: 38 });
 }
 drawMistakes.tabule = true;
+function drawLongMistake(g, m, y){
+  const it = m.info, o = { px: 34, maxW: PW - 150, align: 'left' }, x = 75, n = m.n > 1 ? [{ t: `  ×${m.n}`, c: CHALK.dim }] : [];
+  if (/\n/.test(it.pre) && !it.post.trim()){   // položka „přísloví\n[význam]“: nahoře přísloví, pod ním zvolený a správný význam
+    segs(g, [{ t: oneLine(it.pre).replace(/[\s=→:]+$/, ''), c: CHALK.white }, ...n], x, y, o);
+    segs(g, m.chosen === null ? [{ t: L('oznacenoSpatne'), c: CHALK.red }] : [{ t: '✘ ', c: CHALK.red }, { t: m.chosen, c: CHALK.red, u: true }], x, y + 44, o);
+    segs(g, [{ t: '✔ ', c: CHALK.green }, { t: it.answer, c: CHALK.yellow, u: true }], x, y + 88, o);
+    return;
+  }
+  const pre = oneLine(it.pre), post = oneLine(it.post);
+  segs(g, m.chosen === null ? [{ t: L('oznacenoSpatne'), c: CHALK.red }]
+    : [{ t: '✘ ', c: CHALK.red }, { t: pre, c: CHALK.white }, { t: m.chosen, c: CHALK.red, u: true }, { t: post, c: CHALK.white }], x, y, o);
+  segs(g, [{ t: '✔ ', c: CHALK.green }, { t: pre, c: CHALK.white }, { t: it.answer, c: CHALK.yellow, u: true }, { t: post, c: CHALK.white }, ...n], x, y + 44, o);
+  if (m.veta) segs(g, vetaParts(m.veta), x, y + 88, { px: 30, maxW: PW - 150, align: 'left', weight: 'normal' });
+}
 function mistakesButton(g, y){   // na obrazovce výsledků: znovu otevřít tabuli chyb
   if (!mistakes.length) return;
   button(g, 'chyby', L('chybyN', mistakes.reduce((s, m) => s + m.n, 0)), PW-250, y, 200, 60,
@@ -889,15 +926,15 @@ function spawnWord(){
   const mesh = makeLabel(text, practice
     ? { h: 0.75, color: isCorrect ? PRACTICE_COLOR.good : PRACTICE_COLOR.bad, bg: isCorrect ? PRACTICE_COLOR.goodBg : PRACTICE_COLOR.badBg, border: isCorrect ? PRACTICE_COLOR.good : PRACTICE_COLOR.bad }
     : { h: 0.75, border: null });
-  const ring = makeTimerRing(mesh.userData.w, 0.75); mesh.add(ring);
-  const w = mesh.userData.w;
+  const ring = makeTimerRing(mesh.userData.w, mesh.userData.h); mesh.add(ring);
+  const w = mesh.userData.w, h = mesh.userData.h;
   for (let attempt = 0; attempt < 30; attempt++){
     const a = Math.random()*Math.PI*2, dist = 9 + Math.random()*4, y = 0.9 + Math.random()*4.6;
     const pos = new THREE.Vector3(Math.cos(a)*dist, y, Math.sin(a)*dist);
     let ok = true;
     for (const o of words){
       const op = o.mesh.position;
-      if (Math.abs(op.y - y) > 1.0) continue;
+      if (Math.abs(op.y - y) > (h + o.mesh.userData.h)/2 + 0.25) continue;
       let da = Math.abs(Math.atan2(op.z, op.x) - a); if (da > Math.PI) da = 2*Math.PI - da;
       const arc = da * Math.min(dist, Math.hypot(op.x, op.z));
       if (arc < (w + o.mesh.userData.w)/2 + 0.4){ ok = false; break; }
@@ -927,56 +964,85 @@ function setCardFrame(){
   cardBase = { x: p.x, z: p.z, a: Math.atan2(d.z, d.x), y: renderer.xr.isPresenting ? Math.min(2.0, Math.max(1.0, p.y)) : 1.6 };
 }
 const CARD_BTN_GAP = 0.22;
-function makeCardButton(label, hint = null){   // hint: null | 'good' | 'bad' (cvičení); písmeno = čtverec, slovo = širší tlačítko
+function makeCardButton(label, hint = null){   // hint: null | 'good' | 'bad' (cvičení); písmeno = čtverec, slovo = širší tlačítko, dlouhý význam = víc řádků
   const c = document.createElement('canvas'), g = c.getContext('2d'), px = [...label].length <= 2 ? 130 : 92;
   g.font = `bold ${px}px ${FONT}`;
-  c.width = Math.max(192, Math.ceil(g.measureText(label).width + 70)); c.height = 192;
-  roundRect(g, 8, 8, c.width - 16, 176, 34); g.fillStyle = hint === 'good' ? '#15803d' : hint === 'bad' ? '#b91c1c' : '#1d5bd8'; g.fill();
+  const lines = wrapLines(g, label, px), lh = px*1.1;
+  c.width = Math.max(192, Math.ceil(Math.max(...lines.map(l => g.measureText(l).width)) + 70)); c.height = Math.round(192 + lh*(lines.length - 1));
+  roundRect(g, 8, 8, c.width - 16, c.height - 16, 34); g.fillStyle = hint === 'good' ? '#15803d' : hint === 'bad' ? '#b91c1c' : '#1d5bd8'; g.fill();
   g.lineWidth = 8; g.strokeStyle = hint === 'good' ? '#5dff8a' : hint === 'bad' ? '#ff8a8a' : '#bfe6ff'; g.stroke();
-  g.font = `bold ${px}px ${FONT}`; g.fillStyle = '#fff'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(label, c.width/2, 104);
+  g.font = `bold ${px}px ${FONT}`; g.fillStyle = '#fff'; g.textAlign = 'center'; g.textBaseline = 'middle';
+  lines.forEach((l, i) => g.fillText(l, c.width/2, 104 + i*lh));
   const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4;
-  const w = CARD_BTN * c.width / 192;
-  const m = new THREE.Mesh(new THREE.PlaneGeometry(w, CARD_BTN),
+  const k = lines.length > 1 ? 0.75 : 1;   // víceřádkové tlačítko o něco menším písmem
+  const w = k*CARD_BTN * c.width / 192, h = k*CARD_BTN * c.height / 192;
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h),
     new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity: 0, depthWrite: false, fog: false }));
-  m.renderOrder = 1; m.userData.w = w;
+  m.renderOrder = 1; m.userData.w = w; m.userData.h = h;
   return m;
 }
 function makeCard(info){
   const px = 100, f = `bold ${px}px ${FONT}`, c = document.createElement('canvas'), g = c.getContext('2d');
   // tlačítka s možnostmi (pořadí určuje sada, u vyjmenovaných vždy y vlevo, i vpravo)
   const btnMeshes = info.options.map(o => makeCardButton(o, practice ? (o === info.answer ? 'good' : 'bad') : null));
-  const btnsW = btnMeshes.reduce((s, m) => s + m.userData.w, 0) + CARD_BTN_GAP*(btnMeshes.length - 1);
+  let btnsW = btnMeshes.reduce((s, m) => s + m.userData.w, 0) + CARD_BTN_GAP*(btnMeshes.length - 1);
+  const stack = btnsW > 3.2;   // dlouhé možnosti (význam přísloví) pod sebe
+  if (stack) btnsW = Math.max(...btnMeshes.map(m => m.userData.w));
   g.font = f;
   const optW = Math.max(...info.options.map(o => g.measureText(o).width));
-  const preW = g.measureText(info.pre).width, postW = g.measureText(info.post).width, gapW = Math.max(px*0.78, optW + px*0.3), padX = px*0.5;
-  const textW = preW + gapW + postW + (info.pre ? px*0.06 : 0) + (info.post ? px*0.06 : 0);
-  c.width = Math.ceil(Math.max(textW + padX*2, 1.5*CARD_K, (btnsW + 0.3)*CARD_K)); c.height = Math.round(CARD_H*CARD_K);
-  const rowY = c.height*0.27;
-  const gx = (c.width - textW)/2 + preW + (info.pre ? px*0.06 : 0);   // levý okraj čtverečku
+  const longOpt = optW > px*7;   // odpověď je celá věta: v okénku jen „?“, po zásahu ✔ / ✘
+  const gapW = longOpt ? px*1.4 : Math.max(px*0.78, optW + px*0.3), padX = px*0.5, sp = px*0.06;
+  // řádky textu: { pre, post, blank } – okénko je v jednom z nich; krátká položka = jediný řádek jako dřív
+  const oneRow = !(info.pre + info.post).includes('\n') && g.measureText(info.pre + info.post).width + gapW <= px*WRAP_AT;
+  let rows;
+  if (oneRow) rows = [{ pre: info.pre, post: info.post, blank: true }];
+  else {
+    const preL = wrapLines(g, info.pre, px, true), postL = wrapLines(g, info.post, px, true);
+    const mPre = preL.pop(), mPost = postL.shift();
+    rows = preL.map(t => ({ pre: t, post: '', blank: false }));
+    if (g.measureText(mPre + mPost).width + gapW > px*(WRAP_W + 3)){ rows.push({ pre: mPre, post: '', blank: false }); rows.push({ pre: '', post: mPost, blank: true }); }
+    else rows.push({ pre: mPre, post: mPost, blank: true });
+    rows.push(...postL.map(t => ({ pre: t, post: '', blank: false })));
+    rows = rows.filter(r => r.blank || r.pre.trim() || r.post.trim());
+  }
+  const rowW = (r) => r.blank ? g.measureText(r.pre).width + gapW + g.measureText(r.post).width + (r.pre ? sp : 0) + (r.post ? sp : 0) : g.measureText(r.pre).width;
+  const textW = Math.max(...rows.map(rowW)), lh = px*1.2;
+  const btnAreaH = stack ? btnMeshes.reduce((s, m) => s + m.userData.h, 0) + 0.12*(btnMeshes.length - 1) : Math.max(...btnMeshes.map(m => m.userData.h));
+  const H = oneRow && !stack ? CARD_H : 0.2 + rows.length*lh/CARD_K + 0.16 + btnAreaH + 0.1;
+  c.width = Math.ceil(Math.max(textW + padX*2, 1.5*CARD_K, (btnsW + 0.3)*CARD_K)); c.height = Math.round(H*CARD_K);
+  const row0 = oneRow && !stack ? c.height*0.27 : 0.2*CARD_K + lh*0.42;
   function redraw(fill){   // fill: null | { ok: bool }
     g.clearRect(0, 0, c.width, c.height);
     roundRect(g, 4, 4, c.width-8, c.height-8, 40);
     g.fillStyle = fill ? (fill.ok ? 'rgba(10,60,30,0.92)' : 'rgba(70,10,16,0.92)') : 'rgba(10,18,46,0.9)'; g.fill();
     g.lineWidth = 6; g.strokeStyle = fill ? (fill.ok ? '#5dff8a' : '#ff6b6b') : '#b49bff'; g.stroke();
     g.font = f; g.fillStyle = '#fff'; g.textBaseline = 'middle';
-    g.textAlign = 'right'; g.fillText(info.pre, gx - (info.pre ? px*0.06 : 0), rowY + px*0.04);
-    g.textAlign = 'left'; g.fillText(info.post, gx + gapW + (info.post ? px*0.06 : 0), rowY + px*0.04);
-    const sy = rowY - px*0.48, sh = px*0.96;
-    roundRect(g, gx, sy, gapW, sh, 12);
-    if (fill){ g.fillStyle = fill.ok ? '#1a9d4a' : '#c0392b'; g.fill(); g.lineWidth = 5; g.strokeStyle = '#fff'; g.stroke();
-      g.textAlign = 'center'; g.fillStyle = '#fff'; g.fillText(info.answer, gx + gapW/2, rowY + px*0.04); }
-    else { g.fillStyle = 'rgba(255,255,255,0.08)'; g.fill(); g.lineWidth = 6; g.strokeStyle = '#ffd23f'; g.setLineDash([16, 10]); g.stroke(); g.setLineDash([]); }
+    rows.forEach((r, i) => {
+      const rowY = row0 + i*lh;
+      if (!r.blank){ g.textAlign = 'center'; g.fillStyle = '#fff'; g.fillText(r.pre, c.width/2, rowY + px*0.04); return; }
+      const gx = (c.width - rowW(r))/2 + g.measureText(r.pre).width + (r.pre ? sp : 0);   // levý okraj čtverečku
+      g.fillStyle = '#fff';
+      g.textAlign = 'right'; g.fillText(r.pre, gx - (r.pre ? sp : 0), rowY + px*0.04);
+      g.textAlign = 'left'; g.fillText(r.post, gx + gapW + (r.post ? sp : 0), rowY + px*0.04);
+      const sy = rowY - px*0.48, sh = px*0.96;
+      roundRect(g, gx, sy, gapW, sh, 12);
+      if (fill){ g.fillStyle = fill.ok ? '#1a9d4a' : '#c0392b'; g.fill(); g.lineWidth = 5; g.strokeStyle = '#fff'; g.stroke();
+        g.textAlign = 'center'; g.fillStyle = '#fff'; g.fillText(longOpt ? (fill.ok ? '✔' : '✘') : info.answer, gx + gapW/2, rowY + px*0.04); }
+      else { g.fillStyle = 'rgba(255,255,255,0.08)'; g.fill(); g.lineWidth = 6; g.strokeStyle = '#ffd23f'; g.setLineDash([16, 10]); g.stroke(); g.setLineDash([]);
+        if (longOpt){ g.textAlign = 'center'; g.fillStyle = '#ffd23f'; g.fillText('?', gx + gapW/2, rowY + px*0.04); } }
+    });
     tex.needsUpdate = true;
   }
   const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4;
   redraw(null);
   const w = c.width / CARD_K;
-  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, CARD_H),
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, H),
     new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity: 0, depthWrite: false, fog: false }));
-  mesh.userData.w = w;
-  let bx = -btnsW/2;
+  mesh.userData.w = w; mesh.userData.h = H;
+  let bx = -btnsW/2, by = -H/2 + 0.08 + btnAreaH;
   const btns = btnMeshes.map((b, k) => {
-    b.position.set(bx + b.userData.w/2, -CARD_H/2 + 0.08 + CARD_BTN/2, 0.01); bx += b.userData.w + CARD_BTN_GAP;
+    if (stack){ b.position.set(0, by - b.userData.h/2, 0.01); by -= b.userData.h + 0.12; }
+    else { b.position.set(bx + b.userData.w/2, -H/2 + 0.08 + b.userData.h/2, 0.01); bx += b.userData.w + CARD_BTN_GAP; }
     mesh.add(b); return { mesh: b, option: info.options[k] };
   });
   return { mesh, btns, redraw };
@@ -989,17 +1055,17 @@ function spawnCard(){
     // ve VR ±110° kolem směru pohledu při startu; na počítači / tabletu jen tak široko, aby byla karta celá na obrazovce
     const spread = renderer.xr.isPresenting ? Math.PI*0.62 : Math.max(0, screenHalfFovX()*0.92 - Math.atan(w/2/dist));
     const a = cardBase.a + (Math.random()*2 - 1)*spread;
-    const y = Math.max(1.0, cardBase.y - 0.55 + Math.random()*1.6);
+    const y = Math.max(1.0, card.mesh.userData.h/2 + 0.25, cardBase.y - 0.55 + Math.random()*1.6);
     let ok = true;
     for (const o of cards){
       const op = o.mesh.position;
-      if (Math.abs(op.y - y) > CARD_H + 0.25) continue;
+      if (Math.abs(op.y - y) > (card.mesh.userData.h + o.mesh.userData.h)/2 + 0.25) continue;
       let da = Math.abs(Math.atan2(op.z - cardBase.z, op.x - cardBase.x) - a); da %= 2*Math.PI; if (da > Math.PI) da = 2*Math.PI - da;
       if (da*dist < (w + o.mesh.userData.w)/2 + 0.35){ ok = false; break; }
     }
     if (!ok) continue;
     card.mesh.position.set(cardBase.x + Math.cos(a)*dist, y, cardBase.z + Math.sin(a)*dist);
-    const ring = makeTimerRing(w, CARD_H); card.mesh.add(ring);
+    const ring = makeTimerRing(w, card.mesh.userData.h); card.mesh.add(ring);
     scene.add(card.mesh);
     const progress = 1 - timeLeft/gameTime;
     cards.push({ ...card, ring, info, age: 0, life: 15 - progress*4 + Math.random()*4, phase: 'live', t: 0 });
@@ -1015,7 +1081,7 @@ function answerCard(c, option, haptic){
   c.phase = right ? 'hit' : 'bad'; c.t = 0;
   c.redraw({ ok: right });
   for (const b of c.btns) b.mesh.visible = b.option === c.info.answer;   // zůstane jen správná možnost
-  const top = c.mesh.position.clone().add(new THREE.Vector3(0, CARD_H/2 + 0.35, 0));
+  const top = c.mesh.position.clone().add(new THREE.Vector3(0, c.mesh.userData.h/2 + 0.35, 0));
   if (right){
     score += SCORE_GOOD; goodCount++;
     burst(c.mesh.position, 0x5dff8a, 60, 3);
@@ -1403,15 +1469,15 @@ function spawnBlock(side = 0){   // side: −1 levá půlka, +1 pravá, 0 kdekol
   const mesh = makeLabel(isCorrect ? info.correct : info.wrong, practice
     ? { h: WORD_H, color: isCorrect ? PRACTICE_COLOR.good : PRACTICE_COLOR.bad, border: isCorrect ? PRACTICE_COLOR.good : PRACTICE_COLOR.bad, bg: isCorrect ? PRACTICE_COLOR.goodBg : PRACTICE_COLOR.badBg }
     : { h: WORD_H, border: '#b49bff', bg: 'rgba(16,10,52,0.92)' });
-  const w = mesh.userData.w;
-  const slab = new THREE.Mesh(new THREE.BoxGeometry(w + 0.06, WORD_H + 0.06, 0.07),
+  const w = mesh.userData.w, h = mesh.userData.h;
+  const slab = new THREE.Mesh(new THREE.BoxGeometry(w + 0.06, h + 0.06, 0.07),
     new THREE.MeshStandardMaterial({ color: 0x1a1450, emissive: 0x3a22a0, emissiveIntensity: 0.6, transparent: true, opacity: 0 }));
   slab.position.z = -0.045; mesh.add(slab);
   const xs = side < 0 ? [-1.25, -0.8] : side > 0 ? [0.8, 1.25] : [-1.0, -0.5, 0, 0.5, 1.0];
   const ys = [Math.max(0.6, headY - 0.75), Math.max(0.85, headY - 0.35), Math.max(1.1, headY + 0.05)];
   mesh.position.set(xs[Math.random()*xs.length|0], ys[Math.random()*3|0], SPAWN_Z);
   track.add(mesh);
-  blocks.push({ mesh, slab, w, correct: isCorrect, info, phase: 'fly', t: 0 });
+  blocks.push({ mesh, slab, w, h, correct: isCorrect, info, phase: 'fly', t: 0 });
 }
 function removeBlock(b){ track.remove(b.mesh); disposeMesh(b.mesh); blocks.splice(blocks.indexOf(b), 1); }
 function updateBlocks(dt){
@@ -1483,7 +1549,7 @@ function updateSwords(dt){
   }
 }
 function bladeHits(b, r, dt){
-  const p = b.mesh.position, hx = b.w/2 + 0.06, hy = WORD_H/2 + 0.1, hz = 0.3 + trackSpeed*dt;
+  const p = b.mesh.position, hx = b.w/2 + 0.06, hy = b.h/2 + 0.1, hz = 0.3 + trackSpeed*dt;
   const { pB, pT } = r;
   if (Math.max(pB.z, pT.z, _B.z, _T.z) < p.z - hz || Math.min(pB.z, pT.z, _B.z, _T.z) > p.z + hz) return false;
   for (let i=0;i<=4;i++){ const s = i/4;
@@ -1521,7 +1587,7 @@ function slice(b, r){
 }
 // Rozpůlení: vodorovný sek dělí na horní a dolní půlku, svislý na levou a pravou.
 function splitWord(b, horizontalCut, right){
-  const tex = b.mesh.material.map, w = b.w, h = WORD_H, halves = [];
+  const tex = b.mesh.material.map, w = b.w, h = b.h, halves = [];
   for (const k of [0, 1]){
     const geo = horizontalCut ? new THREE.PlaneGeometry(w, h/2) : new THREE.PlaneGeometry(w/2, h);
     const uv = geo.attributes.uv;
@@ -1666,15 +1732,16 @@ function mzHangPortraits(seg, cells, skipFirst){
    V Souboji se nevěší, aby měly všechny děti stejné podmínky. */
 function makePlaque(text){
   const px = 72, f = `bold ${px}px ${FONT}`, c = document.createElement('canvas'), g = c.getContext('2d'); g.font = f;
-  const tw = Math.ceil(g.measureText(text).width), pad = px*0.55;
-  c.width = tw + pad*2; c.height = Math.round(px*1.6);
+  const lines = wrapLines(g, text, px), lh = px*1.15;
+  const tw = Math.ceil(Math.max(...lines.map(l => g.measureText(l).width))), pad = px*0.55;
+  c.width = tw + pad*2; c.height = Math.round(px*1.6 + lh*(lines.length - 1));
   const gr = g.createLinearGradient(0, 0, 0, c.height); gr.addColorStop(0, '#f6ecd2'); gr.addColorStop(1, '#d9c79c');
   roundRect(g, 4, 4, c.width-8, c.height-8, px*0.18); g.fillStyle = gr; g.fill(); g.lineWidth = 6; g.strokeStyle = '#6b4f1d'; g.stroke();
   g.fillStyle = '#6b4f1d'; for (const x of [pad*0.45, c.width - pad*0.45]){ g.beginPath(); g.arc(x, c.height/2, px*0.07, 0, Math.PI*2); g.fill(); }   // šroubky
   g.font = f; g.fillStyle = '#1f3a1a'; g.textAlign = 'center'; g.textBaseline = 'middle';
-  g.fillText(text, c.width/2, c.height/2 + px*0.05);
+  lines.forEach((l, i) => g.fillText(l, c.width/2, c.height/2 + px*0.05 + (i - (lines.length - 1)/2)*lh));
   const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4;
-  const h = MZ_PLAQUE.H, w = Math.min(h*c.width/c.height, MZ_C - 2*MZ_T - 0.8);
+  const h = MZ_PLAQUE.H * (lines.length > 1 ? LINE_K * c.height/(px*1.6) : 1), w = Math.min(h*c.width/c.height, MZ_C - 2*MZ_T - 0.8);
   return new THREE.Mesh(new THREE.PlaneGeometry(w, w*c.height/c.width), new THREE.MeshBasicMaterial({ map: tex, color: 0xdddddd }));
 }
 const MZ_PLAQUE = { H: 0.26, on: true };
@@ -1761,8 +1828,9 @@ function mzDisposeSeg(seg){
 // Cedule se šipkou a slovem; draw(tone) ji umí přebarvit (neutral | good | bad).
 function makeSign(text, side, tone, maxW){
   const px = 96, f = `bold ${px}px ${FONT}`, c = document.createElement('canvas'), g = c.getContext('2d'); g.font = f;
-  const tw = Math.ceil(g.measureText(text).width), aw = px*1.2, pad = px*0.4;
-  c.width = Math.ceil(pad*3 + aw + tw); c.height = Math.round(px*1.5);
+  const lines = wrapLines(g, text, px), lh = px*1.15;
+  const tw = Math.ceil(Math.max(...lines.map(l => g.measureText(l).width))), aw = px*1.2, pad = px*0.4;
+  c.width = Math.ceil(pad*3 + aw + tw); c.height = Math.round(px*1.5 + lh*(lines.length - 1));
   const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4;
   function draw(tone){
     const col = { neutral: ['rgba(10,18,46,0.95)', '#7fd4ff', '#ffd23f'], good: ['rgba(8,60,28,0.96)', '#5dff8a', '#5dff8a'], bad: ['rgba(70,10,16,0.96)', '#ff6b6b', '#ff6b6b'] }[tone];
@@ -1774,11 +1842,11 @@ function makeSign(text, side, tone, maxW){
     g.moveTo(tip, ay); g.lineTo(neck, ay - px*0.42); g.lineTo(neck, ay - px*0.16); g.lineTo(back, ay - px*0.16);
     g.lineTo(back, ay + px*0.16); g.lineTo(neck, ay + px*0.16); g.lineTo(neck, ay + px*0.42); g.closePath(); g.fill();
     g.font = f; g.fillStyle = '#fff'; g.textBaseline = 'middle'; g.textAlign = 'center';
-    g.fillText(text, side === 'left' ? pad*2 + aw + tw/2 : pad + tw/2, ay + px*0.04);
+    lines.forEach((l, i) => g.fillText(l, side === 'left' ? pad*2 + aw + tw/2 : pad + tw/2, ay + px*0.04 + (i - (lines.length - 1)/2)*lh));
     tex.needsUpdate = true;
   }
   draw(tone);
-  let h = 0.55, w = h*c.width/c.height; if (w > maxW){ h *= maxW/w; w = maxW; }
+  let h = 0.55 * (lines.length > 1 ? LINE_K * c.height/(px*1.5) : 1), w = h*c.width/c.height; if (w > maxW){ h *= maxW/w; w = maxW; }
   const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map: tex, transparent: true, fog: false }));
   return { mesh, w, h, draw };
 }
@@ -1817,11 +1885,13 @@ function mzMakeJunction(P, h, cDir, wDir, cCoords, wCoords, njc, nh){
   // cedule na zdi naproti příchodu: horní ukazuje doleva, dolní doprava
   const face = mzCenter(P).addScaledVector(new THREE.Vector3(DIRX[h], 0, DIRZ[h]), MZ_C/2 - MZ_T - 0.03);
   const L = (h+3)%4, left = new THREE.Vector3(DIRX[L], 0, DIRZ[L]), maxW = MZ_C - 2*MZ_T - 0.3;
+  const signs = [cDir, wDir].map(dir => { const correct = dir === cDir;
+    return makeSign(correct ? J.info.correct : J.info.wrong, dir === L ? 'left' : 'right', practice ? (correct ? 'good' : 'bad') : 'neutral', maxW); });
+  const off = Math.max(0.36, (signs[0].h + signs[1].h)/4 + 0.04);   // víceřádkové cedule (přísloví) od sebe dál
   for (const dir of [cDir, wDir]){
-    const isLeft = dir === L, correct = dir === cDir;
-    const s = makeSign(correct ? J.info.correct : J.info.wrong, isLeft ? 'left' : 'right', practice ? (correct ? 'good' : 'bad') : 'neutral', maxW);
+    const isLeft = dir === L, correct = dir === cDir, s = signs[correct ? 0 : 1];
     s.mesh.position.copy(face).addScaledVector(left, (isLeft ? 1 : -1)*(maxW/2 - s.w/2));
-    s.mesh.position.y = mz.signY + (isLeft ? 0.36 : -0.36);
+    s.mesh.position.y = mz.signY + (isLeft ? off : -off);
     s.mesh.rotation.y = dirYaw(h);   // rovina s natočením dirYaw(d) má líc proti směru d, tedy k hráči
     seg.group.add(s.mesh); seg.extra.push(() => disposeMesh(s.mesh));
     J[correct ? 'signC' : 'signW'] = s;
@@ -2269,11 +2339,13 @@ renderer.setAnimationLoop(() => {
     music.setIntense(timeLeft <= 30); music.tick();
     spawnTimer -= dt;
     if (mode === 'mece'){
-      trackSpeed = 6.5 + progress*4.5 + (timeLeft <= 30 ? 2 : 0);   // 6,5 → 11 m/s, ve finále ještě +2
+      // sada s dlouhými texty (přísloví s významem): bloky letí pomaleji a řidčeji, ať se dají přečíst
+      const slow = sada.slowMece ??= sada.items.filter(it => it.correct.length > 30).length > sada.items.length/3 ? 0.55 : 1;
+      trackSpeed = (6.5 + progress*4.5 + (timeLeft <= 30 ? 2 : 0))*slow;   // 6,5 → 11 m/s, ve finále ještě +2
       if (spawnTimer <= 0){
-        if (Math.random() < 0.15 + progress*0.35){ spawnBlock(-1); spawnBlock(1); }   // dvojice naráz: jedno vlevo, jedno vpravo
+        if (slow === 1 && Math.random() < 0.15 + progress*0.35){ spawnBlock(-1); spawnBlock(1); }   // dvojice naráz: jedno vlevo, jedno vpravo
         else spawnBlock();
-        spawnTimer = 1.3 - progress*0.75;          // 1,3 s → 0,55 s
+        spawnTimer = (1.3 - progress*0.75)/slow;          // 1,3 s → 0,55 s
       }
     } else if (mode === 'karty'){
       if (spawnTimer <= 0){ spawnCard(); spawnTimer = 3.0 - progress*1.6; }   // 3 s → 1,4 s

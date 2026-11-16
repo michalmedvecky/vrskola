@@ -21,6 +21,8 @@ Stejné soubory čte i server Souboje třídy, takže body počítá podle stejn
 | `sk-dvojhlasky.json` | dvojhlásky ie, ia, ô (`chl[ie\|é]b`, `k[ô\|o\|uo]ň`, chyták `d[o\|ô]m`) |
 | `sk-velke-pismena.json` | veľké a malé začiatočné písmeno (`[B\|b]ratislava`, `[p\|P]ondelok`) |
 | `shoda.json` | shoda přísudku s podmětem: koncovka -i/-y (`psi štěkal[i]`, `děti si hrál[y]`, `kluci a holky běhal[i]`); rod střední (-a) vynechán |
+| `prislovi-vyznam.json` | přísloví, pořekadla, rčení a pranostiky a jejich význam (60 spojení): `Kam vítr, tam plášť.\n= [Měnit názory podle toho, co se hodí.]`, špatné významy z ostatních položek skupiny (zaměnitelné významy jsou v různých skupinách); dlouhé texty se ve hře zalamují, v Mečích letí bloky pomaleji |
+| `prislovi-slovo.json` | stejných 60 spojení, hlídá se přesné znění: `Koupit [zajíce\|kočku\|kapra] v pytli`; význam je ve `vety`, ukáže se na tabuli chyb |
 | `nasobilka.json` | malá násobilka 1–10 (`7 · 8 = [56\|48\|64\|63\|49]`, špatné výsledky = sousední násobky a ±1), vygenerovaná; v bludišti visí portréty 13 velkých matematiků (`portrety-matematici/`) |
 | `anglictina.json` | anglická slovíčka pro 1. stupeň ZŠ (3.–5. třída), 20 tematických skupin: `dog = [pes]`, špatné překlady z ostatních slovíček skupiny |
 | `cinstina.json` | čínská slovíčka pro začátečníky (`狗 gǒu = [pes]`, 128 slovíček ve 13 tematických skupinách: pozdravy, čísla, lidé, rodina, zvířata, jídlo, barvy, tělo, příroda, čas, slovesa, přídavná jména, škola a doma); znaky kreslí přibalené písmo `pisma/cinstina.woff2` |
@@ -68,6 +70,10 @@ Odkud se berou špatné možnosti (první, co platí):
 1. vypsané v závorce za `|`: `一 = [jedna|dva|tři]`;
 2. ze `zamena` sady (vyjmenovaná slova: `b[y]dlet` → `i`);
 3. odpovědi ostatních položek ze stejné skupiny (slovíčka: `狗 gǒu = [pes]` → kočka, kůň, ryba…).
+
+Dlouhý text (přísloví, význam) se na kartách, terčích, cedulích v bludišti i na tabuli chyb sám zalomí do víc řádků;
+`\n` v položce (v JSONu zapsané jako `\n`) znamená vždy nový řádek, např. `"Lež má krátké nohy.\n= [Lež se brzy prozradí.]"`.
+Když je odpověď celá věta, má okénko v Doplňovačce jen otazník a tlačítka s možnostmi jsou pod sebou.
 
 Špatný tvar, který je zároveň správným tvarem jiné položky, se vynechá. Každá položka musí mít jedinou správnou
 odpověď: kde by záměna dala jiné skutečné slovo (pyl × pil), dejte do položky krátké spojení („včela sbírá p[y]l“).
