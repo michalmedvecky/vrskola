@@ -114,6 +114,10 @@ node nastroje/strazcy-mapa.mjs nastroje/strazcy-berounsko.gps.json > web/strazcy
 
 Nový soubor v `data/` je potřeba zapsat i do `kustomization.yaml` (ConfigMapa `vrskola-strazcy-data`).
 
+## Tajný klíč pro rodiče
+
+Na klávesnici (PC) napište během hry `HOPHOP`: do brašny přibude 10 klíčů (nejvýš tolik, kolik zbývá zámků), takže jde hned vyzkoušet hrad, nálepku a komnaty bez luštění truhel. Kód je na konci `hra.js`.
+
 ## Lokálně
 
 ```sh

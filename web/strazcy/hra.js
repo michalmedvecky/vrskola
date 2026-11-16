@@ -676,6 +676,21 @@ async function start() {
   if (!stav.postava) obrazovkaPostavy(() => { obnovHud(); uvodHradu(napovez); });
   else { obnovHud(); napovez(); }
 }
+// Tajný klíč pro rodiče: napsat HOPHOP na klávesnici = 10 klíčů do brašny (na zkoušení bez luštění).
+let tajne = '';
+addEventListener('keydown', (e) => {
+  if (e.ctrlKey || e.metaKey || e.altKey || /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+  if (e.key.length !== 1) return;
+  tajne = (tajne + e.key.toUpperCase()).slice(-6);
+  if (tajne !== 'HOPHOP' || !stav.kolo) return;
+  tajne = '';
+  const pridat = Math.min(10, Math.max(0, zbyvaKlicu()));
+  if (!pridat) { bublina('Brašna už má klíče na všechny zámky. 🏰'); return; }
+  stav.kolo.klice += pridat;
+  uloz(); obnovHud(); zvuk.klic();
+  bublina(`🪄 Kouzlo HOPHOP! Do brašny přibylo ${pridat} ${pridat === 1 ? 'klíč' : pridat < 5 ? 'klíče' : 'klíčů'}.`, 0);
+});
+
 start();
 
 // háčky pro automatické testy
