@@ -130,6 +130,7 @@ const UI = {
     pripojuji: 'Připojuji se k souboji…', posilam: 'Posílám výsledek…', nespojeno: 'Se serverem se nepodařilo spojit:',
     zkusitZnovu: 'Zkusit znovu', konecSouboje: 'Konec souboje!', misto: (n) => `${n}. místo`,
     spravneJe: (w) => `správně je: ${w}`, jeSpravne: (w) => `${w} je SPRÁVNĚ`,
+    coSeNepovedlo: 'Co se nepovedlo', tvojeVolba: 'Tvoje volba', oznacenoSpatne: '✘ označeno jako chyba', chybyN: (n) => `Chyby (${n})`, zpet: 'Zpět',
     pauza: 'Pauza', zbyva: 'zbývá', pokracovat: 'Pokračovat', ukoncitHru: 'Ukončit hru', nezapise: 'Ukončená hra se do tabulky nezapíše.',
     vrIn: 'Vstoupit do VR', vrOut: 'Ukončit VR', vrErr: 'Nepodařilo se spustit VR', dOk: '✔ správně', dBad: '✘ špatně', navod: 'Návod',
     klavesy: ['AÁBCČDĎEÉĚ', 'FGHIÍJKLMN', 'ŇOÓPQRŘSŠT', 'ŤUÚŮVWXYÝZ', 'Ž'],
@@ -153,6 +154,7 @@ const UI = {
     pripojuji: 'Pripájam sa k súboju…', posilam: 'Posielam výsledok…', nespojeno: 'So serverom sa nepodarilo spojiť:',
     zkusitZnovu: 'Skúsiť znova', konecSouboje: 'Koniec súboja!', misto: (n) => `${n}. miesto`,
     spravneJe: (w) => `správne je: ${w}`, jeSpravne: (w) => `${w} je SPRÁVNE`,
+    coSeNepovedlo: 'Čo sa nepodarilo', tvojeVolba: 'Tvoja voľba', oznacenoSpatne: '✘ označené ako chyba', chybyN: (n) => `Chyby (${n})`, zpet: 'Späť',
     pauza: 'Pauza', zbyva: 'zostáva', pokracovat: 'Pokračovať', ukoncitHru: 'Ukončiť hru', nezapise: 'Ukončená hra sa do tabuľky nezapíše.',
     vrIn: 'Vstúpiť do VR', vrOut: 'Ukončiť VR', vrErr: 'Nepodarilo sa spustiť VR', dOk: '✔ správne', dBad: '✘ nesprávne', navod: 'Návod',
     klavesy: ['AÁÄBCČDĎEÉ', 'FGHIÍJKLĹĽ', 'MNŇOÓÔPQRŔ', 'SŠTŤUÚVWXY', 'ÝZŽ'],
@@ -260,15 +262,22 @@ function startDuel(){
     startGame();
   }).catch(e => duelFail(e.message, startDuel));
 }
+let duelPending = null;   // už odeslaný výsledek souboje (posílá se hned po konci hry, ať lístek nevyprší nad tabulí chyb)
+function sendDuel(){
+  duelPending = api('souboj/konec', { rezim: mode, sada: sada.id, listek: duelTicket, jmeno: duelName, odpovedi: duelAnswers });
+  duelPending.catch(() => {});   // chybu zpracuje až submitDuel
+}
 function submitDuel(){
   state = 'sending'; duelMsg = L('posilam'); showPanel(drawDuelMsg);
-  api('souboj/konec', { rezim: mode, sada: sada.id, listek: duelTicket, jmeno: duelName, odpovedi: duelAnswers }).then(j => {
+  if (!duelPending) sendDuel();
+  const p = duelPending; duelPending = null;
+  p.then(j => {
     duelTicket = null; duelResult = j; (duelTop[duelKey()] || (duelTop[duelKey()] = {})).list = j.top;
     state = 'results'; showPanel(drawDuelResults);
   }).catch(e => duelFail(e.message, submitDuel));
 }
 function duelFail(msg, retry){ state = 'duelerr'; duelError = msg; duelRetry = retry; showPanel(drawDuelError); }
-function toMenu(){ state = 'menu'; duelTicket = null; showPanel(drawMenu); }
+function toMenu(){ state = 'menu'; duelTicket = null; duelPending = null; showPanel(drawMenu); }
 let nameThen = null;   // co udělat po zadání jména (souboj); null = zápis do místní tabulky rekordů
 function askName(then){ nameThen = then; state = 'name'; nameBuf = duelName; showPanel(drawNameEntry); }
 
@@ -564,8 +573,9 @@ function hidePanel(){ panel.visible = false; buttons = []; }
 function redrawPanel(){
   buttons = [];
   const g = pg; g.clearRect(0,0,PW,PH);
-  roundRect(g, 6, 6, PW-12, PH-12, 40); g.fillStyle = 'rgba(8,14,36,0.93)'; g.fill();
-  g.lineWidth = 8; g.strokeStyle = '#5cc8ff'; g.stroke();
+  if (drawPanelFn?.tabule) drawChalkboard(g);
+  else { roundRect(g, 6, 6, PW-12, PH-12, 40); g.fillStyle = 'rgba(8,14,36,0.93)'; g.fill();
+    g.lineWidth = 8; g.strokeStyle = '#5cc8ff'; g.stroke(); }
   drawPanelFn && drawPanelFn(g);
   panelTex.needsUpdate = true;
 }
@@ -694,7 +704,7 @@ function drawResults(g){
   const total = goodCount + badCount;
   const extra = mode === 'mece' || mode === 'karty' ? L('propasnuto', missCount) : mode === 'bludiste' ? L('krizovatek', mz.cur) : '';
   if (total || extra) txt(g, [total ? L('uspesnost', Math.round(goodCount/total*100)) : '', extra].filter(Boolean).join('  ·  '), PW/2, 565, { px: 26, weight: 'normal', color: '#bcd' });
-  exitVrButton(g);
+  exitVrButton(g); mistakesButton(g, 625);
   button(g, 'again', L('hratZnovu'), PW/2-200, 620, 400, 100, startGame, { color: '#1a9d4a', px: 48 });
 }
 function gameLenText(){ const t = duel ? duelCas : GAME_TIME; return duel ? L('soubojTrva', t >= 60 && t % 60 === 0 ? t/60 + ' min' : t + ' s') : t === 300 ? L('hra5') : L('hraTrva', t); }
@@ -739,7 +749,7 @@ function drawDuelResults(g){
   txt(g, `${L('nespravne')}: ${r.bad}`, 694, 470, { px: 40, color: '#ff6b6b' });
   button(g, 'again', L('hratZnovu'), PW/2-200, 520, 400, 90, startDuel, { color: '#1a9d4a', px: 44 });
   button(g, 'menu', 'Menu', PW/2-120, 630, 240, 64, toMenu, { color: '#25335e', px: 32 });
-  exitVrButton(g);
+  exitVrButton(g); mistakesButton(g, 630);
 }
 function drawPracticeResults(g){
   txt(g, L('konecCviceni'), PW/2, 80, { px: 64, color: '#7fe3ff' });
@@ -751,9 +761,86 @@ function drawPracticeResults(g){
   const total = goodCount + badCount;
   const extra = [total ? L('uspesnost', Math.round(goodCount/total*100)) : '', mode === 'mece' || mode === 'karty' ? L('propasnuto', missCount) : mode === 'bludiste' ? L('krizovatek', mz.cur) : ''].filter(Boolean).join('  ·  ');
   if (extra) txt(g, extra, PW/2, 400, { px: 30, weight: 'normal', color: '#bcd' });
-  exitVrButton(g);
+  exitVrButton(g); mistakesButton(g, 625);
   button(g, 'again', L('cvicitZnovu'), PW/2-200, 500, 400, 100, startGame, { color: '#1a9d4a', px: 48 });
   button(g, 'menu', 'Menu', PW/2-120, 625, 240, 64, () => { state = 'menu'; showPanel(drawMenu); }, { color: '#25335e', px: 32 });
+}
+
+/* ================= TABULE CHYB (po hře) =================
+   Každá chyba: co hráč zvolil × správný tvar (rozhodující část podtržená) a příkladová věta, má-li ji sada ("vety").
+   Ve Střelnici a Mečích jde chybovat i obráceně: správně napsané slovo označené jako chyba (chosen = null). */
+let mistakes = [], mistakesBack = null, mistakesPage = 0;
+const optOf = (info, text) => text.slice(info.pre.length, text.length - info.post.length);   // zvolená možnost ze zobrazeného tvaru
+function noteMistake(info, chosen){
+  const m = mistakes.find(x => x.item === info.item && x.chosen === chosen);
+  if (m){ m.n++; return; }
+  const vs = sada.vety?.get(info.correct);
+  mistakes.push({ item: info.item, info, chosen, n: 1, veta: vs ? vs[Math.random()*vs.length | 0] : null });
+}
+const CHALK = { white: '#f3f1e7', yellow: '#ffe066', red: '#ff9c9c', green: '#a6f0b4', dim: '#b9cbbd' };
+function drawChalkboard(g){
+  roundRect(g, 4, 4, PW-8, PH-8, 22);
+  const wood = g.createLinearGradient(0, 0, 0, PH); wood.addColorStop(0, '#8d5d2e'); wood.addColorStop(1, '#5a3816');
+  g.fillStyle = wood; g.fill();
+  const board = g.createRadialGradient(PW/2, PH/2, 80, PW/2, PH/2, 640);
+  board.addColorStop(0, '#2f5b44'); board.addColorStop(1, '#1b372a');
+  g.fillStyle = board; g.fillRect(30, 30, PW-60, PH-60);
+  g.save(); g.globalAlpha = 0.035; g.fillStyle = '#fff';   // šmouhy po houbě (pevné, ať se při překreslení nehýbou)
+  for (const [x, y, rx, ry] of [[230,210,190,38],[720,330,230,48],[400,520,270,42],[830,610,150,34],[160,640,120,28]]){
+    g.beginPath(); g.ellipse(x, y, rx, ry, -0.08, 0, Math.PI*2); g.fill(); }
+  g.restore();
+  g.fillStyle = CHALK.white; g.fillRect(PW-210, PH-21, 54, 11); g.fillStyle = CHALK.yellow; g.fillRect(PW-140, PH-21, 40, 11);   // křídy na rámu
+}
+// text složený z barevných kousků { t, c, u (podtržení) }; celý se zmenší, aby se vešel do maxW
+function segs(g, parts, x, y, { px = 40, maxW = 400, align = 'center', weight = 'bold' } = {}){
+  const width = () => parts.reduce((s, p) => s + g.measureText(p.t).width, 0);
+  g.font = `${weight} ${px}px ${FONT}`;
+  while (px > 14 && width() > maxW){ px -= 2; g.font = `${weight} ${px}px ${FONT}`; }
+  const w = width(); let cx = align === 'center' ? x - w/2 : align === 'right' ? x - w : x;
+  g.textAlign = 'left'; g.textBaseline = 'middle';
+  for (const p of parts){
+    const pw = g.measureText(p.t).width; g.fillStyle = p.c; g.fillText(p.t, cx, y);
+    if (p.u) g.fillRect(cx, y + px*0.48, pw, Math.max(3, px/12));
+    cx += pw;
+  }
+}
+// "Babička b[y]dlí na vesnici." → kousky se zvýrazněnou částí v závorkách
+function vetaParts(s){ return s.split(/\[([^\]]*)\]/).map((t, i) => ({ t, c: i % 2 ? CHALK.yellow : CHALK.dim, u: i % 2 === 1 })).filter(p => p.t); }
+function drawMistakes(g){
+  const withVety = mistakes.some(m => m.veta);
+  const per = withVety ? 5 : 7, rowH = withVety ? 98 : 66, pages = Math.max(1, Math.ceil(mistakes.length/per));
+  mistakesPage = Math.min(mistakesPage, pages - 1);
+  g.save(); g.shadowColor = 'rgba(255,255,255,0.35)'; g.shadowBlur = 3;   // křída
+  txt(g, L('coSeNepovedlo'), PW/2, 80, { px: 54, color: CHALK.yellow });
+  txt(g, L('tvojeVolba'), 270, 140, { px: 28, color: CHALK.dim, weight: 'normal' });
+  txt(g, L('spravne'), 750, 140, { px: 28, color: CHALK.dim, weight: 'normal' });
+  g.fillStyle = 'rgba(243,241,231,0.35)'; g.fillRect(70, 162, PW-140, 3);
+  mistakes.slice(mistakesPage*per, (mistakesPage + 1)*per).forEach((m, i) => {
+    const it = m.info, y = 204 + i*rowH;
+    const left = m.chosen === null ? [{ t: L('oznacenoSpatne'), c: CHALK.red }]
+      : [{ t: '✘ ', c: CHALK.red }, { t: it.pre, c: CHALK.white }, { t: m.chosen, c: CHALK.red, u: true }, { t: it.post, c: CHALK.white }];
+    segs(g, left, 270, y, { px: 40, maxW: 410 });
+    segs(g, [{ t: '→', c: CHALK.dim }], 510, y, { px: 40, maxW: 60 });
+    const right = [{ t: '✔ ', c: CHALK.green }, { t: it.pre, c: CHALK.white }, { t: it.answer, c: CHALK.yellow, u: true }, { t: it.post, c: CHALK.white }];
+    if (m.n > 1) right.push({ t: `  ×${m.n}`, c: CHALK.dim });
+    segs(g, right, 750, y, { px: 40, maxW: 410 });
+    if (m.veta) segs(g, vetaParts(m.veta), PW/2, y + 43, { px: 30, maxW: PW - 150, weight: 'normal' });
+  });
+  g.restore();
+  if (pages > 1){
+    button(g, 'ch-prev', '◄', 70, 664, 90, 68, () => { mistakesPage = (mistakesPage + pages - 1) % pages; redrawPanel(); }, { color: '#244b37', px: 36 });
+    txt(g, `${mistakesPage + 1} / ${pages}`, 230, 698, { px: 32, color: CHALK.white });
+    button(g, 'ch-next', '►', 300, 664, 90, 68, () => { mistakesPage = (mistakesPage + 1) % pages; redrawPanel(); }, { color: '#244b37', px: 36 });
+  }
+  button(g, 'ch-dal', mistakesBack ? L('zpet') : L('pokracovat') + ' ►', PW-370, 660, 310, 76, () => {
+    if (mistakesBack){ const b = mistakesBack; mistakesBack = null; showPanel(b); } else afterGame();
+  }, { color: '#1a7d3e', px: 38 });
+}
+drawMistakes.tabule = true;
+function mistakesButton(g, y){   // na obrazovce výsledků: znovu otevřít tabuli chyb
+  if (!mistakes.length) return;
+  button(g, 'chyby', L('chybyN', mistakes.reduce((s, m) => s + m.n, 0)), PW-250, y, 200, 60,
+    () => { mistakesBack = drawPanelFn; mistakesPage = 0; showPanel(drawMistakes); }, { color: '#2f5b44', px: 28 });
 }
 
 /* ================= HUD (čas + skóre před očima) ================= */
@@ -936,6 +1023,7 @@ function answerCard(c, option, haptic){
     sfx.good(); haptic?.(0.8, 80);
   } else {
     score += SCORE_BAD; badCount++;
+    noteMistake(c.info, option);
     burst(c.mesh.position, 0xff3030, 30, 2);
     floatText(L('spravneJe', c.info.correct), top, '#ffffff', 2.6, 0.45);
     // příšera vyskočí vedle karty, ať je pořád vidět doplněné správné písmeno
@@ -990,7 +1078,7 @@ function startGame(){
   for (const b of [...blocks]) removeBlock(b);
   for (const c of [...cards]) removeCard(c);
   gameTime = duel ? duelCas : GAME_TIME;
-  score = 0; goodCount = 0; badCount = 0; missCount = 0; timeLeft = gameTime; spawnTimer = 0; lastTick = -1; hudKey = '';
+  score = 0; goodCount = 0; badCount = 0; missCount = 0; mistakes = []; timeLeft = gameTime; spawnTimer = 0; lastTick = -1; hudKey = '';
   hidePanel(); hud.visible = true; state = 'playing';
   if (mode === 'bludiste') startMaze(); else leaveMaze();
   if (mode === 'mece'){ setTrackFrame(); spawnTimer = 0.6; }
@@ -1015,7 +1103,7 @@ function resumeGame(){
   music.resume();
 }
 function quitGame(){   // ukončí rozehranou hru bez zápisu skóre a vrátí se do menu
-  duelTicket = null;
+  duelTicket = null; duelPending = null;
   for (const w of [...words]) removeWord(w);
   for (const c of [...cards]) removeCard(c);
   for (const b of [...blocks]) removeBlock(b);
@@ -1038,10 +1126,15 @@ function endGame(){
   sfx.end();
   music.stop();
   setTimeout(() => {
-    if (duel && duelTicket) return submitDuel();
-    if (!practice && qualifies(score)){ state = 'name'; nameBuf = ''; showPanel(drawNameEntry); }
-    else { state = 'results'; lastRank = -1; showPanel(drawResults); }
+    if (duel && duelTicket) sendDuel();   // výsledek souboje se posílá hned, i když se dítě dívá na tabuli chyb
+    if (mistakes.length){ state = 'chyby'; mistakesBack = null; mistakesPage = 0; showPanel(drawMistakes); }
+    else afterGame();
   }, 1200);
+}
+function afterGame(){   // po tabuli chyb: souboj → výsledek ze serveru, jinak zápis rekordu nebo výsledky
+  if (duel && (duelPending || duelTicket)) return submitDuel();
+  if (!practice && qualifies(score)){ state = 'name'; nameBuf = ''; showPanel(drawNameEntry); }
+  else { state = 'results'; lastRank = -1; showPanel(drawResults); }
 }
 
 /* ================= EFEKTY ================= */
@@ -1186,6 +1279,7 @@ function shoot(hand, origin, dir, haptic){
     sfx.good(); haptic?.(0.8, 80);
   } else {
     w.phase = 'bad'; score += SCORE_BAD; badCount++;
+    noteMistake(w.info, w.correct ? null : optOf(w.info, w.info.wrong));
     burst(w.mesh.position, 0xff3030, 30, 2);
     w.mesh.material.color.set(0xff6060);
     const msg = w.correct ? L('jeSpravne', w.info.correct) : L('spravneJe', w.info.correct);
@@ -1417,6 +1511,7 @@ function slice(b, r){
     sfx.good(); r.haptic?.(0.8, 80);
   } else {
     score += SCORE_BAD; badCount++;
+    noteMistake(b.info, b.correct ? null : optOf(b.info, b.info.wrong));
     burst(wp, 0xff3030, 30, 1.2, { size: 0.045, ring: 0.8 });
     const msg = b.correct ? L('jeSpravne', b.info.correct) : L('spravneJe', b.info.correct);
     floatText(msg, track.localToWorld(new THREE.Vector3(0, headY + 0.55, -3.2)), '#ffffff', 2.6, 0.35);
@@ -1825,6 +1920,7 @@ function mzWrong(J){   // hráč vešel do špatné cesty
   J.status = 'wrong'; J.wasWrong = true;
   logDuel(J.info.wrong, 'R');
   score += SCORE_BAD; badCount++;
+  noteMistake(J.info, optOf(J.info, J.info.wrong));
   sfx.bad(); mzHaptic(0.6, 150);
   mzSpawnMonster(J);
 }
@@ -2154,7 +2250,7 @@ async function initVR(){
 initVR();
 
 /* ================= HLAVNÍ SMYČKA ================= */
-window.__vs = { SADY, setSada, startDuel, get sada(){ return sada; }, mz, mzPlace, MZ_PORT, MZ_PLAQUE, dolly, words, blocks, cards, pauseGame, resumeGame, quitGame, rigs, track, camera, mouseHeld, setMode, setPractice, setDuel, setScoring, startGame, get practice(){ return practice; }, get duel(){ return duel; }, get duelAnswers(){ return duelAnswers; }, get duelResult(){ return duelResult; }, get mode(){ return mode; }, get state(){ return state; }, get score(){ return score; }, get good(){ return goodCount; }, get bad(){ return badCount; } }; // pro testování
+window.__vs = { SADY, setSada, startDuel, get sada(){ return sada; }, mz, mzPlace, MZ_PORT, MZ_PLAQUE, dolly, words, blocks, cards, pauseGame, resumeGame, quitGame, rigs, track, camera, mouseHeld, setMode, setPractice, setDuel, setScoring, startGame, get practice(){ return practice; }, get duel(){ return duel; }, get duelAnswers(){ return duelAnswers; }, get duelResult(){ return duelResult; }, get mode(){ return mode; }, get state(){ return state; }, get score(){ return score; }, get good(){ return goodCount; }, get bad(){ return badCount; }, get mistakes(){ return mistakes; }, noteMistake }; // pro testování
 track.visible = mode === 'mece';
 showPanel(drawMenu);
 const clock = new THREE.Clock();
