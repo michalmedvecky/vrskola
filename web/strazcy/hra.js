@@ -335,10 +335,12 @@ function komnaty(nova = 0, pak = null) {
       <span class="popis ${odemcena || c === otevreno + 1 ? '' : 'prazdne'}">${odemcena ? `<b>${kom.nazev}</b><small>${kom.popisek || ''}</small>` : c === otevreno + 1 ? '<small>otevře se po dalším hradu</small>' : '<small>&nbsp;</small>'}</span>`;
     if (odemcena) {
       dvere.href = kom.odkaz; dvere.target = '_blank'; dvere.rel = 'noopener';
-      dvere.addEventListener('click', () => {
+      dvere.addEventListener('click', (e) => {
         zvuk.zamek();
         if (!videna) { stav.videneKomnaty.push(c); uloz(); }
         dvere.classList.add('videne', 'otevira');
+        const video = prehravac(kom);
+        if (video) { e.preventDefault(); setTimeout(() => kino(kom, video), 450); } // přehraje se přímo ve hře
       });
     }
     chodba.append(dvere);
@@ -348,6 +350,29 @@ function komnaty(nova = 0, pak = null) {
   otevriPanel(obal, { trida: 'siroky', zavritelny: !pak });
   naZavreni = pak || napovez;
   if (nova) setTimeout(() => chodba.querySelector('.nove')?.scrollIntoView({ block: 'center', behavior: 'smooth' }), 300);
+}
+
+// Adresa vkládacího přehrávače: kom.video, jinak oficiální přehrávač ČT podle čísla dílu (IDEC) v odkazu.
+// "video": false = jen odkaz do nové záložky.
+function prehravac(kom) {
+  if (kom.video === false) return null;
+  if (kom.video) return kom.video;
+  const m = /ceskatelevize\.cz\/porady\/[^/]+\/(\d{9,})\/?/.exec(kom.odkaz || '');
+  return m ? `https://player.ceskatelevize.cz/?origin=iVysilani&autoStart=true&width=100%25&client=iVysilaniWeb&IDEC=${m[1]}` : null;
+}
+
+// Kino: přehrávač přes celou obrazovku, dítě zůstává ve hře. Zavřením se video zastaví (iframe se odstraní).
+function kino(kom, video) {
+  const k = document.createElement('div');
+  k.className = 'kino';
+  k.innerHTML = `<div class="kino-lista"><button class="tl kino-zpet">← Zpět do hradu</button><b>${kom.nazev}</b><small>${kom.popisek || ''}</small></div>
+    <div class="kino-platno"><iframe src="${video}" title="${kom.nazev}" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+    ${kom.odkaz ? `<a class="kino-odkaz" href="${kom.odkaz}" target="_blank" rel="noopener">Video nejde pustit? Otevřít na webu ČT ↗</a>` : ''}`;
+  const zavri = () => { zvuk.klik(); k.remove(); removeEventListener('keydown', esc); };
+  const esc = (e) => { if (e.key === 'Escape') zavri(); };
+  k.querySelector('.kino-zpet').onclick = zavri;
+  addEventListener('keydown', esc);
+  document.body.append(k);
 }
 
 // ---------- vesnice a truhla ----------
@@ -694,4 +719,4 @@ addEventListener('keydown', (e) => {
 start();
 
 // háčky pro automatické testy
-window.__mk = { formatCas, komnaty, get stav() { return stav; }, get mapa() { return mapa; }, uloz, noveKolo, obnovHud, navstevaMesta, navstevaHradu };
+window.__mk = { formatCas, komnaty, prehravac, get stav() { return stav; }, get mapa() { return mapa; }, uloz, noveKolo, obnovHud, navstevaMesta, navstevaHradu };
