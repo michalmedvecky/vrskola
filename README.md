@@ -99,6 +99,14 @@ curl -H "$H" -X DELETE "https://<host>/api/admin/top?rezim=strelba"        # sma
 curl -H "$H" -X DELETE "https://<host>/api/admin/top?jmeno=Pepa"           # odebrat jedno jméno ze všech režimů
 ```
 
+**Pohádky do komnat hradu** (Strážcy klýčú): adresa seznamu z domácího serveru i s tajným kódem patří jen do Secretu.
+Bez něj komnaty odkazují na web ČT. Hra dostane jen složku Bob a Bobek, videa přeposílá `vrskola-api`:
+
+```sh
+kubectl -n vrskola create secret generic vrskola-pohadky --from-literal=seznam='https://<server>/pohadky/<tajný-kód>/seznam'
+kubectl -n vrskola rollout restart deploy/vrskola-api
+```
+
 Délka souboje: `SOUBOJ_CAS` v `deploy/api-deployment.yaml` (sekundy).
 
 ## Nasazení do k3s

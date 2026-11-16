@@ -36,9 +36,29 @@ async function nactiJson(cesta) {
   return r.json();
 }
 
+// odmeny.zdroj = adresa (náš server), která vrátí { dily: [{ nazev, ep, video }] }. Když odpoví, komnaty dostanou
+// díly z domácího serveru a přehrají se přímo ve hře; když ne, zůstanou odkazy na ČT z odmeny.komnaty.
+async function pripojPohadky() {
+  try {
+    const ctrl = new AbortController(); const t = setTimeout(() => ctrl.abort(), 4000);
+    const r = await fetch(odmeny.zdroj, { cache: 'no-cache', signal: ctrl.signal }); clearTimeout(t);
+    if (!r.ok) return;
+    const { dily } = await r.json();
+    if (!dily?.length) return;
+    const puvodni = odmeny.komnaty || [];
+    odmeny.komnaty = dily.map((d, i) => ({
+      nazev: d.nazev || puvodni[i]?.nazev || `Díl ${i + 1}`,
+      popisek: `${odmeny.serial || 'Díl'} ${d.ep ?? i + 1}`,
+      soubor: d.video,
+      odkaz: puvodni[i]?.odkaz,
+    }));
+  } catch { /* domácí server nedostupný → odkazy na ČT */ }
+}
+
 async function nactiData() {
   [mapyIndex, ukolyIndex, odmeny] = await Promise.all([nactiJson('data/mapy.json'), nactiJson('data/ukoly.json'),
     nactiJson('data/odmeny.json').catch(() => null)]); // komnaty hradu jsou nepovinné
+  if (odmeny?.zdroj) await pripojPohadky(); // díly z domácího serveru, nesmí zdržet start hry
   const idMapy = params.get('mapa') || stav.nastaveni.mapa;
   const m = mapyIndex.mapy.find((x) => x.id === idMapy) || mapyIndex.mapy[0];
   stav.nastaveni.mapa = m.id;
@@ -339,8 +359,7 @@ function komnaty(nova = 0, pak = null) {
         zvuk.zamek();
         if (!videna) { stav.videneKomnaty.push(c); uloz(); }
         dvere.classList.add('videne', 'otevira');
-        const video = prehravac(kom);
-        if (video) { e.preventDefault(); setTimeout(() => kino(kom, video), 450); } // přehraje se přímo ve hře
+        e.preventDefault(); kino(kom); // okno musí vzniknout hned v kliknutí, jinak ho prohlížeč zablokuje
       });
     }
     chodba.append(dvere);
@@ -352,25 +371,50 @@ function komnaty(nova = 0, pak = null) {
   if (nova) setTimeout(() => chodba.querySelector('.nove')?.scrollIntoView({ block: 'center', behavior: 'smooth' }), 300);
 }
 
-// Adresa vkládacího přehrávače: kom.video, jinak oficiální přehrávač ČT podle čísla dílu (IDEC) v odkazu.
-// "video": false = jen odkaz do nové záložky.
-function prehravac(kom) {
-  if (kom.video === false) return null;
-  if (kom.video) return kom.video;
-  const m = /ceskatelevize\.cz\/porady\/[^/]+\/(\d{9,})\/?/.exec(kom.odkaz || '');
-  return m ? `https://player.ceskatelevize.cz/?origin=iVysilani&autoStart=true&width=100%25&client=iVysilaniWeb&IDEC=${m[1]}` : null;
-}
-
-// Kino: přehrávač přes celou obrazovku, dítě zůstává ve hře. Zavřením se video zastaví (iframe se odstraní).
-function kino(kom, video) {
+// Kino. ČT svůj přehrávač do cizích stránek vložit nedovolí (frame-ancestors), proto se díl pustí v samostatném okně ČT
+// a hra mezitím ukazuje „promítací sál“; jakmile dítě okno zavře, vrátí se samo do hradu.
+// "video": "<url>" = zdroj, který vkládání povoluje (např. YouTube embed) – ten se přehraje přímo ve hře v iframe.
+// "soubor": "<url videa>" (díly z domácího serveru přes odmeny.zdroj) – přehraje se přímo ve hře v <video>.
+function kino(kom) {
   const k = document.createElement('div');
   k.className = 'kino';
-  k.innerHTML = `<div class="kino-lista"><button class="tl kino-zpet">← Zpět do hradu</button><b>${kom.nazev}</b><small>${kom.popisek || ''}</small></div>
-    <div class="kino-platno"><iframe src="${video}" title="${kom.nazev}" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
-    ${kom.odkaz ? `<a class="kino-odkaz" href="${kom.odkaz}" target="_blank" rel="noopener">Video nejde pustit? Otevřít na webu ČT ↗</a>` : ''}`;
-  const zavri = () => { zvuk.klik(); k.remove(); removeEventListener('keydown', esc); };
-  const esc = (e) => { if (e.key === 'Escape') zavri(); };
-  k.querySelector('.kino-zpet').onclick = zavri;
+  const lista = `<div class="kino-lista"><button class="tl kino-zpet">← Zpět do hradu</button><b>${kom.nazev}</b><small>${kom.popisek || ''}</small></div>`;
+  let okno = null, hlidac = 0;
+  const zavri = (zavritOkno = true) => {
+    clearInterval(hlidac);
+    if (zavritOkno) try { okno?.close(); } catch { /* nevadí */ }
+    k.remove(); removeEventListener('keydown', esc);
+  };
+  const esc = (e) => { if (e.key === 'Escape') { zvuk.klik(); zavri(); } };
+  if (kom.soubor) {
+    k.innerHTML = lista + `<div class="kino-platno"><video src="${kom.soubor}" controls autoplay playsinline preload="auto"></video></div>`;
+    const v = k.querySelector('video');
+    v.addEventListener('ended', () => { zvuk.fanfara(); setTimeout(() => zavri(), 1500); });
+    v.addEventListener('error', () => {
+      v.replaceWith(Object.assign(document.createElement('p'), { className: 'kino-stav', innerHTML: 'Pohádku se teď nepodařilo pustit. 😕 Zkus to za chvíli.' }));
+    });
+  } else if (kom.video) {
+    k.innerHTML = lista + `<div class="kino-platno"><iframe src="${kom.video}" title="${kom.nazev}" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>`;
+  } else {
+    const pust = () => {
+      const w = Math.round(Math.min(screen.availWidth * 0.9, 1280)), h = Math.round(Math.min(screen.availHeight * 0.9, 800));
+      const x = Math.round((screen.availWidth - w) / 2), y = Math.round((screen.availHeight - h) / 2);
+      if (okno && !okno.closed) { okno.focus(); return; }
+      okno = window.open(kom.odkaz, 'strazcy-kino', `popup,width=${w},height=${h},left=${x},top=${y}`);
+      if (!okno) { k.querySelector('.kino-stav').innerHTML = 'Okno se neotevřelo. Klepni na <b>Pustit</b>.'; return; }
+      clearInterval(hlidac);
+      hlidac = setInterval(() => { if (okno.closed) { zvuk.fanfara(); zavri(false); } }, 500);
+    };
+    k.innerHTML = lista + `<div class="kino-sal">
+        <div class="kino-opona l"></div><div class="kino-opona p"></div>
+        <div class="kino-tv">📺</div>
+        <p class="kino-stav">Pohádka běží ve vedlejším okně. 🐰🐰<br>Až dokoukáš, zavři ho a vrátíš se rovnou sem do hradu.</p>
+        <button class="tl velke hlavni kino-pust">▶ Pustit</button>
+      </div>`;
+    k.querySelector('.kino-pust').onclick = () => { zvuk.klik(); pust(); };
+    pust();
+  }
+  k.querySelector('.kino-zpet').onclick = () => { zvuk.klik(); zavri(); };
   addEventListener('keydown', esc);
   document.body.append(k);
 }
@@ -719,4 +763,4 @@ addEventListener('keydown', (e) => {
 start();
 
 // háčky pro automatické testy
-window.__mk = { formatCas, komnaty, prehravac, get stav() { return stav; }, get mapa() { return mapa; }, uloz, noveKolo, obnovHud, navstevaMesta, navstevaHradu };
+window.__mk = { formatCas, komnaty, get stav() { return stav; }, get mapa() { return mapa; }, uloz, noveKolo, obnovHud, navstevaMesta, navstevaHradu };

@@ -262,6 +262,12 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .kino-lista small { opacity: .75; }
 .tl.kino-zpet { background: #f5c518; color: #5d4037; box-shadow: 0 4px 0 #b8900f; font-size: 18px; padding: 8px 16px; }
 .kino-platno { flex: 1; width: 100%; max-width: 1200px; min-height: 0; display: flex; align-items: center; justify-content: center; }
-.kino-platno iframe { width: 100%; max-height: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: 14px; background: #000;
+.kino-platno iframe, .kino-platno video { width: 100%; max-height: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: 14px; background: #000;
   box-shadow: 0 0 0 6px #8d5524, 0 0 40px rgba(245, 197, 24, .35); }
-.kino-odkaz { color: #ffe9a8; font-size: 14px; opacity: .8; }
+.kino-sal { position: relative; flex: 1; width: 100%; max-width: 900px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 18px; text-align: center; overflow: hidden; border-radius: 18px; border: 6px solid #8d5524; background: #120c1c; padding: 24px; }
+.kino-opona { position: absolute; top: 0; bottom: 0; width: 16%; background: repeating-linear-gradient(90deg, #a3122a 0 18px, #7d0d20 18px 30px); }
+.kino-opona.l { left: 0; } .kino-opona.p { right: 0; }
+.kino-tv { font-size: 96px; animation: kino-tv 1.6s ease-in-out infinite; }
+@keyframes kino-tv { 50% { transform: translateY(-8px) rotate(-3deg); } }
+.kino-stav { font-size: 22px; line-height: 1.5; max-width: 30em; position: relative; }

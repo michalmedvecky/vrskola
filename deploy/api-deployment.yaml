@@ -48,6 +48,14 @@ spec:
                   name: vrskola-api-admin
                   key: token
                   optional: true
+            - name: POHADKY_SEZNAM      # adresa seznamu pohádek i s tajným kódem; Secret je nepovinný (bez něj komnaty odkazují na ČT)
+              valueFrom:
+                secretKeyRef:
+                  name: vrskola-pohadky
+                  key: seznam
+                  optional: true
+            - name: POHADKY_SLOZKA      # jediná složka ze seznamu, kterou hra dostane
+              value: "Bob a Bobek"
           ports:
             - name: http
               containerPort: 8081

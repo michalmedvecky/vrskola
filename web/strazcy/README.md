@@ -78,11 +78,22 @@ a ověří je; `-v` vypíše ukázky).
 ## Komnaty hradu (odměny)
 
 Nápad Markétky: s každým odemčeným hradem se uvnitř otevřou jedny dveře do komnaty. Za dveřmi je ve výchozí verzi jeden díl
-pohádky Bob a Bobek – králíci z klobouku. Přehraje se přímo ve hře („kino“ přes celou obrazovku, tlačítko Zpět do hradu)
-v oficiálním vkládacím přehrávači ČT (`player.ceskatelevize.cz`, stejný, který ČT uvádí v metadatech každé stránky dílu).
-Video se nikam nekopíruje, streamuje se ze serverů ČT. Číslo dílu (IDEC) se vezme z konce `odkaz`.
-Pod přehrávačem zůstává odkaz „Otevřít na webu ČT“ pro případ, že by se video ve hře nepustilo.
-Volitelně `"video": "<adresa pro iframe>"` přepíše přehrávač (např. jiný zdroj), `"video": false` = jen odkaz do nové záložky.
+pohádky Bob a Bobek – králíci z klobouku na webu České televize.
+**Díly z domácího serveru (výchozí):** `"zdroj": "/api/pohadky"` v `odmeny.json`. Server `vrskola-api` si stáhne seznam
+pohádek z domácího serveru, vybere jen složku `POHADKY_SLOZKA` („Bob a Bobek“), přeskočí díly čekající na převod
+a hře vrátí `{ dily: [{ nazev, ep, video: "/api/pohadky/video/<n>" }] }`. Videa přeposílá on (s podporou Range, jde přetáčet),
+takže prohlížeč nikdy nevidí tajný kód ani odkaz na celou sdílenou složku. Díl se přehraje přímo ve hře a po dokoukání
+se hra sama vrátí do hradu. Adresa seznamu i s tajným kódem je jen v Secretu (nikdy v repu):
+
+```
+kubectl -n vrskola create secret generic vrskola-pohadky --from-literal=seznam='https://<server>/pohadky/<tajný-kód>/seznam'
+kubectl -n vrskola rollout restart deployment/vrskola-api
+```
+
+**Záloha:** když `/api/pohadky` neodpoví (Secret chybí, domácí server spí), komnaty použijí `komnaty` z `odmeny.json`,
+tedy odkazy na ČT. ČT svůj přehrávač do cizích stránek vložit nedovolí, proto se díl otevře v samostatném okně ČT a hra
+mezitím ukazuje „promítací sál“; po zavření okna se sama vrátí do hradu.
+Volitelně u komnaty `"video": "<adresa pro iframe>"` (zdroj, který vkládání povoluje) nebo `"soubor": "<adresa videa>"`.
 Komnaty jsou vidět na hradě, v albu a hned po otevření hradu.
 
 `data/odmeny.json`:
