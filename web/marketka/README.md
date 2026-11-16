@@ -1,6 +1,6 @@
-# Cesta za klíči
+# Strážci klíčů
 
-(Ve složce `web/marketka/` a na adrese `/marketka/`, hra sama se jmenuje **Cesta za klíči**.)
+(Ve složce `web/marketka/` a na adrese `/marketka/`, hra sama se jmenuje **Strážci klíčů**.)
 
 Samostatná hra pro tablet (bez VR, bez serveru) na `/marketka/`. Dítě si nastrojí postavičku, na hradě vidí
 zámky (výchozí 10) a vydá se po mapě kraje hledat klíče. V každé vesnici je truhlička (Berounsko má 24 vesnic): nejdřív krátká hádanka

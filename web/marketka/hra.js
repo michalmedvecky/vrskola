@@ -1,4 +1,4 @@
-// Cesta za klíči – hlavní logika hry (obrazovky, postup, ukládání).
+// Strážci klíčů – hlavní logika hry (obrazovky, postup, ukládání).
 // Postup se ukládá jen v prohlížeči (localStorage), žádný server.
 import { Mapa } from './mapa.js';
 import { nakresliPostavu, VOLBY, POPISY, VYCHOZI } from './postava.js';
