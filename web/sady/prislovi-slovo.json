@@ -1,0 +1,181 @@
+{
+  "id": "prislovi-slovo",
+  "nazev": "Přísloví a pranostiky: doplň slovo",
+  "jazyk": "cs",
+  "popis": "Stejných 60 přísloví, rčení a pranostik, ale hráč hlídá přesné znění: jedno slovo je zaměněné (Koupit kočku v pytli, Dělat z komára slona). Na tabuli chyb se ukáže i význam.",
+  "poznamka": "Položka je přísloví s klíčovým slovem v [závorkách] a dvěma vypsanými špatnými slovy. Špatná slova jsou podobná nebo známá z cizích jazyků (kočka v pytli, slon), ale nesmí dát jiné skutečné české rčení (proto ne „mít něco na srdci“). Význam je ve „vety“, ukáže se na tabuli chyb.",
+  "pocetMoznosti": 3,
+  "texty": {
+    "strelba": [
+      "PRAVÁ ruka střílí přísloví napsaná SPRÁVNĚ",
+      "LEVÁ ruka střílí přísloví se ŠPATNÝM slovem"
+    ],
+    "mece": [
+      "ZELENÝ meč (pravá ruka) seká SPRÁVNÁ přísloví",
+      "ČERVENÝ meč (levá ruka) seká přísloví se ŠPATNÝM slovem"
+    ],
+    "karty": [
+      "V přísloví chybí slovo. Které tam patří?",
+      "Vystřel správné slovo pod kartou, klidně kteroukoli rukou."
+    ],
+    "bludiste": [
+      "Na křižovatce jdi tam, kde je přísloví SPRÁVNĚ.",
+      "Špatná cesta končí u příšery – rozsekni ji mečem, nebo uteč!"
+    ],
+    "cviceni": [
+      "Správná přísloví jsou ZELENÁ,",
+      "přísloví se špatným slovem jsou ČERVENÁ."
+    ],
+    "cviceniKarty": [
+      "Správné slovo svítí ZELENĚ, špatné ČERVENĚ."
+    ],
+    "cviceniBludiste": [
+      "Šipka se správným příslovím je ZELENÁ,",
+      "šipka se špatným slovem je ČERVENÁ."
+    ]
+  },
+  "skupiny": [
+    {
+      "nazev": "Přísloví a pořekadla",
+      "polozky": [
+        "Kam vítr, tam [plášť|kabát|deštník].",
+        "Bez práce nejsou [koláče|buchty|peníze].",
+        "Kdo jinému jámu kopá, sám do ní [padá|skáče|leze].",
+        "Jak se do lesa volá, tak se z lesa [ozývá|vrací|odpovídá].",
+        "Ranní [ptáče|kuře|zajíc] dál doskáče.",
+        "Dvakrát měř, jednou [řež|šij|stříhej].",
+        "Darovanému koni na [zuby|kopyta|uši] nehleď.",
+        "Kdo se směje naposled, ten se směje [nejlépe|nejdéle|nejvíc].",
+        "Lež má krátké [nohy|ruce|uši].",
+        "Tichá voda [břehy|kameny|mlýny] mele.",
+        "Jablko nepadá daleko od [stromu|plotu|domu].",
+        "Kovářova [kobyla|kráva|koza] chodí bosa.",
+        "Komu se nelení, tomu se [zelení|daří|vede].",
+        "Lepší vrabec v hrsti než [holub|kos|orel] na střeše.",
+        "Není všechno [zlato|stříbro|diamant], co se třpytí.",
+        "Tak dlouho se chodí se džbánem pro vodu, až se [ucho|dno|víko] utrhne.",
+        "Co můžeš udělat dnes, neodkládej na [zítřek|pozítří|večer].",
+        "Kdo chce psa bít, [hůl|kámen|bič] si vždycky najde.",
+        "S poctivostí nejdál [dojdeš|dojedeš|doletíš].",
+        "Pod [svícnem|stolem|lampou] bývá největší tma."
+      ]
+    },
+    {
+      "nazev": "Rčení a ustálená spojení",
+      "polozky": [
+        "Házet [flintu|čepici|lopatu] do žita",
+        "Mít [máslo|med|sýr] na hlavě",
+        "Koupit [zajíce|kočku|kapra] v pytli",
+        "Nosit [dříví|vodu|houby] do lesa",
+        "Chodit kolem horké [kaše|polévky|kávy]",
+        "Mít hluboko do [kapsy|peněženky|truhly]",
+        "Vzít nohy na [ramena|záda|krk]",
+        "Dělat z komára [velblouda|slona|koně]",
+        "Mít srdce na [dlani|jazyku|rukávu]",
+        "Mít za [ušima|nehty|zády]",
+        "Mazat někomu [med|máslo|marmeládu] kolem pusy",
+        "Přilévat [olej|vodu|benzín] do ohně",
+        "Házet [perly|zlato|růže] sviním",
+        "Mít oči na [stopkách|špejlích|tyčkách]",
+        "Jít s [kůží|kabátem|hlavou] na trh",
+        "Vzít rozum do [hrsti|hlavy|kapsy]",
+        "Tahat někoho za [nos|ucho|vlasy]",
+        "Být [trnem|hřebíkem|kamenem] v oku",
+        "Vytrhnout někomu trn z [paty|prstu|ruky]",
+        "Mít něco na [jazyku|nose|zádech]"
+      ]
+    },
+    {
+      "nazev": "Další přísloví a rčení",
+      "polozky": [
+        "Vrána k [vráně|holubici|sově] sedá.",
+        "Tonoucí se [stébla|větve|lana] chytá.",
+        "Ruka [ruku|nohu|hlavu] myje.",
+        "Když se dva perou, [třetí|čtvrtý|soused] se směje.",
+        "Sytý [hladovému|chudému|nemocnému] nevěří.",
+        "Kdo pozdě chodí, sám sobě [škodí|vadí|ubližuje].",
+        "Mnoho [povyku|křiku|hluku] pro nic.",
+        "Mít všech [pět|šest|deset] pohromadě.",
+        "Pálit [mosty|lodě|domy].",
+        "Dostat se z bláta do [louže|řeky|potoka]."
+      ]
+    },
+    {
+      "nazev": "Pranostiky",
+      "polozky": [
+        "Březen, za [kamna|pec|dveře] vlezem.",
+        "[Duben|Květen|Červen], ještě tam budem.",
+        "Medardova kápě [čtyřicet|třicet|sedm] dní kape.",
+        "Svatá Anna, chladna [zrána|večer|v noci].",
+        "Na svatého [Martina|Václava|Jiří] kouřívá se z komína.",
+        "[Kateřina|Barbora|Lucie] na ledě, Vánoce na blátě.",
+        "Únor [bílý|zelený|deštivý], pole sílí.",
+        "Na [Hromnice|Tři krále|Silvestra] o hodinu více.",
+        "Studený [máj|duben|březen], v stodole ráj.",
+        "Svatá [Lucie|Barbora|Anna] noci upije, ale dne nepřidá."
+      ]
+    }
+  ],
+  "vety": {
+    "Kam vítr, tam plášť.": "[Význam:] Měnit názory podle toho, co se hodí.",
+    "Bez práce nejsou koláče.": "[Význam:] Bez úsilí není odměna.",
+    "Kdo jinému jámu kopá, sám do ní padá.": "[Význam:] Špatný úmysl se může obrátit proti člověku.",
+    "Jak se do lesa volá, tak se z lesa ozývá.": "[Význam:] Jak se chováš k ostatním, tak se chovají oni k tobě.",
+    "Ranní ptáče dál doskáče.": "[Význam:] Kdo začne včas, má výhodu.",
+    "Dvakrát měř, jednou řež.": "[Význam:] Nejdřív přemýšlej, potom jednej.",
+    "Darovanému koni na zuby nehleď.": "[Význam:] Nekritizuj dar.",
+    "Kdo se směje naposled, ten se směje nejlépe.": "[Význam:] O výsledku se rozhoduje až na konci.",
+    "Lež má krátké nohy.": "[Význam:] Lež se brzy prozradí.",
+    "Tichá voda břehy mele.": "[Význam:] Nenápadný člověk může překvapit.",
+    "Jablko nepadá daleko od stromu.": "[Význam:] Děti se často podobají rodičům.",
+    "Kovářova kobyla chodí bosa.": "[Význam:] Člověk zanedbává u sebe to, co dělá pro druhé.",
+    "Komu se nelení, tomu se zelení.": "[Význam:] Pracovitost přináší výsledky.",
+    "Lepší vrabec v hrsti než holub na střeše.": "[Význam:] Jistota je lepší než nejistý větší zisk.",
+    "Není všechno zlato, co se třpytí.": "[Význam:] Věci nejsou vždy takové, jak vypadají.",
+    "Tak dlouho se chodí se džbánem pro vodu, až se ucho utrhne.": "[Význam:] Riskantní jednání nakonec špatně dopadne.",
+    "Co můžeš udělat dnes, neodkládej na zítřek.": "[Význam:] Neodkládej povinnosti.",
+    "Kdo chce psa bít, hůl si vždycky najde.": "[Význam:] Kdo chce někomu uškodit, najde si záminku.",
+    "S poctivostí nejdál dojdeš.": "[Význam:] Poctivé jednání se vyplácí.",
+    "Pod svícnem bývá největší tma.": "[Význam:] Přehlížíme to, co je přímo před námi.",
+    "Házet flintu do žita": "[Význam:] Vzdávat se.",
+    "Mít máslo na hlavě": "[Význam:] Být něčím vinen.",
+    "Koupit zajíce v pytli": "[Význam:] Koupit něco bez předchozího ověření.",
+    "Nosit dříví do lesa": "[Význam:] Dělat něco zbytečného.",
+    "Chodit kolem horké kaše": "[Význam:] Vyhýbat se podstatě věci.",
+    "Mít hluboko do kapsy": "[Význam:] Mít málo peněz.",
+    "Vzít nohy na ramena": "[Význam:] Rychle utéct.",
+    "Dělat z komára velblouda": "[Význam:] Zveličovat problém.",
+    "Mít srdce na dlani": "[Význam:] Být otevřený a laskavý.",
+    "Mít za ušima": "[Význam:] Být chytrý a mazaný.",
+    "Mazat někomu med kolem pusy": "[Význam:] Lichotit někomu kvůli výhodě.",
+    "Přilévat olej do ohně": "[Význam:] Zhoršovat spor nebo problém.",
+    "Házet perly sviním": "[Význam:] Nabízet něco hodnotného někomu, kdo to neocení.",
+    "Mít oči na stopkách": "[Význam:] Být velmi pozorný.",
+    "Jít s kůží na trh": "[Význam:] Vystavit se kritice nebo riziku.",
+    "Vzít rozum do hrsti": "[Význam:] Začít přemýšlet rozumně.",
+    "Tahat někoho za nos": "[Význam:] Klamat někoho.",
+    "Být trnem v oku": "[Význam:] Někomu silně vadit.",
+    "Vytrhnout někomu trn z paty": "[Význam:] Pomoci někomu v nesnázích.",
+    "Mít něco na jazyku": "[Význam:] Nemoci si právě vybavit, co chce člověk říct.",
+    "Vrána k vráně sedá.": "[Význam:] Podobní lidé se sdružují.",
+    "Tonoucí se stébla chytá.": "[Význam:] Zoufalý člověk zkouší každou možnost.",
+    "Ruka ruku myje.": "[Význam:] Lidé si navzájem pomáhají, často kvůli vlastnímu prospěchu.",
+    "Když se dva perou, třetí se směje.": "[Význam:] Ze sporu dvou může těžit někdo další.",
+    "Sytý hladovému nevěří.": "[Význam:] Kdo problém nezažil, těžko ho chápe.",
+    "Kdo pozdě chodí, sám sobě škodí.": "[Význam:] Nedochvilnost má následky.",
+    "Mnoho povyku pro nic.": "[Význam:] Zbytečně velký rozruch kvůli maličkosti.",
+    "Mít všech pět pohromadě.": "[Význam:] Být rozumný.",
+    "Pálit mosty.": "[Význam:] Zničit možnost návratu nebo usmíření.",
+    "Dostat se z bláta do louže.": "[Význam:] Dostat se z jedné špatné situace do druhé.",
+    "Březen, za kamna vlezem.": "[Význam:] V březnu bývá ještě chladno.",
+    "Duben, ještě tam budem.": "[Význam:] I v dubnu může být zima.",
+    "Medardova kápě čtyřicet dní kape.": "[Význam:] Déšť na Medarda má podle tradice předznamenávat dlouhé deštivé období.",
+    "Svatá Anna, chladna zrána.": "[Význam:] Koncem července bývají chladnější rána.",
+    "Na svatého Martina kouřívá se z komína.": "[Význam:] V listopadu už bývá chladno a topí se.",
+    "Kateřina na ledě, Vánoce na blátě.": "[Význam:] Mrazivý konec listopadu má podle tradice předznamenávat teplejší Vánoce.",
+    "Únor bílý, pole sílí.": "[Význam:] Sníh v únoru prospívá polím.",
+    "Na Hromnice o hodinu více.": "[Význam:] Na začátku února jsou dny delší.",
+    "Studený máj, v stodole ráj.": "[Význam:] Chladnější květen podle tradice prospívá úrodě.",
+    "Svatá Lucie noci upije, ale dne nepřidá.": "[Význam:] Pranostika souvisí s délkou dne a noci v prosinci."
+  }
+}

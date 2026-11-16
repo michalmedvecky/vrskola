@@ -40,6 +40,8 @@ configMapGenerator:
       - web/sady/sk-dvojhlasky.json
       - web/sady/sk-velke-pismena.json
       - web/sady/shoda.json
+      - web/sady/prislovi-vyznam.json
+      - web/sady/prislovi-slovo.json
       - web/sady/nasobilka.json
       - web/sady/anglictina.json
       - web/sady/cinstina.json
