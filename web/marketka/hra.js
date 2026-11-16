@@ -1,4 +1,4 @@
-// Marketka a zamčený hrad – hlavní logika hry (obrazovky, postup, ukládání).
+// Cesta za klíči – hlavní logika hry (obrazovky, postup, ukládání).
 // Postup se ukládá jen v prohlížeči (localStorage), žádný server.
 import { Mapa } from './mapa.js';
 import { nakresliPostavu, VOLBY, POPISY, VYCHOZI } from './postava.js';

@@ -41,7 +41,7 @@ pošle na mini server v `server/` (viz níže). V tabulce má každé jméno jen
 Hra trvá 5 minut (`?cas=30` zkrátí), tabulka 3 nejlepších se ukládá v prohlížeči headsetu. Pauza: B/Y (Esc na počítači).
 Na počítači jde hrát myší (levé/pravé tlačítko, šipky otáčí).
 
-## Marketka a zamčený hrad (tablet, `/marketka/`)
+## Cesta za klíči (tablet, `/marketka/`)
 
 Samostatná hra pro tablet bez VR a bez serveru ve `web/marketka/`: postavička chodí po mapě Berounska, v každé
 vesnici odemyká truhličku a za vyřešenou úlohu dostane klíč; klíči odemyká hrad a sbírá nálepky. Mapa i úkoly
