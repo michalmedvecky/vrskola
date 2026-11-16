@@ -97,6 +97,26 @@ configMapGenerator:
       - web/strazcy/data/ukoly-pady.json
       - web/strazcy/data/ukoly-pocty.json
       - web/strazcy/data/ukoly-anglictina.json
+  - name: vrskola-padam   # samostatná hra pro tablet na /padam/ (určování pádů, bez VR, bez serveru)
+    files:
+      - web/padam/index.html
+      - web/padam/styl.css
+      - web/padam/hra.js
+      - web/padam/spolecne.js
+      - web/padam/pradnici.js
+      - web/padam/vytah.js
+      - web/padam/ptacek.js
+      - web/padam/promeny.js
+      - web/padam/detektiv.js
+      - web/padam/zvuky.js
+      - web/padam/manifest.json
+      - web/padam/ikona.svg
+  - name: vrskola-padam-data   # věty a slova hry Padám padám (vyměnitelná data), servíruje se z /padam/data/
+    files:
+      - web/padam/data/obsah.json
+      - web/padam/data/vety.json
+      - web/padam/data/ptacek.json
+      - web/padam/data/promeny.json
   - name: vrskola-nginx
     files:
       - deploy/default.conf

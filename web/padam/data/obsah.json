@@ -1,0 +1,11 @@
+{
+  "baliky": [
+    {
+      "id": "4-trida",
+      "nazev": "Podstatná jména – 4. třída",
+      "vety": ["vety.json"],
+      "ptacek": ["ptacek.json"],
+      "promeny": ["promeny.json"]
+    }
+  ]
+}
