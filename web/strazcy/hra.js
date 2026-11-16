@@ -83,7 +83,7 @@ const zapnutaTemata = () => {
 function noveKolo() {
   const cislo = (stav.kolo?.cislo || 0) + 1;
   const zamku = Math.min(stav.nastaveni.zamku, maxZamku());
-  stav.kolo = { cislo, zamku, otevreno: 0, klice: 0, kousky: 0, cas: 0, hotova: [], zamceno: {}, temata: {} };
+  stav.kolo = { cislo, zamku, otevreno: 0, klice: 0, kousky: 0, cas: 0, hotova: [], zamceno: {}, temata: {}, odmeneno: false };
   rozdelTemata();
   uloz();
 }
@@ -139,7 +139,8 @@ function bublina(text, ms = 6000) {
 }
 function napovez() {
   const k = stav.kolo, hrad = mestoNazev(startId());
-  if (k.klice > 0 && k.klice >= k.zamku - k.otevreno) bublina(`Máš všechny klíče! Běž na hrad do města <b>${hrad}</b>. 🏰`, 0);
+  if (k.otevreno >= k.zamku) bublina(`Hrad je odemčený! Běž do města <b>${hrad}</b>. 🏰`, 0);
+  else if (k.klice > 0 && k.klice >= k.zamku - k.otevreno) bublina(`Máš všechny klíče! Běž na hrad do města <b>${hrad}</b>. 🏰`, 0);
   else if (k.klice > 0) bublina(`V brašně máš ${k.klice === 1 ? 'klíč' : 'klíče'}. Můžeš hledat dál, nebo je zanést na hrad (<b>${hrad}</b>).`);
   else if (k.kousky) bublina(`Máš kousek klíče. Otevři ještě ${naKlic() - k.kousky === 1 ? 'jednu truhlu' : `${naKlic() - k.kousky} truhly`} a klíč bude celý! ✨`);
   else bublina('Klepni na vesnici se zlatou truhličkou a vyraz tam! ✨');
@@ -274,6 +275,13 @@ async function navstevaHradu() {
   otevriPanel(obal, { trida: 'siroky' });
   naZavreni = napovez;
   if (maKomnaty()) obal.append(tlacitko(`🚪 Komnaty hradu (${otevrenychKomnat()} / ${odmeny.komnaty.length})`, () => komnaty(), 'komnaty-tl'));
+  if (k.otevreno >= k.zamku) {
+    // všechny zámky jsou odemčené, ale kolo neskončilo (stránka se zavřela uprostřed oslavy)
+    if (k.odmeneno === false) { $('#panel-zavrit').hidden = true; await hradOtevren(svg); return; }
+    text.innerHTML = 'Hrad je odemčený a dárek už máš. Kouzelník ho ale v noci zase zamkl!';
+    tl.append(tlacitko('Nové dobrodružství ➜', () => { noveKolo(); zavriPanel(); obnovHud(); uvodHradu(napovez); }, 'hlavni'));
+    return;
+  }
   if (!k.klice) {
     text.innerHTML = `Ještě ${zbyvaKlicu() === 1 ? 'chybí 1 klíč' : `chybí ${zbyvaKlicu()} klíčů`}. Klíče najdeš v truhličkách ve vesnicích.`;
     tl.append(tlacitko('Jdu hledat ➜', () => { zavriPanel(); napovez(); }));
@@ -313,6 +321,7 @@ async function hradOtevren(svg) {
   konfety();
   await pauza(1600);
   stav.hradu++;
+  stav.kolo.odmeneno = true; // nálepka i komnata jsou rozdané; po obnovení stránky se jen začne nové kolo
   const nova = vyberNalepku(stav.nalepky);
   const cas = stav.kolo.cas || 0;
   const rekord = stav.nalepky.every((s) => !s.cas || cas < s.cas);
@@ -767,7 +776,7 @@ addEventListener('keydown', (e) => {
   tajne = '';
   opravKolo();
   const pridat = Math.min(10, Math.max(0, zbyvaKlicu()));
-  if (!pridat) { bublina('Brašna už má klíče na všechny zámky. 🏰'); return; }
+  if (!pridat) { bublina(stav.kolo.otevreno >= stav.kolo.zamku ? `Hrad je už celý odemčený! Běž do města <b>${mestoNazev(startId())}</b>. 🏰` : 'Brašna už má klíče na všechny zámky. 🏰'); return; }
   stav.kolo.klice += pridat;
   uloz(); obnovHud(); zvuk.klic();
   // stojí-li postavička zrovna u hradu, překreslí se, aby ukázal tlačítko Odemknout (jinak by hlásil „chybí 10 klíčů“)
