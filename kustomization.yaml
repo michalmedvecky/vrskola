@@ -93,6 +93,7 @@ configMapGenerator:
       - web/strazcy/data/mapy.json
       - web/strazcy/data/mapa-berounsko.json
       - web/strazcy/data/ukoly.json
+      - web/strazcy/data/odmeny.json
       - web/strazcy/data/ukoly-pravopis.json
       - web/strazcy/data/ukoly-pady.json
       - web/strazcy/data/ukoly-pocty.json

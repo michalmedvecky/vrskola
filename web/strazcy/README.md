@@ -75,6 +75,20 @@ vyrobí z úloh tématu: jeden pád, jedno písmeno, správná věta ze dvou).
 Kontrola po úpravě: `node nastroje/strazcy-test-ulohy.mjs` (vygeneruje stovky úloh a zámků z každého tématu
 a ověří je; `-v` vypíše ukázky).
 
+## Komnaty hradu (odměny)
+
+Nápad Markétky: s každým odemčeným hradem se uvnitř otevřou jedny dveře do komnaty. Za dveřmi je odkaz, který se otevře
+v nové záložce, ve výchozí verzi jeden díl pohádky Bob a Bobek – králíci z klobouku na stránkách České televize.
+Hra jen odkazuje na stránku ČT, video ani obrázky nikam nekopíruje. Komnaty jsou vidět na hradě, v albu a hned po otevření hradu.
+
+`data/odmeny.json`:
+
+```json
+{ "nazev": "Komnaty hradu", "popis": "…", "komnaty": [ { "nazev": "Na ulici", "popisek": "Bob a Bobek 1/39", "odkaz": "https://www.ceskatelevize.cz/porady/…/" } ] }
+```
+
+Další díly (nebo úplně jiné odměny) se přidávají na konec seznamu. Když soubor chybí nebo je seznam prázdný, komnaty se nezobrazí.
+
 ## Výměna mapy
 
 `data/mapy.json` je seznam map (víc map = výběr v nastavení, nebo `?mapa=<id>`). Mapa je JSON v pixelech:
@@ -99,6 +113,10 @@ node nastroje/strazcy-mapa.mjs nastroje/strazcy-berounsko.gps.json > web/strazcy
 ```
 
 Nový soubor v `data/` je potřeba zapsat i do `kustomization.yaml` (ConfigMapa `vrskola-strazcy-data`).
+
+## Tajný klíč pro rodiče
+
+Na klávesnici (PC) napište během hry `HOPHOP`: do brašny přibude 10 klíčů (nejvýš tolik, kolik zbývá zámků), takže jde hned vyzkoušet hrad, nálepku a komnaty bez luštění truhel. Kód je na konci `hra.js`.
 
 ## Lokálně
 
