@@ -54,7 +54,9 @@ Téma:
 }
 ```
 
-`vaha` určuje, jak často se daný druh úlohy objeví. Typy úloh:
+`vaha` určuje, jak často se daný druh úlohy objeví. Věty a zadání se vybírají náhodně, ale hra si pamatuje posledních
+300 použitých a dává přednost těm, které dítě ještě nevidělo (opakují se, až když se vystřídají ostatní). Počty a anglické věty
+se generují, takže se prakticky neopakují. Typy úloh:
 
 | typ | data | co dítě dělá |
 |---|---|---|

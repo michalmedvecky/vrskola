@@ -353,7 +353,9 @@ async function navstevaMesta(id) {
   plocha.append(kouzlo);
   const uEl = div('uloha');
   plocha.append(uEl);
-  const uloha = vytvorUlohu(tema, { diktat: umimMluvit('cs-CZ') });
+  const uloha = vytvorUlohu(tema, { diktat: umimMluvit('cs-CZ'), nedavno: stav.nedavno });
+  // pamatuje si posledních 300 použitých vět a zadání, ať se neopakují dřív, než se vystřídají ostatní
+  stav.nedavno = [...(stav.nedavno || []).filter((x) => !uloha.pouzite.includes(x)), ...uloha.pouzite].slice(-300);
   $('#panel-zavrit').hidden = true; // úloha se dodělá (nebo prohraje), neutíká se od ní
   const vysledek = await spustUlohu(uEl, uloha, { zivoty: stav.nastaveni.zivoty });
   $('#panel-zavrit').hidden = false;

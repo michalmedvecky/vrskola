@@ -230,3 +230,5 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .nalepka { position: relative; }
 .nalepka small.cas { font-size: 11px; font-weight: 700; opacity: .7; margin-top: 0; }
 .nalepka .pocet { position: absolute; right: -4px; top: -4px; background: #e74c3c; color: #fff; border-radius: 12px; font-size: 13px; padding: 1px 7px; }
+
+.slovo-celek { white-space: nowrap; }

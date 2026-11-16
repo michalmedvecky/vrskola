@@ -18,6 +18,15 @@ export function zamichej(pole) {
   for (let i = p.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [p[i], p[j]] = [p[j], p[i]]; }
   return p;
 }
+// Nedávno použité položky (věty, zadání): při výběru mají přednost ty, které dítě ještě nevidělo.
+let nedavno = new Set();
+let pouzite = [];
+// zamíchá a nedávno použité dá na konec
+function cerstve(pole, klic = (x) => (typeof x === 'string' ? x : JSON.stringify(x))) {
+  const z = zamichej(pole);
+  return [...z.filter((x) => !nedavno.has(klic(x))), ...z.filter((x) => nedavno.has(klic(x)))];
+}
+const pouzij = (x) => { pouzite.push(typeof x === 'string' ? x : JSON.stringify(x)); return x; };
 const velke = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
@@ -46,11 +55,11 @@ function spatneVarianty(spravne, explicitni, zamena) {
 
 function doplnovacka(def, tema) {
   const min = def.minMezer || 1;
-  const vety = zamichej(def.vety);
+  const vety = cerstve(def.vety);
   const vybrane = [];
   let mezer = 0;
   for (const v of vety) {
-    vybrane.push(v);
+    vybrane.push(pouzij(v));
     mezer += rozeber(v).filter((c) => typeof c !== 'string').length;
     if (mezer >= min) break;
   }
@@ -71,7 +80,7 @@ function doplnovacka(def, tema) {
 }
 
 function diktat(def, tema) {
-  const veta = nahodne(def.vety);
+  const veta = pouzij(cerstve(def.vety)[0]);
   const casti = rozeber(veta);
   const mezery = casti.map((c, i) => (typeof c === 'string' ? -1 : i)).filter((i) => i >= 0);
   const spravne = textVety(casti);
@@ -96,11 +105,11 @@ function diktat(def, tema) {
 
 function urcovani(def) {
   const min = def.minSlov || 1;
-  const vety = zamichej(def.vety);
+  const vety = cerstve(def.vety);
   const vybrane = [];
   let slov = 0;
   for (const v of vety) {
-    vybrane.push(v);
+    vybrane.push(pouzij(v));
     slov += rozeber(v).filter((c) => typeof c !== 'string').length;
     if (slov >= min) break;
   }
@@ -123,7 +132,7 @@ function urcovani(def) {
 }
 
 function vyber(def) {
-  const p = nahodne(def.polozky);
+  const p = pouzij(cerstve(def.polozky)[0]);
   const moznosti = zamichej(p.moznosti);
   return {
     typ: 'vyber', pokyn: p.pokyn || def.pokyn, otazka: p.otazka, mluvit: p.mluvit, jazyk: p.jazyk,
@@ -264,6 +273,9 @@ function slozene(def) {
 
 // --- skládání vět ---
 function presentSimple(def) {
+  for (let i = 0; i < 15; i++) { const p = presentSimpleJednou(def); if (!nedavno.has(p.predloha + p.konec) || i === 14) { pouzite.push(p.predloha + p.konec); return p; } }
+}
+function presentSimpleJednou(def) {
   const sl = def.slovnik;
   const druh = nahodne(def.druhy || ['otazka', 'zapor']);
   let podmet;
@@ -294,7 +306,7 @@ function rozdelVysledek(p) {
 }
 function skladaniPolozka(def) {
   if (def.generator === 'present-simple') return presentSimple(def);
-  return rozdelVysledek(nahodne(def.polozky));
+  return rozdelVysledek(pouzij(cerstve(def.polozky)[0]));
 }
 function skladani(def, tema) {
   const p = skladaniPolozka(def);
@@ -316,7 +328,10 @@ function vazenyVyber(polozky) {
 }
 
 // moznosti.diktat === false → typ diktat se přeskočí (zařízení neumí česky mluvit)
+// moznosti.nedavno = pole nedávno použitých klíčů; výsledek má u.pouzite (co si zapamatovat)
 export function vytvorUlohu(tema, moznosti = {}) {
+  nedavno = new Set(moznosti.nedavno || []);
+  pouzite = [];
   let defy = tema.ulohy.filter((u) => TYPY[u.typ]);
   if (moznosti.diktat === false) defy = defy.filter((u) => u.typ !== 'diktat');
   const def = vazenyVyber(defy);
@@ -324,6 +339,7 @@ export function vytvorUlohu(tema, moznosti = {}) {
   u.tema = tema.id;
   u.podtyp = def.typ + (def.operace ? def.operace : '');
   u.zivoty = u.zivoty ?? def.zivoty;
+  u.pouzite = pouzite;
   return u;
 }
 
