@@ -1,0 +1,90 @@
+{
+  "id": "pravopis",
+  "nazev": "Vyjmenovaná slova po P a S (+ opakování B, L, M)",
+  "kouzlo": "Kouzelný nápis",
+  "zamena": { "y": "i", "i": "y", "ý": "í", "í": "ý" },
+  "ulohy": [
+    {
+      "typ": "doplnovacka",
+      "vaha": 3,
+      "pokyn": "Oprav kouzelný nápis: doplň písmenka, ať truhla vydá klíč.",
+      "minMezer": 3,
+      "vety": [
+        "Kůň klop[ý]tl a ztratil podkovu z kop[y]ta.",
+        "Včely nosí p[y]l do úlu a p[i]lně pracují.",
+        "Na p[i]le se třp[y]tí kapky rosy.",
+        "Děda nesl p[y]tel p[í]sku na zahradu.",
+        "P[y]šný kohout si čep[ý]řil peří.",
+        "Slep[ý]š se vyhříval na teplém kameni.",
+        "Babička vytrhala ze záhonu p[ý]r i kopřivy.",
+        "Holčička se zap[ý]řila a p[í]skla radostí.",
+        "Velbloud má velký měkký p[y]sk.",
+        "Netop[ý]r spí v jeskyni hlavou dolů.",
+        "Na stole leží p[i]škoty a p[i]vo pro tátu.",
+        "S[ý]kora sedí na s[í]ti u okna.",
+        "S[y]n s[y]pe zrní slepicím.",
+        "Maminka koupila s[ý]r a s[i]rup.",
+        "S[y]sel se schoval do nory, protože bylo s[y]chravo.",
+        "Had s[y]čí a s[ý]ček houká.",
+        "Po obědě byl Matěj s[y]tý a spokojený.",
+        "Seno na louce us[y]chá na slunci.",
+        "S[i]lnice vede kolem starého ml[ý]na.",
+        "Babička upekla s[ý]rový koláč.",
+        "Mrkev se dá jíst i s[y]rová.",
+        "Táta má velkou s[í]lu a unese těžký p[y]tel.",
+        "Na podzim pos[y]páme cestičky p[í]skem.",
+        "S[y]kot hada vyděsil malého s[y]sla.",
+        "Kluci s[i]ce p[í]skali, ale nikdo je neslyšel.",
+        "B[y]dlíme v novém b[y]tě.",
+        "Kob[y]la a b[ý]k se pasou na louce.",
+        "Ob[y]vatelé vesnice mají nový náb[y]tek.",
+        "B[y]strý pes hlídá dob[y]tek.",
+        "Na louce rostou b[y]linky a b[í]lé kopretiny.",
+        "Sl[y]šíš, jak se bl[ý]ská?",
+        "Řeka pl[y]ne kolem ml[ý]na.",
+        "Nepl[ý]tvej vodou, když s[i] čistíš zuby!",
+        "Na l[y]žích jezdíme v zimě.",
+        "Děda je trochu l[y]sý a nosí l[í]bivý klobouk.",
+        "M[y] jsme si um[y]li ruce.",
+        "Hm[y]z bzučí kolem lampy.",
+        "M[y]š utekla do díry před kocourem.",
+        "Hlem[ý]žď leze po l[i]stu.",
+        "M[y]slím, že se m[ý]líš.",
+        "Zam[y]kej dveře, když odcházíš.",
+        "M[í]ša m[y]je nádobí po obědě."
+      ]
+    },
+    {
+      "typ": "diktat",
+      "vaha": 1,
+      "pokyn": "Poslouchej kouzelnou větu a vyber, který nápis je správně.",
+      "moznosti": 3,
+      "vety": [
+        "S[y]n s[y]pe zrní slepicím.",
+        "Maminka koupila s[ý]r a s[i]rup.",
+        "Kůň klop[ý]tl a ztratil podkovu z kop[y]ta.",
+        "P[y]šný kohout si čep[ý]řil peří.",
+        "S[ý]kora sedí na s[í]ti u okna.",
+        "Babička upekla s[ý]rový koláč.",
+        "Na p[i]le se třp[y]tí kapky rosy.",
+        "Děda nesl p[y]tel p[í]sku na zahradu.",
+        "S[y]sel se schoval do nory, protože bylo s[y]chravo.",
+        "Táta má velkou s[í]lu a unese těžký p[y]tel.",
+        "Kob[y]la a b[ý]k se pasou na louce.",
+        "Řeka pl[y]ne kolem ml[ý]na.",
+        "M[y]slím, že se m[ý]líš."
+      ]
+    }
+  ],
+  "zamky": {
+    "pokyn": "Které písmenko chybí?",
+    "slova": [
+      "p[ý]cha", "p[y]tel", "p[y]sk", "netop[ý]r", "slep[ý]š", "p[y]l", "kop[y]to", "klop[ý]tat", "třp[y]tit",
+      "p[y]kat", "p[ý]r", "zap[ý]řit se", "čep[ý]řit se", "p[i]vo", "p[í]sek", "p[i]la", "p[i]škot",
+      "s[y]n", "s[y]tý", "s[ý]r", "s[y]rový", "s[y]chravo", "us[y]chat", "s[ý]kora", "s[ý]ček", "s[y]sel",
+      "s[y]čet", "s[y]pat", "s[í]to", "s[i]lnice", "s[i]rup", "s[í]la",
+      "b[ý]t", "b[y]dlit", "náb[y]tek", "kob[y]la", "b[ý]k", "b[y]strý", "b[í]lý",
+      "sl[y]šet", "ml[ý]n", "l[y]že", "l[ý]tko", "l[i]st", "m[y]š", "hm[y]z", "m[y]slet", "m[ý]dlo", "m[í]č"
+    ]
+  }
+}

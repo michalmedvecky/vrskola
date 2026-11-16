@@ -1,0 +1,69 @@
+{
+  "id": "pady",
+  "nazev": "Určování pádů",
+  "kouzlo": "Kouzelné otázky",
+  "ulohy": [
+    {
+      "typ": "urcovani",
+      "vaha": 1,
+      "pokyn": "Truhla se ptá, v jakém pádu jsou svítící slova. Zeptej se na ně otázkou!",
+      "minSlov": 3,
+      "moznosti": [
+        { "hodnota": "1", "popis": "1. pád", "napoveda": "kdo? co?" },
+        { "hodnota": "2", "popis": "2. pád", "napoveda": "koho? čeho?" },
+        { "hodnota": "3", "popis": "3. pád", "napoveda": "komu? čemu?" },
+        { "hodnota": "4", "popis": "4. pád", "napoveda": "koho? co?" },
+        { "hodnota": "5", "popis": "5. pád", "napoveda": "oslovujeme" },
+        { "hodnota": "6", "popis": "6. pád", "napoveda": "o kom? o čem?" },
+        { "hodnota": "7", "popis": "7. pád", "napoveda": "s kým? s čím?" }
+      ],
+      "vety": [
+        "Babička dala [vnučce|3] [jablko|4].",
+        "Pes běží po [louce|6].",
+        "[Kočka|1] spí na [gauči|6].",
+        "Bez [čepice|2] je mi zima.",
+        "Šli jsme k [řece|3].",
+        "Petr psal [dopis|4] [tužkou|7].",
+        "Volali jsme: „[Maminko|5], pojď se podívat!“",
+        "Mluvili jsme o [výletě|6].",
+        "Z [lesa|2] vyběhl [zajíc|1].",
+        "Dívám se na [hrad|4].",
+        "Pták sedí na [stromě|6].",
+        "Před [domem|7] stojí [auto|1].",
+        "Jdu do [školy|2] s [kamarádem|7].",
+        "Děkuji [tatínkovi|3] za [dárek|4].",
+        "[Pepíku|5], kde máš [aktovku|4]?",
+        "Rybář chytil velkou [rybu|4].",
+        "U [silnice|2] roste stará [lípa|1].",
+        "Kvůli [dešti|3] jsme zůstali doma.",
+        "Na [zahradě|6] kvetou [růže|1].",
+        "Letadlo letí nad [městem|7].",
+        "Vyprávěl jsem [bratrovi|3] [pohádku|4].",
+        "Kluci hráli [fotbal|4] na [hřišti|6].",
+        "Myška utekla před [kocourem|7].",
+        "Proti [větru|3] se špatně jede na kole.",
+        "Kousek od [Berouna|2] teče [Berounka|1].",
+        "Těším se na [prázdniny|4].",
+        "Po [obědě|6] si babička zdřímne.",
+        "[Babičko|5], máš ráda [kávu|4]?",
+        "Pod [mostem|7] plavou [kachny|1].",
+        "Koupil jsem si knihu o [dinosaurech|6].",
+        "Vedle [kostela|2] je [pekárna|1].",
+        "Za [kopcem|7] leží malá vesnice.",
+        "Jedeme [vlakem|7] do [Prahy|2].",
+        "[Sestra|1] poslala [kamarádce|3] [pohlednici|4].",
+        "Na [hradě|6] bydlel [rytíř|1] se [psem|7].",
+        "Ke [studánce|3] chodí pít [srnky|1].",
+        "[Tomáši|5], podej mi [míč|4]!",
+        "Klíč ležel pod [kamenem|7] u [cesty|2].",
+        "Vrána přiletěla k [hnízdu|3] s [červíkem|7].",
+        "Ve [sklepě|6] mají [brambory|4] a [jablka|4]."
+      ]
+    }
+  ],
+  "zamky": {
+    "generator": "z-uloh",
+    "pokyn": "V jakém pádu je slovo?",
+    "moznosti": 3
+  }
+}

@@ -1,0 +1,422 @@
+{
+  "id": "berounsko",
+  "nazev": "Berounsko",
+  "sirka": 2680,
+  "vyska": 2599,
+  "start": "beroun",
+  "mesta": [
+    {
+      "id": "beroun",
+      "nazev": "Beroun",
+      "velikost": 3,
+      "x": 1474,
+      "y": 957
+    },
+    {
+      "id": "kraluv-dvur",
+      "nazev": "Králův Dvůr",
+      "velikost": 2,
+      "x": 1246,
+      "y": 1096
+    },
+    {
+      "id": "tetin",
+      "nazev": "Tetín",
+      "velikost": 1,
+      "x": 1657,
+      "y": 1096
+    },
+    {
+      "id": "hyskov",
+      "nazev": "Hýskov",
+      "velikost": 1,
+      "x": 1313,
+      "y": 704
+    },
+    {
+      "id": "vraz",
+      "nazev": "Vráž",
+      "velikost": 1,
+      "x": 1821,
+      "y": 761
+    },
+    {
+      "id": "lodenice",
+      "nazev": "Loděnice",
+      "velikost": 1,
+      "x": 1998,
+      "y": 662
+    },
+    {
+      "id": "chynava",
+      "nazev": "Chyňava",
+      "velikost": 1,
+      "x": 1486,
+      "y": 359
+    },
+    {
+      "id": "nizbor",
+      "nazev": "Nižbor",
+      "velikost": 1,
+      "x": 1029,
+      "y": 605
+    },
+    {
+      "id": "hudlice",
+      "nazev": "Hudlice",
+      "velikost": 1,
+      "x": 865,
+      "y": 983
+    },
+    {
+      "id": "svata",
+      "nazev": "Svatá",
+      "velikost": 1,
+      "x": 804,
+      "y": 1182
+    },
+    {
+      "id": "zdice",
+      "nazev": "Zdice",
+      "velikost": 2,
+      "x": 895,
+      "y": 1446
+    },
+    {
+      "id": "zebrak",
+      "nazev": "Žebrák",
+      "velikost": 1,
+      "x": 408,
+      "y": 1786
+    },
+    {
+      "id": "horovice",
+      "nazev": "Hořovice",
+      "velikost": 2,
+      "x": 445,
+      "y": 2165
+    },
+    {
+      "id": "srbsko",
+      "nazev": "Srbsko",
+      "velikost": 1,
+      "x": 1858,
+      "y": 1229
+    },
+    {
+      "id": "karlstejn",
+      "nazev": "Karlštejn",
+      "velikost": 1,
+      "x": 2162,
+      "y": 1248
+    },
+    {
+      "id": "morina",
+      "nazev": "Mořina",
+      "velikost": 1,
+      "x": 2309,
+      "y": 1059
+    },
+    {
+      "id": "liten",
+      "nazev": "Liteň",
+      "velikost": 1,
+      "x": 1943,
+      "y": 1531
+    },
+    {
+      "id": "revnice",
+      "nazev": "Řevnice",
+      "velikost": 1,
+      "x": 2473,
+      "y": 1427
+    },
+    {
+      "id": "koneprusy",
+      "nazev": "Koněprusy",
+      "velikost": 1,
+      "x": 1450,
+      "y": 1389
+    }
+  ],
+  "cesty": [
+    [
+      "beroun",
+      "kraluv-dvur"
+    ],
+    [
+      "beroun",
+      "tetin"
+    ],
+    [
+      "beroun",
+      "hyskov"
+    ],
+    [
+      "beroun",
+      "vraz"
+    ],
+    [
+      "hyskov",
+      "nizbor"
+    ],
+    [
+      "hyskov",
+      "chynava"
+    ],
+    [
+      "vraz",
+      "lodenice"
+    ],
+    [
+      "vraz",
+      "chynava"
+    ],
+    [
+      "tetin",
+      "srbsko"
+    ],
+    [
+      "tetin",
+      "koneprusy"
+    ],
+    [
+      "srbsko",
+      "karlstejn"
+    ],
+    [
+      "karlstejn",
+      "morina"
+    ],
+    [
+      "karlstejn",
+      "revnice"
+    ],
+    [
+      "karlstejn",
+      "liten"
+    ],
+    [
+      "lodenice",
+      "morina"
+    ],
+    [
+      "liten",
+      "koneprusy"
+    ],
+    [
+      "nizbor",
+      "hudlice"
+    ],
+    [
+      "hudlice",
+      "kraluv-dvur"
+    ],
+    [
+      "kraluv-dvur",
+      "svata"
+    ],
+    [
+      "kraluv-dvur",
+      "zdice"
+    ],
+    [
+      "svata",
+      "zdice"
+    ],
+    [
+      "zdice",
+      "koneprusy"
+    ],
+    [
+      "zdice",
+      "zebrak"
+    ],
+    [
+      "zebrak",
+      "horovice"
+    ],
+    [
+      "zdice",
+      "horovice"
+    ]
+  ],
+  "reky": [
+    {
+      "nazev": "Berounka",
+      "sirka": 16,
+      "body": [
+        [0, 189],
+        [426, 284],
+        [822, 501],
+        [1005, 595],
+        [1279, 709],
+        [1413, 879],
+        [1523, 974],
+        [1632, 1068],
+        [1797, 1182],
+        [2010, 1267],
+        [2193, 1295],
+        [2406, 1389],
+        [2680, 1512]
+      ]
+    },
+    {
+      "nazev": "Litavka",
+      "sirka": 9,
+      "body": [
+        [670, 2599],
+        [579, 2174],
+        [701, 1843],
+        [883, 1465],
+        [1096, 1229],
+        [1279, 1087],
+        [1450, 974]
+      ]
+    }
+  ],
+  "lesy": [
+    {
+      "nazev": "Křivoklátsko",
+      "body": [
+        [0, 0],
+        [853, 0],
+        [975, 236],
+        [792, 406],
+        [426, 501],
+        [183, 614],
+        [0, 709]
+      ]
+    },
+    {
+      "nazev": "Brdy",
+      "body": [
+        [792, 2599],
+        [731, 2221],
+        [1036, 1938],
+        [1523, 1796],
+        [2132, 1749],
+        [2680, 1654],
+        [2680, 2599]
+      ]
+    },
+    {
+      "nazev": "Český kras",
+      "body": [
+        [1706, 1134],
+        [1949, 1087],
+        [2254, 1134],
+        [2406, 1200],
+        [2345, 1323],
+        [2071, 1371],
+        [1766, 1418],
+        [1614, 1323]
+      ]
+    },
+    {
+      "body": [
+        [0, 1512],
+        [305, 1418],
+        [609, 1560],
+        [548, 1701],
+        [183, 1749],
+        [0, 1843]
+      ]
+    },
+    {
+      "body": [
+        [487, 851],
+        [731, 756],
+        [914, 851],
+        [731, 992],
+        [518, 1040]
+      ]
+    },
+    {
+      "body": [
+        [1645, 501],
+        [1888, 425],
+        [2193, 520],
+        [2254, 614],
+        [1949, 633],
+        [1706, 586]
+      ]
+    },
+    {
+      "body": [
+        [1949, 0],
+        [2680, 0],
+        [2680, 331],
+        [2254, 284]
+      ]
+    }
+  ],
+  "kopce": [
+    {
+      "nazev": "Velíz",
+      "r": 120,
+      "x": 244,
+      "y": 1285
+    },
+    {
+      "nazev": "Plešivec",
+      "r": 140,
+      "x": 670,
+      "y": 1957
+    },
+    {
+      "nazev": "Zlatý kůň",
+      "r": 90,
+      "x": 1584,
+      "y": 1342
+    },
+    {
+      "nazev": "Damil",
+      "r": 80,
+      "x": 1766,
+      "y": 1087
+    },
+    {
+      "r": 130,
+      "x": 548,
+      "y": 425
+    },
+    {
+      "r": 160,
+      "x": 1645,
+      "y": 2221
+    },
+    {
+      "r": 150,
+      "x": 2254,
+      "y": 1843
+    },
+    {
+      "r": 110,
+      "x": 1096,
+      "y": 189
+    },
+    {
+      "r": 100,
+      "x": 426,
+      "y": 756
+    }
+  ],
+  "popisky": [
+    {
+      "text": "Křivoklátsko",
+      "x": 365,
+      "y": 284
+    },
+    {
+      "text": "Brdy",
+      "x": 1827,
+      "y": 2268
+    },
+    {
+      "text": "Český kras",
+      "x": 2071,
+      "y": 1295
+    }
+  ]
+}
