@@ -757,6 +757,9 @@ addEventListener('keydown', (e) => {
   if (!pridat) { bublina('Brašna už má klíče na všechny zámky. 🏰'); return; }
   stav.kolo.klice += pridat;
   uloz(); obnovHud(); zvuk.klic();
+  // stojí-li postavička zrovna u hradu, překreslí se, aby ukázal tlačítko Odemknout (jinak by hlásil „chybí 10 klíčů“)
+  const hrad = $('#panel-obsah .hrad-navsteva');
+  if (hrad && !$('#panel-zavrit').hidden && !hrad.querySelector('.brana-otevrena')) { zavriPanel(); navstevaHradu(); }
   bublina(`🪄 Kouzlo HOPHOP! Do brašny přibylo ${pridat} ${pridat === 1 ? 'klíč' : pridat < 5 ? 'klíče' : 'klíčů'}.`, 0);
 });
 
