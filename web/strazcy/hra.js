@@ -36,9 +36,29 @@ async function nactiJson(cesta) {
   return r.json();
 }
 
+// odmeny.zdroj = adresa (náš server), která vrátí { dily: [{ nazev, ep, video }] }. Když odpoví, komnaty dostanou
+// díly z domácího serveru a přehrají se přímo ve hře; když ne, zůstanou odkazy na ČT z odmeny.komnaty.
+async function pripojPohadky() {
+  try {
+    const ctrl = new AbortController(); const t = setTimeout(() => ctrl.abort(), 4000);
+    const r = await fetch(odmeny.zdroj, { cache: 'no-cache', signal: ctrl.signal }); clearTimeout(t);
+    if (!r.ok) return;
+    const { dily } = await r.json();
+    if (!dily?.length) return;
+    const puvodni = odmeny.komnaty || [];
+    odmeny.komnaty = dily.map((d, i) => ({
+      nazev: d.nazev || puvodni[i]?.nazev || `Díl ${i + 1}`,
+      popisek: `${odmeny.serial || 'Díl'} ${d.ep ?? i + 1}`,
+      soubor: d.video,
+      odkaz: puvodni[i]?.odkaz,
+    }));
+  } catch { /* domácí server nedostupný → odkazy na ČT */ }
+}
+
 async function nactiData() {
   [mapyIndex, ukolyIndex, odmeny] = await Promise.all([nactiJson('data/mapy.json'), nactiJson('data/ukoly.json'),
     nactiJson('data/odmeny.json').catch(() => null)]); // komnaty hradu jsou nepovinné
+  if (odmeny?.zdroj) await pripojPohadky(); // díly z domácího serveru, nesmí zdržet start hry
   const idMapy = params.get('mapa') || stav.nastaveni.mapa;
   const m = mapyIndex.mapy.find((x) => x.id === idMapy) || mapyIndex.mapy[0];
   stav.nastaveni.mapa = m.id;
@@ -354,6 +374,7 @@ function komnaty(nova = 0, pak = null) {
 // Kino. ČT svůj přehrávač do cizích stránek vložit nedovolí (frame-ancestors), proto se díl pustí v samostatném okně ČT
 // a hra mezitím ukazuje „promítací sál“; jakmile dítě okno zavře, vrátí se samo do hradu.
 // "video": "<url>" = zdroj, který vkládání povoluje (např. YouTube embed) – ten se přehraje přímo ve hře v iframe.
+// "soubor": "<url videa>" (díly z domácího serveru přes odmeny.zdroj) – přehraje se přímo ve hře v <video>.
 function kino(kom) {
   const k = document.createElement('div');
   k.className = 'kino';
@@ -365,7 +386,14 @@ function kino(kom) {
     k.remove(); removeEventListener('keydown', esc);
   };
   const esc = (e) => { if (e.key === 'Escape') { zvuk.klik(); zavri(); } };
-  if (kom.video) {
+  if (kom.soubor) {
+    k.innerHTML = lista + `<div class="kino-platno"><video src="${kom.soubor}" controls autoplay playsinline preload="auto"></video></div>`;
+    const v = k.querySelector('video');
+    v.addEventListener('ended', () => { zvuk.fanfara(); setTimeout(() => zavri(), 1500); });
+    v.addEventListener('error', () => {
+      v.replaceWith(Object.assign(document.createElement('p'), { className: 'kino-stav', innerHTML: 'Pohádku se teď nepodařilo pustit. 😕 Zkus to za chvíli.' }));
+    });
+  } else if (kom.video) {
     k.innerHTML = lista + `<div class="kino-platno"><iframe src="${kom.video}" title="${kom.nazev}" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>`;
   } else {
     const pust = () => {

@@ -10,6 +10,12 @@
 //   ADMIN_TOKEN (heslo učitele pro mazání; bez něj je mazání vypnuté),
 //   SADY=../web/sady (adresář se sadami zadání, index.json + <id>.json), SADA_JS=../web/sada.js (sdílený parser),
 //   STATIC_DIR (jen pro lokální zkoušení: servíruje i soubory hry, např. STATIC_DIR=../web)
+//   POHADKY_SEZNAM (adresa seznamu pohádek z domácího serveru i s tajným kódem; bez ní jsou /api/pohadky vypnuté),
+//   POHADKY_SLOZKA="Bob a Bobek" (jediná složka, kterou hra smí vidět)
+//
+// Pohádky pro komnaty hradu ve hře Strážcy klýčú: GET /api/pohadky vrátí díly jedné složky (bez tajného kódu i bez
+// adresy Nextcloudu), GET /api/pohadky/video/<n> přepošle n-tý díl (s podporou Range, takže jde přetáčet).
+// Prohlížeč tak nikdy neuvidí tajný kód ani odkaz na celou sdílenou složku, jen díly Boba a Bobka.
 import http from 'node:http';
 import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 import { readFileSync, writeFileSync, renameSync, mkdirSync, existsSync } from 'node:fs';
@@ -26,6 +32,8 @@ const TOP_N = 5, KEEP_N = 100;              // ukazuje se 5, uchovává se 100 n
 const MIN_GAP_MS = 60;                       // odpověď dřív než 60 ms po předchozí se nezapočítá (ani oběma rukama to rychleji nejde)
 const MAX_RATE = 2.5;                        // víc správných odpovědí než 2,5 za sekundu se nezapočítá
 const MAX_ANSWERS_RATE = 6;                  // ještě víc odpovědí = zjevný podvrh, výsledek se odmítne
+const POHADKY_SEZNAM = process.env.POHADKY_SEZNAM || '';
+const POHADKY_SLOZKA = (process.env.POHADKY_SLOZKA || 'Bob a Bobek').trim().toLocaleLowerCase('cs');
 const TICKET_TTL_MS = 45 * 60 * 1000;        // lístek platí 45 min (hra jde pauznout)
 
 /* ---- sady zadání: stejné soubory a stejný parser jako hra (web/sada.js, web/sady/) ---- */
@@ -133,6 +141,44 @@ function limited(ip){
   return h.n > 300;
 }
 
+/* ---- pohádky z domácího serveru (komnaty hradu ve hře Strážcy klýčú) ---- */
+let pohadky = { t: 0, dily: null };
+const prirozene = new Intl.Collator('cs', { numeric: true, sensitivity: 'base' });
+async function dilyPohadek(){
+  if (pohadky.dily && Date.now() - pohadky.t < 5 * 60 * 1000) return pohadky.dily;
+  const r = await fetch(POHADKY_SEZNAM, { signal: AbortSignal.timeout(10000) });
+  if (!r.ok) throw new Error(`seznam pohádek: HTTP ${r.status}`);
+  const j = await r.json(), a = j.attributes || j;
+  const slozka = (a.folders || []).find(f => String(f.name).trim().toLocaleLowerCase('cs') === POHADKY_SLOZKA);
+  if (!slozka) throw new Error('složka s pohádkou v seznamu není');
+  const soubory = [...(slozka.files || []), ...(slozka.seasons || []).flatMap(s => s.files || [])].filter(f => f && f.path && !f.pending);
+  soubory.sort((x, y) => (x.ep != null && y.ep != null ? x.ep - y.ep : 0) || prirozene.compare(x.name || x.path, y.name || y.path));
+  const kodujCestu = (c) => String(c).split('/').map(encodeURIComponent).join('/');
+  const dily = soubory.map(f => ({
+    nazev: f.title || String(f.name || f.path).replace(/\.[^.]+$/, '').replace(/^[\d\s._-]+/, '').trim() || String(f.name),
+    ep: f.ep ?? null,
+    url: String(a.base).replace(/\/?$/, '/') + kodujCestu(f.path).replace(/^\//, ''),
+  }));
+  pohadky = { t: Date.now(), dily };
+  return dily;
+}
+async function videoPohadky(req, res, n){
+  const dil = (await dilyPohadek())[n];
+  if (!dil) return send(res, 404, { chyba: 'takový díl není' });
+  const hlavicky = {};
+  if (req.headers.range) hlavicky.Range = req.headers.range;
+  const ctrl = new AbortController();
+  req.on('close', () => ctrl.abort());
+  const r = await fetch(dil.url, { headers: hlavicky, signal: ctrl.signal });
+  if (!r.ok && r.status !== 206) return send(res, 502, { chyba: `video: HTTP ${r.status}` });
+  const ven = { 'Content-Type': r.headers.get('content-type') || 'video/mp4', 'Accept-Ranges': 'bytes', 'Cache-Control': 'private, max-age=3600' };
+  for (const h of ['content-length', 'content-range']) if (r.headers.get(h)) ven[h] = r.headers.get(h);
+  res.writeHead(r.status, ven);
+  if (req.method === 'HEAD' || !r.body) return res.end();
+  try { for await (const kus of r.body) if (!res.write(kus)) await new Promise(ok => res.once('drain', ok)); res.end(); }
+  catch { res.destroy(); }
+}
+
 /* ---- HTTP ---- */
 function send(res, code, obj){
   const body = JSON.stringify(obj);
@@ -158,8 +204,21 @@ const server = http.createServer(async (req, res) => {
   const ip = String(req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim();
   try {
     if (path === '/healthz') return send(res, 200, { ok: true });
+    // video se stahuje po kouscích (Range) → mimo omezovač požadavků
+    const video = /^\/api\/pohadky\/video\/(\d{1,4})$/.exec(path);
+    if (video && (req.method === 'GET' || req.method === 'HEAD')){
+      if (!POHADKY_SEZNAM) return send(res, 404, { chyba: 'pohádky nejsou nastavené' });
+      return await videoPohadky(req, res, Number(video[1]));
+    }
     if (limited(ip)) return send(res, 429, { chyba: 'moc požadavků, zkus to za chvíli' });
 
+    if (req.method === 'GET' && path === '/api/pohadky'){
+      if (!POHADKY_SEZNAM) return send(res, 404, { chyba: 'pohádky nejsou nastavené' });
+      try {
+        const dily = await dilyPohadek();
+        return send(res, 200, { dily: dily.map((d, i) => ({ nazev: d.nazev, ep: d.ep, video: `/api/pohadky/video/${i}` })) });
+      } catch (e) { console.error(e.message); return send(res, 502, { chyba: 'seznam pohádek teď nejde načíst' }); }
+    }
     // sada (id sady zadání) je nepovinná, bez ní platí první sada ze sady/index.json
     if (req.method === 'GET' && path === '/api/top'){
       const mode = url.searchParams.get('rezim'), sada = sadaOf(url.searchParams.get('sada'));
@@ -218,5 +277,5 @@ const server = http.createServer(async (req, res) => {
     send(res, 400, { chyba: e.message || 'chyba' });
   }
 });
-server.listen(PORT, () => console.log(`vrskola-api na :${PORT}, souboj ${CAS} s, sady: ${[...SADY.values()].map(s => `${s.id} (${s.items.length})`).join(', ')}, mazání ${ADMIN_TOKEN ? 'zapnuté' : 'vypnuté'}`));
+server.listen(PORT, () => console.log(`vrskola-api na :${PORT}, souboj ${CAS} s, sady: ${[...SADY.values()].map(s => `${s.id} (${s.items.length})`).join(', ')}, mazání ${ADMIN_TOKEN ? 'zapnuté' : 'vypnuté'}, pohádky ${POHADKY_SEZNAM ? 'zapnuté' : 'vypnuté'}`));
 for (const s of ['SIGTERM', 'SIGINT']) process.on(s, () => server.close(() => process.exit(0)));

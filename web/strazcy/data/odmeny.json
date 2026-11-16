@@ -1,6 +1,8 @@
 {
   "nazev": "Komnaty hradu",
-  "popis": "Za každými dveřmi je jeden díl pohádky Bob a Bobek – králíci z klobouku. Pustí se v okně České televize.",
+  "popis": "Za každými dveřmi je jeden díl pohádky Bob a Bobek – králíci z klobouku.",
+  "serial": "Bob a Bobek",
+  "zdroj": "/api/pohadky",
   "komnaty": [
     {
       "nazev": "Na ulici",

@@ -262,7 +262,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .kino-lista small { opacity: .75; }
 .tl.kino-zpet { background: #f5c518; color: #5d4037; box-shadow: 0 4px 0 #b8900f; font-size: 18px; padding: 8px 16px; }
 .kino-platno { flex: 1; width: 100%; max-width: 1200px; min-height: 0; display: flex; align-items: center; justify-content: center; }
-.kino-platno iframe { width: 100%; max-height: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: 14px; background: #000;
+.kino-platno iframe, .kino-platno video { width: 100%; max-height: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: 14px; background: #000;
   box-shadow: 0 0 0 6px #8d5524, 0 0 40px rgba(245, 197, 24, .35); }
 .kino-sal { position: relative; flex: 1; width: 100%; max-width: 900px; display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 18px; text-align: center; overflow: hidden; border-radius: 18px; border: 6px solid #8d5524; background: #120c1c; padding: 24px; }
