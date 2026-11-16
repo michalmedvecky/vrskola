@@ -71,6 +71,9 @@ spec:
             - name: padam-data
               mountPath: /usr/share/nginx/padam-data
               readOnly: true
+            - name: klavir
+              mountPath: /usr/share/nginx/klavir
+              readOnly: true
             - name: nginx-conf
               mountPath: /etc/nginx/conf.d
               readOnly: true
@@ -104,6 +107,9 @@ spec:
         - name: padam-data
           configMap:
             name: vrskola-padam-data
+        - name: klavir
+          configMap:
+            name: vrskola-klavir
         - name: nginx-conf
           configMap:
             name: vrskola-nginx
