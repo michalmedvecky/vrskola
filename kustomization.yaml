@@ -75,6 +75,28 @@ configMapGenerator:
   - name: vrskola-pisma      # přibalená písma sad (čínské znaky, podmnožina Noto Sans SC, OFL), hra je čte z /pisma/
     files:
       - web/pisma/cinstina.woff2
+  - name: vrskola-marketka   # samostatná hra pro tablet na /marketka/ (bez VR, bez serveru)
+    files:
+      - web/marketka/index.html
+      - web/marketka/styl.css
+      - web/marketka/hra.js
+      - web/marketka/mapa.js
+      - web/marketka/postava.js
+      - web/marketka/ulohy.js
+      - web/marketka/ulohy-ui.js
+      - web/marketka/nalepky.js
+      - web/marketka/zvuky.js
+      - web/marketka/manifest.json
+      - web/marketka/ikona.svg
+  - name: vrskola-marketka-data   # mapy a sady úkolů Marketky (vyměnitelná data), servíruje se z /marketka/data/
+    files:
+      - web/marketka/data/mapy.json
+      - web/marketka/data/mapa-berounsko.json
+      - web/marketka/data/ukoly.json
+      - web/marketka/data/ukoly-pravopis.json
+      - web/marketka/data/ukoly-pady.json
+      - web/marketka/data/ukoly-pocty.json
+      - web/marketka/data/ukoly-anglictina.json
   - name: vrskola-nginx
     files:
       - deploy/default.conf

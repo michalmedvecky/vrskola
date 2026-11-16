@@ -1,0 +1,70 @@
+{
+  "id": "anglictina",
+  "nazev": "Present simple: otázky a zápory",
+  "kouzlo": "Kouzlo z ostrovů",
+  "jazykRec": "en-GB",
+  "ulohy": [
+    {
+      "typ": "skladani",
+      "vaha": 3,
+      "pokyn": "Poskládej kouzelnou větu ze slov.",
+      "generator": "present-simple",
+      "druhy": ["otazka", "zapor"],
+      "pokyny": {
+        "otazka": "Zeptej se anglicky:",
+        "zapor": "Řekni anglicky, že to NENÍ pravda:"
+      },
+      "slovnik": {
+        "podmety": [
+          { "slovo": "I", "osoba": "1" },
+          { "slovo": "you", "osoba": "2" },
+          { "slovo": "we", "osoba": "1pl" },
+          { "slovo": "they", "osoba": "3pl" },
+          { "slovo": "he", "osoba": "3" },
+          { "slovo": "she", "osoba": "3" },
+          { "slovo": "Tom", "osoba": "3" },
+          { "slovo": "Anna", "osoba": "3" },
+          { "slovo": "my sister", "osoba": "3" },
+          { "slovo": "my parents", "osoba": "3pl" },
+          { "slovo": "the children", "osoba": "3pl" },
+          { "slovo": "our teacher", "osoba": "3" }
+        ],
+        "slovesa": [
+          { "zaklad": "play", "tvar3": "plays", "predmety": ["football", "the piano", "computer games", "tennis"] },
+          { "zaklad": "like", "tvar3": "likes", "predmety": ["pizza", "cats", "ice cream", "apples"] },
+          { "zaklad": "eat", "tvar3": "eats", "predmety": ["apples", "breakfast", "carrots"] },
+          { "zaklad": "drink", "tvar3": "drinks", "predmety": ["milk", "tea", "orange juice"] },
+          { "zaklad": "watch", "tvar3": "watches", "predmety": ["TV", "cartoons", "films"] },
+          { "zaklad": "read", "tvar3": "reads", "predmety": ["books", "comics"] },
+          { "zaklad": "go", "tvar3": "goes", "predmety": ["to school", "to the park", "swimming"] },
+          { "zaklad": "live", "tvar3": "lives", "predmety": ["in Beroun", "in a castle", "in a big house"] },
+          { "zaklad": "have", "tvar3": "has", "predmety": ["a dog", "a bike", "a garden"] },
+          { "zaklad": "speak", "tvar3": "speaks", "predmety": ["English", "Czech"] },
+          { "zaklad": "ride", "tvar3": "rides", "predmety": ["a bike", "a horse"] },
+          { "zaklad": "do", "tvar3": "does", "predmety": ["homework", "sport"] },
+          { "zaklad": "study", "tvar3": "studies", "predmety": ["maths", "English"] },
+          { "zaklad": "wash", "tvar3": "washes", "predmety": ["the car", "the dishes"] },
+          { "zaklad": "fly", "tvar3": "flies", "predmety": ["a kite"] }
+        ]
+      }
+    },
+    {
+      "typ": "skladani",
+      "vaha": 1,
+      "pokyn": "Poskládej kouzelnou větu ze slov.",
+      "polozky": [
+        { "pokyn": "Zeptej se anglicky:", "predloha": "The cat sleeps on the sofa.", "vysledek": "Does the cat sleep on the sofa?", "navic": ["Do", "sleeps"] },
+        { "pokyn": "Zeptej se anglicky:", "predloha": "You like chocolate.", "vysledek": "Do you like chocolate?", "navic": ["Does", "likes"] },
+        { "pokyn": "Řekni anglicky, že to NENÍ pravda:", "predloha": "My brother plays the guitar.", "vysledek": "My brother doesn't play the guitar.", "navic": ["don't", "plays"] },
+        { "pokyn": "Řekni anglicky, že to NENÍ pravda:", "predloha": "We go to school on Sunday.", "vysledek": "We don't go to school on Sunday.", "navic": ["doesn't", "goes"] },
+        { "pokyn": "Zeptej se anglicky:", "predloha": "The dog barks at night.", "vysledek": "Does the dog bark at night?", "navic": ["Do", "barks"] },
+        { "pokyn": "Řekni anglicky, že to NENÍ pravda:", "predloha": "It rains every day.", "vysledek": "It doesn't rain every day.", "navic": ["don't", "rains"] }
+      ]
+    }
+  ],
+  "zamky": {
+    "generator": "z-uloh",
+    "pokyn": "Která věta je kouzelná (správně)?",
+    "moznosti": 2
+  }
+}

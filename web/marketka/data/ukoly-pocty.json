@@ -1,0 +1,53 @@
+{
+  "id": "pocty",
+  "nazev": "Písemné odčítání a násobení, složené příklady po krocích",
+  "kouzlo": "Kouzelné počty",
+  "ulohy": [
+    {
+      "typ": "pisemne",
+      "vaha": 2,
+      "operace": "-",
+      "pokyn": "Vypočítej pod sebou. Piš od jednotek, tedy zprava.",
+      "a": [1000, 9999],
+      "b": [100, 8999],
+      "minPrechodu": 2
+    },
+    {
+      "typ": "pisemne",
+      "vaha": 2,
+      "operace": "×",
+      "pokyn": "Vynásob pod sebou. Piš od jednotek, tedy zprava.",
+      "a": [120, 2999],
+      "b": [3, 9]
+    },
+    {
+      "typ": "pisemne",
+      "vaha": 1,
+      "operace": "×",
+      "pokyn": "Vynásob pod sebou. Nejdřív jednotkami, pak desítkami (o místo doleva), nakonec sečti.",
+      "a": [21, 499],
+      "b": [12, 49]
+    },
+    {
+      "typ": "slozene",
+      "vaha": 2,
+      "pokyn": "Počítej po krocích. Co uděláš nejdřív?",
+      "sablony": [
+        { "vyraz": "a + b × c", "a": [100, 900], "b": [2, 9], "c": [3, 9] },
+        { "vyraz": "a − b × c", "a": [100, 900], "b": [2, 9], "c": [3, 9] },
+        { "vyraz": "(a − b) × c", "a": [40, 300], "b": [10, 200], "c": [2, 6] },
+        { "vyraz": "(a + b) × c", "a": [12, 150], "b": [10, 150], "c": [2, 5] },
+        { "vyraz": "a × b + c × d", "a": [3, 9], "b": [11, 40], "c": [2, 9], "d": [3, 9] },
+        { "vyraz": "a × b − c", "a": [3, 9], "b": [21, 120], "c": [10, 99] },
+        { "vyraz": "a − (b + c)", "a": [300, 999], "b": [50, 250], "c": [20, 199] },
+        { "vyraz": "(a + b) : c", "a": [20, 200], "b": [10, 200], "c": [2, 9] }
+      ],
+      "max": 9999
+    }
+  ],
+  "zamky": {
+    "generator": "pocty-zpameti",
+    "pokyn": "Kolik to je?",
+    "moznosti": 3
+  }
+}

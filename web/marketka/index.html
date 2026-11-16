@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#5fb3c9">
+<title>Marketka a zamčený hrad</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="ikona.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="ikona.svg">
+<link rel="stylesheet" href="styl.css">
+</head>
+<body>
+<canvas id="mapa"></canvas>
+
+<div id="hud" hidden>
+  <button id="brasna" class="hud-tl" aria-label="Brašnička">
+    <span class="brasna-ikona">👜</span><span id="klice" class="klice"></span>
+  </button>
+  <div id="hrad-stav" class="hud-tl pasivni"></div>
+  <div class="hud-vpravo">
+    <button id="tl-album" class="hud-tl" aria-label="Sbírka nálepek">📒 <span id="pocet-nalepek">0</span></button>
+    <button id="tl-nastaveni" class="hud-tl kulate" aria-label="Pro rodiče">⚙️</button>
+  </div>
+</div>
+<div id="bublina" hidden></div>
+
+<div id="panel" class="panel-obal" hidden>
+  <div class="panel">
+    <button id="panel-zavrit" class="zavrit" aria-label="Zavřít">✕</button>
+    <div id="panel-obsah"></div>
+  </div>
+</div>
+
+<div id="nacitani" class="nacitani">Chystám mapu…</div>
+<div id="konfety"></div>
+
+<script type="module" src="hra.js"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "Marketka a zamčený hrad",
+  "short_name": "Marketka",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#5fb3c9",
+  "theme_color": "#5fb3c9",
+  "icons": [{ "src": "ikona.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

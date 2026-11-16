@@ -1,0 +1,65 @@
+{
+  "id": "berounsko",
+  "nazev": "Berounsko",
+  "pxNaKm": 85,
+  "okraj": { "sever": 50.065, "jih": 49.79, "zapad": 13.83, "vychod": 14.27 },
+  "start": "beroun",
+  "mesta": [
+    { "id": "beroun", "nazev": "Beroun", "gps": [49.9638, 14.0720], "velikost": 3 },
+    { "id": "kraluv-dvur", "nazev": "Králův Dvůr", "gps": [49.9490, 14.0345], "velikost": 2 },
+    { "id": "tetin", "nazev": "Tetín", "gps": [49.9490, 14.1020], "velikost": 1 },
+    { "id": "hyskov", "nazev": "Hýskov", "gps": [49.9905, 14.0455], "velikost": 1 },
+    { "id": "vraz", "nazev": "Vráž", "gps": [49.9845, 14.1290], "velikost": 1 },
+    { "id": "lodenice", "nazev": "Loděnice", "gps": [49.9950, 14.1580], "velikost": 1 },
+    { "id": "chynava", "nazev": "Chyňava", "gps": [50.0270, 14.0740], "velikost": 1 },
+    { "id": "nizbor", "nazev": "Nižbor", "gps": [50.0010, 13.9990], "velikost": 1 },
+    { "id": "hudlice", "nazev": "Hudlice", "gps": [49.9610, 13.9720], "velikost": 1 },
+    { "id": "svata", "nazev": "Svatá", "gps": [49.9400, 13.9620], "velikost": 1 },
+    { "id": "zdice", "nazev": "Zdice", "gps": [49.9120, 13.9770], "velikost": 2 },
+    { "id": "zebrak", "nazev": "Žebrák", "gps": [49.8760, 13.8970], "velikost": 1 },
+    { "id": "horovice", "nazev": "Hořovice", "gps": [49.8360, 13.9030], "velikost": 2 },
+    { "id": "srbsko", "nazev": "Srbsko", "gps": [49.9350, 14.1350], "velikost": 1 },
+    { "id": "karlstejn", "nazev": "Karlštejn", "gps": [49.9330, 14.1850], "velikost": 1 },
+    { "id": "morina", "nazev": "Mořina", "gps": [49.9530, 14.2090], "velikost": 1 },
+    { "id": "liten", "nazev": "Liteň", "gps": [49.9030, 14.1490], "velikost": 1 },
+    { "id": "revnice", "nazev": "Řevnice", "gps": [49.9140, 14.2360], "velikost": 1 },
+    { "id": "koneprusy", "nazev": "Koněprusy", "gps": [49.9180, 14.0680], "velikost": 1 }
+  ],
+  "cesty": [
+    ["beroun", "kraluv-dvur"], ["beroun", "tetin"], ["beroun", "hyskov"], ["beroun", "vraz"],
+    ["hyskov", "nizbor"], ["hyskov", "chynava"], ["vraz", "lodenice"], ["vraz", "chynava"],
+    ["tetin", "srbsko"], ["tetin", "koneprusy"], ["srbsko", "karlstejn"], ["karlstejn", "morina"],
+    ["karlstejn", "revnice"], ["karlstejn", "liten"], ["lodenice", "morina"], ["liten", "koneprusy"],
+    ["nizbor", "hudlice"], ["hudlice", "kraluv-dvur"], ["kraluv-dvur", "svata"], ["kraluv-dvur", "zdice"],
+    ["svata", "zdice"], ["zdice", "koneprusy"], ["zdice", "zebrak"], ["zebrak", "horovice"], ["zdice", "horovice"]
+  ],
+  "reky": [
+    { "nazev": "Berounka", "sirka": 16, "gps": [[50.045, 13.83], [50.035, 13.90], [50.012, 13.965], [50.002, 13.995], [49.990, 14.040], [49.972, 14.062], [49.962, 14.080], [49.952, 14.098], [49.940, 14.125], [49.931, 14.160], [49.928, 14.190], [49.918, 14.225], [49.905, 14.27]] },
+    { "nazev": "Litavka", "sirka": 9, "gps": [[49.79, 13.94], [49.835, 13.925], [49.870, 13.945], [49.910, 13.975], [49.935, 14.010], [49.950, 14.040], [49.962, 14.068]] }
+  ],
+  "lesy": [
+    { "nazev": "Křivoklátsko", "gps": [[50.065, 13.83], [50.065, 13.97], [50.040, 13.99], [50.022, 13.96], [50.012, 13.90], [50.000, 13.86], [49.990, 13.83]] },
+    { "nazev": "Brdy", "gps": [[49.79, 13.96], [49.83, 13.95], [49.86, 14.00], [49.875, 14.08], [49.88, 14.18], [49.89, 14.27], [49.79, 14.27]] },
+    { "nazev": "Český kras", "gps": [[49.945, 14.110], [49.950, 14.150], [49.945, 14.200], [49.938, 14.225], [49.925, 14.215], [49.920, 14.170], [49.915, 14.120], [49.925, 14.095]] },
+    { "gps": [[49.905, 13.83], [49.915, 13.88], [49.900, 13.93], [49.885, 13.92], [49.880, 13.86], [49.870, 13.83]] },
+    { "gps": [[49.975, 13.91], [49.985, 13.95], [49.975, 13.98], [49.960, 13.950], [49.955, 13.915]] },
+    { "gps": [[50.012, 14.10], [50.020, 14.14], [50.010, 14.19], [50.000, 14.20], [49.998, 14.150], [50.003, 14.11]] },
+    { "gps": [[50.065, 14.15], [50.065, 14.27], [50.030, 14.27], [50.035, 14.20]] }
+  ],
+  "kopce": [
+    { "nazev": "Velíz", "gps": [49.929, 13.870], "r": 120 },
+    { "nazev": "Plešivec", "gps": [49.858, 13.940], "r": 140 },
+    { "nazev": "Zlatý kůň", "gps": [49.923, 14.090], "r": 90 },
+    { "nazev": "Damil", "gps": [49.950, 14.120], "r": 80 },
+    { "gps": [50.020, 13.920], "r": 130 },
+    { "gps": [49.830, 14.100], "r": 160 },
+    { "gps": [49.870, 14.200], "r": 150 },
+    { "gps": [50.045, 14.010], "r": 110 },
+    { "gps": [49.985, 13.900], "r": 100 }
+  ],
+  "popisky": [
+    { "text": "Křivoklátsko", "gps": [50.035, 13.89] },
+    { "text": "Brdy", "gps": [49.825, 14.13] },
+    { "text": "Český kras", "gps": [49.928, 14.17] }
+  ]
+}

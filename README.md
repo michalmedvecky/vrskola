@@ -41,6 +41,13 @@ pošle na mini server v `server/` (viz níže). V tabulce má každé jméno jen
 Hra trvá 5 minut (`?cas=30` zkrátí), tabulka 3 nejlepších se ukládá v prohlížeči headsetu. Pauza: B/Y (Esc na počítači).
 Na počítači jde hrát myší (levé/pravé tlačítko, šipky otáčí).
 
+## Marketka a zamčený hrad (tablet, `/marketka/`)
+
+Samostatná hra pro tablet bez VR a bez serveru ve `web/marketka/`: postavička chodí po mapě Berounska, v každé
+vesnici odemyká truhličku a za vyřešenou úlohu dostane klíč; klíči odemyká hrad a sbírá nálepky. Mapa i úkoly
+jsou vyměnitelná data (`web/marketka/data/`), podrobnosti v [`web/marketka/README.md`](web/marketka/README.md).
+V k3s jsou to ConfigMapy `vrskola-marketka` a `vrskola-marketka-data`, nginx je servíruje z `/marketka/`.
+
 ## Soubory
 
 | Cesta | Co to je |
@@ -51,6 +58,7 @@ Na počítači jde hrát myší (levé/pravé tlačítko, šipky otáčí).
 | `web/sada.js` | parser sad, sdílený hrou i serverem |
 | `web/three.module.min.js` | three.js 0.160 |
 | `server/server.mjs` | mini server pro Souboj třídy (Node.js 22, bez závislostí) |
+| `web/marketka/` | hra Marketka pro tablet (vlastní README) |
 | `kustomization.yaml`, `deploy/` | nasazení do k3s |
 
 Lokálně: `cd web && python3 -m http.server 8000` → http://localhost:8000/ (WebXR v headsetu potřebuje https).
