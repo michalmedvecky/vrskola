@@ -23,7 +23,13 @@
     { "id": "morina", "nazev": "Mořina", "gps": [49.9530, 14.2090], "velikost": 1 },
     { "id": "liten", "nazev": "Liteň", "gps": [49.9030, 14.1490], "velikost": 1 },
     { "id": "revnice", "nazev": "Řevnice", "gps": [49.9140, 14.2360], "velikost": 1 },
-    { "id": "koneprusy", "nazev": "Koněprusy", "gps": [49.9180, 14.0680], "velikost": 1 }
+    { "id": "koneprusy", "nazev": "Koněprusy", "gps": [49.9180, 14.0680], "velikost": 1 },
+    { "id": "trubin", "nazev": "Trubín", "gps": [49.9425, 13.996], "velikost": 1 },
+    { "id": "tman", "nazev": "Tmaň", "gps": [49.907, 14.036], "velikost": 1 },
+    { "id": "menany", "nazev": "Měňany", "gps": [49.91, 14.11], "velikost": 1 },
+    { "id": "bubovice", "nazev": "Bubovice", "gps": [49.969, 14.165], "velikost": 1 },
+    { "id": "vysoky-ujezd", "nazev": "Vysoký Újezd", "gps": [49.994, 14.205], "velikost": 1 },
+    { "id": "svaty-jan", "nazev": "Svatý Jan pod Skalou", "gps": [49.969, 14.133], "velikost": 1 }
   ],
   "cesty": [
     ["beroun", "kraluv-dvur"], ["beroun", "tetin"], ["beroun", "hyskov"], ["beroun", "vraz"],
@@ -31,7 +37,8 @@
     ["tetin", "srbsko"], ["tetin", "koneprusy"], ["srbsko", "karlstejn"], ["karlstejn", "morina"],
     ["karlstejn", "revnice"], ["karlstejn", "liten"], ["lodenice", "morina"], ["liten", "koneprusy"],
     ["nizbor", "hudlice"], ["hudlice", "kraluv-dvur"], ["kraluv-dvur", "svata"], ["kraluv-dvur", "zdice"],
-    ["svata", "zdice"], ["zdice", "koneprusy"], ["zdice", "zebrak"], ["zebrak", "horovice"], ["zdice", "horovice"]
+    ["svata", "zdice"], ["zdice", "koneprusy"], ["zdice", "zebrak"], ["zebrak", "horovice"], ["zdice", "horovice"],
+    ["kraluv-dvur", "trubin"], ["trubin", "svata"], ["trubin", "hudlice"], ["zdice", "tman"], ["tman", "koneprusy"], ["koneprusy", "menany"], ["menany", "liten"], ["menany", "srbsko"], ["tetin", "svaty-jan"], ["svaty-jan", "vraz"], ["svaty-jan", "bubovice"], ["bubovice", "srbsko"], ["bubovice", "lodenice"], ["lodenice", "vysoky-ujezd"], ["vysoky-ujezd", "morina"]
   ],
   "reky": [
     { "nazev": "Berounka", "sirka": 16, "gps": [[50.045, 13.83], [50.035, 13.90], [50.012, 13.965], [50.002, 13.995], [49.990, 14.040], [49.972, 14.062], [49.962, 14.080], [49.952, 14.098], [49.940, 14.125], [49.931, 14.160], [49.928, 14.190], [49.918, 14.225], [49.905, 14.27]] },

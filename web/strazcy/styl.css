@@ -205,3 +205,28 @@ button { font: inherit; color: inherit; cursor: pointer; }
   .truhla-svg { width: 120px; }
   .klavesa { height: 54px; }
 }
+
+.pulklic { position: relative; opacity: .55; letter-spacing: 0; margin-left: 4px; }
+.pulklic small { position: absolute; right: -10px; bottom: -6px; font-size: 11px; font-weight: 900; background: var(--zlata); color: #4a3000; border-radius: 8px; padding: 0 4px; opacity: 1; }
+.vyletujici-klic.kousek { clip-path: inset(0 50% 0 0); }
+
+/* ---------- úvodní obrazovka ---------- */
+.splash { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; overflow: hidden; background: linear-gradient(#5fb3c9, #9fd8e8 55%, #b7d98b 55.2%, #8bc34a); transition: opacity .5s, transform .5s; }
+.splash[hidden] { display: none; }
+.splash.pryc { opacity: 0; transform: scale(1.15); }
+.splash-nebe { position: absolute; inset: 0; background: radial-gradient(circle at 20% 25%, rgba(255,255,255,.8) 0 40px, transparent 41px), radial-gradient(circle at 26% 22%, rgba(255,255,255,.8) 0 55px, transparent 56px), radial-gradient(circle at 78% 18%, rgba(255,255,255,.75) 0 45px, transparent 46px), radial-gradient(circle at 84% 21%, rgba(255,255,255,.75) 0 35px, transparent 36px); animation: mraky 30s linear infinite alternate; }
+@keyframes mraky { to { transform: translateX(80px); } }
+.splash-obsah { position: relative; text-align: center; padding: 20px; }
+.splash-nazev { margin: 6px 0 0; font-size: clamp(48px, 9vw, 104px); font-weight: 900; color: #fff8e1; letter-spacing: 1px; text-shadow: 0 5px 0 #b8900f, 0 8px 0 #7b2d26, 0 14px 24px rgba(0,0,0,.35); transform: rotate(-3deg); animation: nazev 2.5s ease-in-out infinite; }
+@keyframes nazev { 50% { transform: rotate(-1deg) scale(1.03); } }
+.splash-hrad { width: min(340px, 60vw); display: block; margin: 10px auto 0; filter: drop-shadow(0 10px 0 rgba(0,0,0,.15)); }
+.splash-klice span { display: inline-block; font-size: 46px; animation: klicky 1.6s ease-in-out infinite; }
+.splash-klice span:nth-child(2) { animation-delay: .25s; font-size: 58px; }
+.splash-klice span:nth-child(3) { animation-delay: .5s; }
+@keyframes klicky { 50% { transform: translateY(-14px) rotate(20deg); } }
+.splash-stat { min-height: 28px; margin-top: 10px; font-size: 19px; font-weight: 700; color: #3b5323; }
+.splash-hrat { font-size: 30px !important; padding: 18px 54px !important; animation: poskakuj 1.4s ease-in-out infinite; }
+.cas-hradu { font-size: 22px; }
+.nalepka { position: relative; }
+.nalepka small.cas { font-size: 11px; font-weight: 700; opacity: .7; margin-top: 0; }
+.nalepka .pocet { position: absolute; right: -4px; top: -4px; background: #e74c3c; color: #fff; border-radius: 12px; font-size: 13px; padding: 1px 7px; }

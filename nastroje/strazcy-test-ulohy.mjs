@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-// Kontrola balíčků úloh hry Marketka: každé téma vygeneruje spoustu úloh a zámků a ověří, že dávají smysl.
-//   node nastroje/marketka-test-ulohy.mjs
+// Kontrola balíčků úloh hry Strážcy klýčú: každé téma vygeneruje spoustu úloh a zámků a ověří, že dávají smysl.
+//   node nastroje/strazcy-test-ulohy.mjs
 import { readFileSync } from 'node:fs';
-import { vytvorUlohu, vytvorZamek, zkontrolujTema } from '../web/marketka/ulohy.js';
+import { vytvorUlohu, vytvorZamek, zkontrolujTema } from '../web/strazcy/ulohy.js';
 
-const dir = new URL('../web/marketka/data/', import.meta.url);
+const dir = new URL('../web/strazcy/data/', import.meta.url);
 const index = JSON.parse(readFileSync(new URL('ukoly.json', dir)));
 let chyb = 0;
 const chyba = (m) => { chyb++; console.error('CHYBA', m); };

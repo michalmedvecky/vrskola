@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// Převede mapu zadanou GPS souřadnicemi na mapu pro hru Marketka (souřadnice v pixelech).
-//   node nastroje/marketka-mapa.mjs nastroje/marketka-berounsko.gps.json > web/marketka/data/mapa-berounsko.json
+// Převede mapu zadanou GPS souřadnicemi na mapu pro hru Strážcy klýčú (souřadnice v pixelech).
+//   node nastroje/strazcy-mapa.mjs nastroje/strazcy-berounsko.gps.json > web/strazcy/data/mapa-berounsko.json
 // Ve zdroji: "gps": [šířka, délka] u bodů, "gps": [[š, d], ...] u čar a ploch, "okraj" = výřez mapy, "pxNaKm" = měřítko.
 import { readFileSync } from 'node:fs';
 
