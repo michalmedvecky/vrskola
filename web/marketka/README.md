@@ -1,15 +1,15 @@
 # Marketka a zamčený hrad
 
 Samostatná hra pro tablet (bez VR, bez serveru) na `/marketka/`. Dítě si nastrojí postavičku, na hradě vidí
-zámky (výchozí 10) a vydá se po mapě kraje hledat klíče. V každé vesnici je truhlička: nejdřív krátká hádanka
-na zámku (2–3 možnosti), pak úloha. Za vyřešenou úlohu klíč do brašničky, za nevyřešenou se truhla zamkne
-na 5 minut a postavička odejde do sousední vesnice. Klíče se kdykoli vkládají do zámků na hradě; když povolí
+zámky (výchozí 10) a vydá se po mapě kraje hledat klíče. V každé vesnici je truhlička (Berounsko má 24 vesnic): nejdřív krátká hádanka
+na zámku (2–3 možnosti), pak úloha. Za vyřešenou úlohu kousek klíče (výchozí jsou dvě truhly na jeden klíč, tedy 20 truhel na 10 zámků), za nevyřešenou se truhla zamkne
+na 1 minutu (nastavitelné) a postavička odejde do sousední vesnice. Klíče se kdykoli vkládají do zámků na hradě; když povolí
 všechny, dítě dostane nálepku do sbírky (36 druhů, pak zlaté verze) a hrad se zamkne znovu na další kolo.
 Za počet odemčených hradů roste hodnost (Poutník → … → Legenda).
 
 Postup se ukládá jen v prohlížeči tabletu (`localStorage`, klíč `marketka-v1`).
 
-**Pro rodiče:** ozubené kolečko vpravo nahoře, podržet 2 s. Počet zámků, pauza po chybě, počet srdíček
+**Pro rodiče:** ozubené kolečko vpravo nahoře, podržet 2 s. Počet zámků, truhliček na jeden klíč, pauza po chybě, počet srdíček
 v úloze (kolik chyb se odpustí), která témata se procvičují, zvuk, statistika po tématech a seznam posledních
 chyb (co přesně dítě spletlo), úprava postavičky, smazání postupu.
 

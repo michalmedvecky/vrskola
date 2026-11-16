@@ -205,3 +205,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   .truhla-svg { width: 120px; }
   .klavesa { height: 54px; }
 }
+
+.pulklic { position: relative; opacity: .55; letter-spacing: 0; margin-left: 4px; }
+.pulklic small { position: absolute; right: -10px; bottom: -6px; font-size: 11px; font-weight: 900; background: var(--zlata); color: #4a3000; border-radius: 8px; padding: 0 4px; opacity: 1; }
+.vyletujici-klic.kousek { clip-path: inset(0 50% 0 0); }

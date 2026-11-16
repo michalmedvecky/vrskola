@@ -12,14 +12,18 @@ const $ = (s) => document.querySelector(s);
 const params = new URLSearchParams(location.search);
 
 // ---------- stav ----------
-const VYCHOZI_NASTAVENI = { zamku: 10, pauza: 5, zivoty: 2, temata: {}, mapa: null, balik: null, zvuk: true };
+const VYCHOZI_NASTAVENI = { zamku: 10, truhelNaKlic: 2, pauza: 1, zivoty: 2, temata: {}, mapa: null, balik: null, zvuk: true };
 let stav = nactiStav();
 function nactiStav() {
   try {
     const s = JSON.parse(localStorage.getItem(KLIC));
-    if (s && s.verze === 1) return { ...s, nastaveni: { ...VYCHOZI_NASTAVENI, ...s.nastaveni } };
+    if (s && s.verze === 1) { // v1: klíč za každou truhlu, pauza 5 min → nové výchozí hodnoty
+      s.verze = 2;
+      s.nastaveni = { ...s.nastaveni, truhelNaKlic: 2, pauza: s.nastaveni?.pauza === 5 ? 1 : s.nastaveni?.pauza };
+    }
+    if (s && s.verze === 2) return { ...s, nastaveni: { ...VYCHOZI_NASTAVENI, ...s.nastaveni } };
   } catch { /* prázdné nebo zakázané úložiště */ }
-  return { verze: 1, postava: null, nastaveni: { ...VYCHOZI_NASTAVENI }, kolo: null, pozice: null, nalepky: [], hradu: 0, stat: {}, chyby: [] };
+  return { verze: 2, postava: null, nastaveni: { ...VYCHOZI_NASTAVENI }, kolo: null, pozice: null, nalepky: [], hradu: 0, stat: {}, chyby: [] };
 }
 function uloz() { try { localStorage.setItem(KLIC, JSON.stringify(stav)); } catch { /* nevadí */ } }
 
@@ -48,7 +52,8 @@ async function nactiData() {
 const startId = () => dataMapy.start;
 const mestoNazev = (id) => dataMapy.mesta.find((m) => m.id === id)?.nazev || id;
 const mestaSTruhlou = () => dataMapy.mesta.filter((m) => m.id !== startId());
-const maxZamku = () => mestaSTruhlou().length;
+const naKlic = () => Math.max(1, stav.nastaveni.truhelNaKlic || 1);
+const maxZamku = () => Math.floor(mestaSTruhlou().length / naKlic());
 const zapnutaTemata = () => {
   const z = temata.filter((t) => stav.nastaveni.temata[t.id]);
   return z.length ? z : temata;
@@ -57,7 +62,7 @@ const zapnutaTemata = () => {
 function noveKolo() {
   const cislo = (stav.kolo?.cislo || 0) + 1;
   const zamku = Math.min(stav.nastaveni.zamku, maxZamku());
-  stav.kolo = { cislo, zamku, otevreno: 0, klice: 0, hotova: [], zamceno: {}, temata: {} };
+  stav.kolo = { cislo, zamku, otevreno: 0, klice: 0, kousky: 0, hotova: [], zamceno: {}, temata: {} };
   rozdelTemata();
   uloz();
 }
@@ -85,7 +90,8 @@ const zbyvaKlicu = () => stav.kolo.zamku - stav.kolo.otevreno - stav.kolo.klice;
 function obnovHud() {
   $('#hud').hidden = false;
   const k = stav.kolo;
-  $('#klice').innerHTML = k.klice ? '🗝️'.repeat(Math.min(k.klice, 6)) + (k.klice > 6 ? `<b>×${k.klice}</b>` : '') : '<i>prázdná</i>';
+  const pul = k.kousky ? `<span class="pulklic" title="kousek klíče">🗝️<small>${k.kousky}/${naKlic()}</small></span>` : '';
+  $('#klice').innerHTML = (k.klice ? '🗝️'.repeat(Math.min(k.klice, 6)) + (k.klice > 6 ? `<b>×${k.klice}</b>` : '') : '') + pul || '<i>prázdná</i>';
   $('#hrad-stav').innerHTML = `🏰 <span class="zamky">${'🔓'.repeat(k.otevreno)}${'🔒'.repeat(Math.max(0, k.zamku - k.otevreno))}</span>`;
   $('#pocet-nalepek').textContent = stav.nalepky.length;
   nastavZtlumeni(!stav.nastaveni.zvuk);
@@ -102,6 +108,7 @@ function napovez() {
   const k = stav.kolo, hrad = mestoNazev(startId());
   if (k.klice > 0 && k.klice >= k.zamku - k.otevreno) bublina(`Máš všechny klíče! Běž na hrad do města <b>${hrad}</b>. 🏰`, 0);
   else if (k.klice > 0) bublina(`V brašně máš ${k.klice === 1 ? 'klíč' : 'klíče'}. Můžeš hledat dál, nebo je zanést na hrad (<b>${hrad}</b>).`);
+  else if (k.kousky) bublina(`Máš kousek klíče. Otevři ještě ${naKlic() - k.kousky === 1 ? 'jednu truhlu' : `${naKlic() - k.kousky} truhly`} a klíč bude celý! ✨`);
   else bublina('Klepni na vesnici se zlatou truhličkou a vyraz tam! ✨');
 }
 
@@ -215,7 +222,7 @@ function uvodHradu(dalsi) {
   const obal = div('uvod');
   obal.innerHTML = svgHradu(k.zamku, k.otevreno) +
     `<div class="pribeh"><p><b>Ahoj${jmeno}!</b> Na hradě je schovaný poklad, ale někdo ho zamkl na <b>${k.zamku} zámků</b>.</p>
-     <p>Klíče jsou ukryté v truhličkách po celém kraji. Truhličky jsou kouzelné: otevřou se jen tomu, kdo vyluští jejich hádanku.</p>
+     <p>Klíče jsou ukryté v truhličkách po celém kraji${naKlic() > 1 ? `. Každý klíč je rozlomený na ${naKlic() === 2 ? 'dvě půlky' : `${naKlic()} kousky`} a každý kousek je v jiné truhle` : ''}. Truhličky jsou kouzelné: otevřou se jen tomu, kdo vyluští jejich hádanku.</p>
      <p>Najdi klíče, přines je na hrad a odemkni ho!</p></div>`;
   obal.append(tlacitko('Vyrazit na cestu! 🗺️', () => { zavriPanel(); dalsi(); }, 'hlavni'));
   otevriPanel(obal, { zavritelny: false, trida: 'siroky' });
@@ -351,15 +358,20 @@ async function navstevaMesta(id) {
   plocha.innerHTML = '';
   scena.classList.remove('mala');
   if (vysledek.ok) {
-    stav.kolo.klice++;
-    stav.kolo.hotova.push(id);
+    const k = stav.kolo;
+    k.kousky = (k.kousky || 0) + 1;
+    const cely = k.kousky >= naKlic();
+    if (cely) { k.kousky = 0; k.klice++; }
+    k.hotova.push(id);
     uloz();
-    scena.innerHTML = truhlaSvg('otevrena') + '<div class="vyletujici-klic">🗝️</div>';
+    scena.innerHTML = truhlaSvg('otevrena') + `<div class="vyletujici-klic ${cely || naKlic() === 1 ? '' : 'kousek'}">🗝️</div>`;
     zvuk.klic();
     mapa.postava.radost = 1; setTimeout(() => { mapa.postava.radost = 0; }, 2000);
-    plocha.append(div('pribeh', '<b>Hurá! Truhla ti dala klíč.</b> Schovej ho do brašničky.'));
+    plocha.append(div('pribeh', naKlic() === 1 ? '<b>Hurá! Truhla ti dala klíč.</b> Schovej ho do brašničky.'
+      : cely ? '<b>Hurá! Poslední kousek – klíč je celý!</b> Schovej ho do brašničky.'
+      : `<b>Hurá! Truhla ti dala kousek klíče.</b> Najdi ještě ${naKlic() - k.kousky === 1 ? 'jednu truhlu' : `${naKlic() - k.kousky} truhly`} a klíč bude celý.`));
     obnovHud();
-    plocha.append(tlacitko('Do brašničky! 👜', () => { zavriPanel(); napovez(); }, 'hlavni'));
+    plocha.append(tlacitko(cely || naKlic() === 1 ? 'Do brašničky! 👜' : 'Hledat další truhlu ➜', () => { zavriPanel(); napovez(); }, 'hlavni'));
   } else {
     stav.kolo.zamceno[id] = Date.now() + stav.nastaveni.pauza * 60000;
     uloz();
@@ -449,9 +461,17 @@ function nastaveni() {
     i.oninput = () => { out.textContent = format(+i.value); zmena(+i.value); uloz(); };
     w.append(i, out); return w;
   };
-  radek('Počet zámků na hradě', posuvnik(1, maxZamku(), Math.min(n.zamku, maxZamku()), (v) => String(v), (v) => {
+  const zamkyRadek = radek('Počet zámků na hradě', posuvnik(1, maxZamku(), Math.min(n.zamku, maxZamku()), (v) => String(v), (v) => {
     n.zamku = v;
     stav.kolo.zamku = Math.max(v, stav.kolo.otevreno); // už odemčené zámky zůstávají
+    obnovHud();
+  }));
+  radek('Truhliček na jeden klíč', posuvnik(1, 3, naKlic(), (v) => String(v), (v) => {
+    n.truhelNaKlic = v;
+    const max = maxZamku();
+    zamkyRadek.querySelector('input').max = max;
+    if (n.zamku > max) { n.zamku = max; zamkyRadek.querySelector('input').value = max; zamkyRadek.querySelector('.hodnota').textContent = max; }
+    stav.kolo.zamku = Math.max(Math.min(stav.kolo.zamku, max), stav.kolo.otevreno);
     obnovHud();
   }));
   radek('Pauza truhly po chybě', posuvnik(1, 15, n.pauza, (v) => `${v} min`, (v) => { n.pauza = v; }));

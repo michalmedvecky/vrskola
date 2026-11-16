@@ -137,6 +137,48 @@
       "velikost": 1,
       "x": 1450,
       "y": 1389
+    },
+    {
+      "id": "trubin",
+      "nazev": "Trubín",
+      "velikost": 1,
+      "x": 1011,
+      "y": 1158
+    },
+    {
+      "id": "tman",
+      "nazev": "Tmaň",
+      "velikost": 1,
+      "x": 1255,
+      "y": 1493
+    },
+    {
+      "id": "menany",
+      "nazev": "Měňany",
+      "velikost": 1,
+      "x": 1706,
+      "y": 1465
+    },
+    {
+      "id": "bubovice",
+      "nazev": "Bubovice",
+      "velikost": 1,
+      "x": 2041,
+      "y": 907
+    },
+    {
+      "id": "vysoky-ujezd",
+      "nazev": "Vysoký Újezd",
+      "velikost": 1,
+      "x": 2284,
+      "y": 671
+    },
+    {
+      "id": "svaty-jan",
+      "nazev": "Svatý Jan pod Skalou",
+      "velikost": 1,
+      "x": 1846,
+      "y": 907
     }
   ],
   "cesty": [
@@ -239,6 +281,66 @@
     [
       "zdice",
       "horovice"
+    ],
+    [
+      "kraluv-dvur",
+      "trubin"
+    ],
+    [
+      "trubin",
+      "svata"
+    ],
+    [
+      "trubin",
+      "hudlice"
+    ],
+    [
+      "zdice",
+      "tman"
+    ],
+    [
+      "tman",
+      "koneprusy"
+    ],
+    [
+      "koneprusy",
+      "menany"
+    ],
+    [
+      "menany",
+      "liten"
+    ],
+    [
+      "menany",
+      "srbsko"
+    ],
+    [
+      "tetin",
+      "svaty-jan"
+    ],
+    [
+      "svaty-jan",
+      "vraz"
+    ],
+    [
+      "svaty-jan",
+      "bubovice"
+    ],
+    [
+      "bubovice",
+      "srbsko"
+    ],
+    [
+      "bubovice",
+      "lodenice"
+    ],
+    [
+      "lodenice",
+      "vysoky-ujezd"
+    ],
+    [
+      "vysoky-ujezd",
+      "morina"
     ]
   ],
   "reky": [
