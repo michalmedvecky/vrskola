@@ -106,9 +106,21 @@ function stavMesta(id) {
   return { stav: 'zavrena' };
 }
 const zbyvaKlicu = () => stav.kolo.zamku - stav.kolo.otevreno - stav.kolo.klice;
+// Pojistka: počty v kole musí být celá čísla (starší uložený stav mohl mít místo klíčů prázdno nebo NaN,
+// pak brašna ukazovala prázdno a HOPHOP hlásil „klíče na všechny zámky“).
+function opravKolo() {
+  const k = stav.kolo;
+  if (!k) return;
+  const cislo = (v, z) => (Number.isFinite(Number(v)) && v !== null && v !== '' ? Math.max(0, Math.round(Number(v))) : z);
+  k.zamku = Math.max(1, cislo(k.zamku, Math.min(stav.nastaveni.zamku, maxZamku())));
+  k.otevreno = Math.min(cislo(k.otevreno, 0), k.zamku);
+  k.klice = cislo(k.klice, 0);
+  k.kousky = cislo(k.kousky, 0);
+}
 
 // ---------- HUD ----------
 function obnovHud() {
+  opravKolo();
   $('#hud').hidden = false;
   const k = stav.kolo;
   const pul = k.kousky ? `<span class="pulklic" title="kousek klíče">🗝️<small>${k.kousky}/${naKlic()}</small></span>` : '';
@@ -753,6 +765,7 @@ addEventListener('keydown', (e) => {
   tajne = (tajne + e.key.toUpperCase()).slice(-6);
   if (tajne !== 'HOPHOP' || !stav.kolo) return;
   tajne = '';
+  opravKolo();
   const pridat = Math.min(10, Math.max(0, zbyvaKlicu()));
   if (!pridat) { bublina('Brašna už má klíče na všechny zámky. 🏰'); return; }
   stav.kolo.klice += pridat;
