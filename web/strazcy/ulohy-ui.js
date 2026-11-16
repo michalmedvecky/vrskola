@@ -48,11 +48,20 @@ export function spustUlohu(el, u, { zivoty = 2 } = {}) {
 function postupne(u, { telo, chyba, konec }) {
   const veta = h('div', { class: 'veta' });
   const mista = [];
+  // Slovo s mezerou (s_rup) drží pohromadě v jednom nezalomitelném spanu, ať se nerozdělí na dva řádky.
+  let slovo = null;
+  const doSlova = (uzel) => { if (!slovo) { slovo = h('span', { class: 'slovo-celek' }); veta.append(slovo); } slovo.append(uzel); };
   for (const c of u.casti) {
-    if (typeof c === 'string') { veta.append(c); continue; }
-    const e = h('span', { class: c.zobraz === '_' ? 'mezera' : 'znacka' }, c.zobraz === '_' ? ' ' : c.zobraz);
+    if (typeof c === 'string') {
+      for (const kus of c.split(/(\s+)/)) {
+        if (!kus) continue;
+        if (/^\s+$/.test(kus)) { slovo = null; veta.append(kus); } else doSlova(kus);
+      }
+      continue;
+    }
+    const e = h('span', { class: c.zobraz === '_' ? 'mezera' : 'znacka' }, c.zobraz === '_' ? '\u2002' : c.zobraz);
     mista.push({ c, e });
-    veta.append(e);
+    doSlova(e);
   }
   const tlacitka = h('div', { class: 'moznosti' + (u.tlacitkaVelka ? ' moznosti-pady' : '') });
   telo.append(veta, tlacitka);
