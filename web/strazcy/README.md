@@ -77,9 +77,13 @@ a ověří je; `-v` vypíše ukázky).
 
 ## Komnaty hradu (odměny)
 
-Nápad Markétky: s každým odemčeným hradem se uvnitř otevřou jedny dveře do komnaty. Za dveřmi je odkaz, který se otevře
-v nové záložce, ve výchozí verzi jeden díl pohádky Bob a Bobek – králíci z klobouku na stránkách České televize.
-Hra jen odkazuje na stránku ČT, video ani obrázky nikam nekopíruje. Komnaty jsou vidět na hradě, v albu a hned po otevření hradu.
+Nápad Markétky: s každým odemčeným hradem se uvnitř otevřou jedny dveře do komnaty. Za dveřmi je ve výchozí verzi jeden díl
+pohádky Bob a Bobek – králíci z klobouku. Přehraje se přímo ve hře („kino“ přes celou obrazovku, tlačítko Zpět do hradu)
+v oficiálním vkládacím přehrávači ČT (`player.ceskatelevize.cz`, stejný, který ČT uvádí v metadatech každé stránky dílu).
+Video se nikam nekopíruje, streamuje se ze serverů ČT. Číslo dílu (IDEC) se vezme z konce `odkaz`.
+Pod přehrávačem zůstává odkaz „Otevřít na webu ČT“ pro případ, že by se video ve hře nepustilo.
+Volitelně `"video": "<adresa pro iframe>"` přepíše přehrávač (např. jiný zdroj), `"video": false` = jen odkaz do nové záložky.
+Komnaty jsou vidět na hradě, v albu a hned po otevření hradu.
 
 `data/odmeny.json`:
 
