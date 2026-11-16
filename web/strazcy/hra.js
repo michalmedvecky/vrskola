@@ -27,7 +27,7 @@ function nactiStav() {
 }
 function uloz() { try { localStorage.setItem(KLIC, JSON.stringify(stav)); } catch { /* nevadí */ } }
 
-let mapa = null, dataMapy = null, temata = [], mapyIndex = null, ukolyIndex = null;
+let mapa = null, dataMapy = null, temata = [], mapyIndex = null, ukolyIndex = null, odmeny = null;
 let panelOtevreny = false;
 
 async function nactiJson(cesta) {
@@ -37,7 +37,8 @@ async function nactiJson(cesta) {
 }
 
 async function nactiData() {
-  [mapyIndex, ukolyIndex] = await Promise.all([nactiJson('data/mapy.json'), nactiJson('data/ukoly.json')]);
+  [mapyIndex, ukolyIndex, odmeny] = await Promise.all([nactiJson('data/mapy.json'), nactiJson('data/ukoly.json'),
+    nactiJson('data/odmeny.json').catch(() => null)]); // komnaty hradu jsou nepovinné
   const idMapy = params.get('mapa') || stav.nastaveni.mapa;
   const m = mapyIndex.mapy.find((x) => x.id === idMapy) || mapyIndex.mapy[0];
   stav.nastaveni.mapa = m.id;
@@ -240,6 +241,7 @@ async function navstevaHradu() {
   obal.append(tl);
   otevriPanel(obal, { trida: 'siroky' });
   naZavreni = napovez;
+  if (maKomnaty()) obal.append(tlacitko(`🚪 Komnaty hradu (${otevrenychKomnat()} / ${odmeny.komnaty.length})`, () => komnaty(), 'komnaty-tl'));
   if (!k.klice) {
     text.innerHTML = `Ještě ${zbyvaKlicu() === 1 ? 'chybí 1 klíč' : `chybí ${zbyvaKlicu()} klíčů`}. Klíče najdeš v truhličkách ve vesnicích.`;
     tl.append(tlacitko('Jdu hledat ➜', () => { zavriPanel(); napovez(); }));
@@ -301,9 +303,51 @@ async function hradOtevren(svg) {
       <p>Ve sbírce máš ${stav.nalepky.length} ${stav.nalepky.length === 1 ? 'nálepku' : stav.nalepky.length < 5 ? 'nálepky' : 'nálepek'}. Tvoje hodnost: <b>${hodnost(stav.hradu)}</b></p>
       <p>Jenže… v noci přiletěl kouzelník a zamkl hrad znovu! Najdeš klíče i tentokrát?</p>`);
     obal.append(popis);
-    obal.append(tlacitko('Nové dobrodružství ➜', () => { noveKolo(); zavriPanel(); obnovHud(); uvodHradu(napovez); }, 'hlavni'));
+    const dalsiKolo = () => { noveKolo(); zavriPanel(); obnovHud(); uvodHradu(napovez); };
+    if (maKomnaty() && stav.hradu <= odmeny.komnaty.length) {
+      const c = stav.hradu;
+      obal.append(div('pribeh komnata-nova', `<p>🚪 <b>A ještě něco!</b> Uvnitř hradu se odemkly dveře do komnaty č. ${c}.</p>`));
+      obal.append(tlacitko('Jít do komnaty ➜', () => komnaty(c, dalsiKolo), 'hlavni'));
+    } else obal.append(tlacitko('Nové dobrodružství ➜', dalsiKolo, 'hlavni'));
     konfety();
   };
+}
+
+// ---------- komnaty hradu (odměny za otevřené hrady, data/odmeny.json) ----------
+const maKomnaty = () => !!odmeny?.komnaty?.length;
+const otevrenychKomnat = () => Math.min(stav.hradu, odmeny.komnaty.length);
+// nova = číslo právě odemčené komnaty (zvýrazní se), pak = co dělat po zavření (nové kolo)
+function komnaty(nova = 0, pak = null) {
+  const obal = div('komnaty');
+  obal.append(div('nadpis', odmeny.nazev || 'Komnaty hradu'));
+  if (odmeny.popis) obal.append(div('pribeh male', odmeny.popis));
+  const chodba = div('chodba');
+  const otevreno = otevrenychKomnat();
+  stav.videneKomnaty ||= [];
+  odmeny.komnaty.forEach((kom, i) => {
+    const c = i + 1;
+    const odemcena = c <= otevreno;
+    const videna = stav.videneKomnaty.includes(c);
+    const dvere = document.createElement(odemcena ? 'a' : 'div');
+    dvere.className = `dvere ${odemcena ? 'odemcene' : 'zamcene'} ${c === nova ? 'nove' : ''} ${videna ? 'videne' : ''}`;
+    dvere.innerHTML = `<span class="cislo">${c}</span>
+      <span class="kridlo"><span class="klika"></span>${odemcena ? '' : '<span class="visak-dvere">🔒</span>'}</span>
+      <span class="popis ${odemcena || c === otevreno + 1 ? '' : 'prazdne'}">${odemcena ? `<b>${kom.nazev}</b><small>${kom.popisek || ''}</small>` : c === otevreno + 1 ? '<small>otevře se po dalším hradu</small>' : '<small>&nbsp;</small>'}</span>`;
+    if (odemcena) {
+      dvere.href = kom.odkaz; dvere.target = '_blank'; dvere.rel = 'noopener';
+      dvere.addEventListener('click', () => {
+        zvuk.zamek();
+        if (!videna) { stav.videneKomnaty.push(c); uloz(); }
+        dvere.classList.add('videne', 'otevira');
+      });
+    }
+    chodba.append(dvere);
+  });
+  obal.append(chodba);
+  if (pak) obal.append(tlacitko('Nové dobrodružství ➜', () => { zavriPanel(); pak(); }, 'hlavni'));
+  otevriPanel(obal, { trida: 'siroky', zavritelny: !pak });
+  naZavreni = pak || napovez;
+  if (nova) setTimeout(() => chodba.querySelector('.nove')?.scrollIntoView({ block: 'center', behavior: 'smooth' }), 300);
 }
 
 // ---------- vesnice a truhla ----------
@@ -440,6 +484,7 @@ function album() {
     mriz.append(div(`nalepka ${m ? '' : 'chybi'} ${m?.zlata ? 'zlata' : ''}`, m ? `<span>${n.emoji}</span><small>${n.nazev}</small>${m.cas ? `<small class="cas">⏱ ${formatCas(m.cas)}</small>` : ''}${m.pocet > 1 ? `<b class="pocet">×${m.pocet}</b>` : ''}` : '<span>?</span><small>&nbsp;</small>'));
   }
   obal.append(mriz);
+  if (maKomnaty()) obal.append(tlacitko(`🚪 Komnaty hradu (${otevrenychKomnat()} / ${odmeny.komnaty.length})`, () => komnaty()));
   otevriPanel(obal, { trida: 'siroky' });
   naZavreni = null;
 }
@@ -634,4 +679,4 @@ async function start() {
 start();
 
 // háčky pro automatické testy
-window.__mk = { formatCas, get stav() { return stav; }, get mapa() { return mapa; }, uloz, noveKolo, obnovHud, navstevaMesta, navstevaHradu };
+window.__mk = { formatCas, komnaty, get stav() { return stav; }, get mapa() { return mapa; }, uloz, noveKolo, obnovHud, navstevaMesta, navstevaHradu };
