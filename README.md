@@ -48,6 +48,14 @@ vesnici odemyká truhličku a za vyřešenou úlohu dostane klíč; klíči odem
 jsou vyměnitelná data (`web/strazcy/data/`), podrobnosti v [`web/strazcy/README.md`](web/strazcy/README.md).
 V k3s jsou to ConfigMapy `vrskola-strazcy` a `vrskola-strazcy-data`, nginx je servíruje z `/strazcy/`.
 
+## Padám padám (tablet, `/padam/`)
+
+Hra na určování pádů podstatných jmen pro tablet (bez VR, bez serveru) ve `web/padam/`. Městečko se čtyřmi minihrami
+(Pádový výtah, Ptáček se ptá, Proměny jednoho slova, Detektiv) a sedmi pádníky, kteří rostou se správnými odpověďmi.
+Pád se vždy hledá přes pádovou otázku a nápovědy se postupně schovávají. Věty a slova jsou vyměnitelná data
+(`web/padam/data/`), podrobnosti v [`web/padam/README.md`](web/padam/README.md). V k3s jsou to ConfigMapy
+`vrskola-padam` a `vrskola-padam-data`, nginx je servíruje z `/padam/`.
+
 ## Soubory
 
 | Cesta | Co to je |
@@ -59,6 +67,7 @@ V k3s jsou to ConfigMapy `vrskola-strazcy` a `vrskola-strazcy-data`, nginx je se
 | `web/three.module.min.js` | three.js 0.160 |
 | `server/server.mjs` | mini server pro Souboj třídy (Node.js 22, bez závislostí) |
 | `web/strazcy/` | hra Strážcy klýčú pro tablet (vlastní README) |
+| `web/padam/` | hra Padám padám pro tablet, určování pádů (vlastní README) |
 | `kustomization.yaml`, `deploy/` | nasazení do k3s |
 
 Lokálně: `cd web && python3 -m http.server 8000` → http://localhost:8000/ (WebXR v headsetu potřebuje https).

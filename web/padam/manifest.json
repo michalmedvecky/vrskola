@@ -1,0 +1,10 @@
+{
+  "name": "Padám padám",
+  "short_name": "Padám padám",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "background_color": "#ffd99a",
+  "theme_color": "#ffb85c",
+  "icons": [{ "src": "ikona.svg", "sizes": "any", "type": "image/svg+xml" }]
+}
