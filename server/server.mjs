@@ -162,19 +162,34 @@ async function dilyPohadek(){
   pohadky = { t: Date.now(), dily };
   return dily;
 }
+const TYPY_VIDEA = { '.mp4': 'video/mp4', '.m4v': 'video/mp4', '.mov': 'video/quicktime', '.webm': 'video/webm', '.mkv': 'video/x-matroska' };
 async function videoPohadky(req, res, n){
   const dil = (await dilyPohadek())[n];
   if (!dil) return send(res, 404, { chyba: 'takový díl není' });
   const hlavicky = {};
   if (req.headers.range) hlavicky.Range = req.headers.range;
+  if (req.headers['if-range']) hlavicky['If-Range'] = req.headers['if-range'];
   const ctrl = new AbortController();
-  req.on('close', () => ctrl.abort());
+  // req 'close' v Node přijde hned po přečtení (prázdného) těla požadavku → hlídá se odpověď
+  res.on('close', () => { if (!res.writableFinished) ctrl.abort(); });
   const r = await fetch(dil.url, { headers: hlavicky, signal: ctrl.signal });
-  if (!r.ok && r.status !== 206) return send(res, 502, { chyba: `video: HTTP ${r.status}` });
-  const ven = { 'Content-Type': r.headers.get('content-type') || 'video/mp4', 'Accept-Ranges': 'bytes', 'Cache-Control': 'private, max-age=3600' };
-  for (const h of ['content-length', 'content-range']) if (r.headers.get(h)) ven[h] = r.headers.get(h);
+  if (r.status === 416) { res.writeHead(416, { 'Content-Range': r.headers.get('content-range') || '' }); ctrl.abort(); return res.end(); }
+  if (!r.ok) { ctrl.abort(); return send(res, 502, { chyba: `video: HTTP ${r.status}` }); }
+  // Safari video odmítne, když typ není video/* (Nextcloud občas posílá application/octet-stream) nebo chybí délka
+  let typ = r.headers.get('content-type') || '';
+  if (!/^video\//.test(typ)) typ = TYPY_VIDEA[extname(new URL(dil.url).pathname).toLowerCase()] || 'video/mp4';
+  const ven = { 'Content-Type': typ, 'Accept-Ranges': 'bytes', 'Cache-Control': 'private, max-age=3600' };
+  const rozsah = r.headers.get('content-range');
+  let delka = r.headers.get('content-length');
+  if (rozsah) {
+    ven['Content-Range'] = rozsah;
+    const m = /bytes (\d+)-(\d+)\//.exec(rozsah);
+    if (!delka && m) delka = String(Number(m[2]) - Number(m[1]) + 1);
+  }
+  if (delka) ven['Content-Length'] = delka;
+  for (const h of ['etag', 'last-modified']) if (r.headers.get(h)) ven[h] = r.headers.get(h);
   res.writeHead(r.status, ven);
-  if (req.method === 'HEAD' || !r.body) return res.end();
+  if (req.method === 'HEAD' || !r.body) { ctrl.abort(); return res.end(); }
   try { for await (const kus of r.body) if (!res.write(kus)) await new Promise(ok => res.once('drain', ok)); res.end(); }
   catch { res.destroy(); }
 }

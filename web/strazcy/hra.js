@@ -403,7 +403,7 @@ function kino(kom) {
     const v = k.querySelector('video');
     v.addEventListener('ended', () => { zvuk.fanfara(); setTimeout(() => zavri(), 1500); });
     v.addEventListener('error', () => {
-      v.replaceWith(Object.assign(document.createElement('p'), { className: 'kino-stav', innerHTML: 'Pohádku se teď nepodařilo pustit. 😕 Zkus to za chvíli.' }));
+      v.replaceWith(Object.assign(document.createElement('p'), { className: 'kino-stav', innerHTML: `Pohádku se teď nepodařilo pustit. 😕 Zkus to za chvíli.<br><small style="opacity:.5">(kód ${v.error?.code ?? '?'}${v.error?.message ? ': ' + v.error.message : ''})</small>` }));
     });
   } else if (kom.video) {
     k.innerHTML = lista + `<div class="kino-platno"><iframe src="${kom.video}" title="${kom.nazev}" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>`;
