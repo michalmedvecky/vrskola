@@ -13,6 +13,13 @@ let K = null;                 // kurz z JSONu
 const POL = {};               // id položky „tema:polozka“ → { tema, p }
 let S = { obr: 'nacitani' };
 let casovac = null;
+let vrMozne = false, veVR = false;
+const posluchaci = [];
+// VR (vr.js) poslouchá každé překreslení: překreslí panel a pozná zásah, chybu, konec souboje.
+export function poslouchej(fn) { posluchaci.push(fn); }
+export const stav = () => S;
+export function nastavVR(v) { veVR = v; render(); }
+const oznam = () => posluchaci.forEach((f) => f(S));
 const app = () => document.getElementById('app');
 const zrus = () => { clearTimeout(casovac); casovac = null; };
 
@@ -37,6 +44,8 @@ export async function start() {
   document.addEventListener('click', klik);
   document.addEventListener('keydown', klavesa);
   const q = new URLSearchParams(location.search);
+  if (navigator.xr?.isSessionSupported) navigator.xr.isSessionSupported('immersive-vr').then((ok) => { vrMozne = ok; if (ok) render(); }).catch(() => {});
+  if (q.has('vrnahled')) import('./vr.js').then((m) => m.nahledVR());
   if (q.get('lekce')) otevriLekci(q.get('lekce')); else jdi({ obr: 'mapa' });
   window.__zlomky = { K, S: () => S, postup, akce, render, generuj: (gid) => generuj(POL[gid].p.gen, POL[gid].p.param, K.data, []) };
 }
@@ -98,6 +107,8 @@ export function akce(a, el) {
     case 'karty-znovu': if (S.v) { S.v.poradi = []; render(); } break;
     case 'dalsi': dalsiUloha(); break;
     case 'nastaveni': jdi({ obr: 'nastaveni' }); break;
+    case 'vr': import('./vr.js').then((m) => m.spustVR()).catch((e) => console.error(e)); break;
+    case 'vr-konec': import('./vr.js').then((m) => m.ukonciVR()); break;
     case 'zvuk': postup.P.nast.zvuk = !postup.P.nast.zvuk; nastavZtlumeni(!postup.P.nast.zvuk); postup.uloz(); render(); break;
     case 'odemknout': postup.P.vseOdemceno = !postup.P.vseOdemceno; postup.uloz(); render(); break;
     case 'smazat': jdi({ obr: 'smazat' }); break;
@@ -387,6 +398,8 @@ function render() {
     if (karta && !S.hotove.length && (!S.zprava || S.zprava.typ === 'ok-krok')) karta.scrollTop = 0;
     else (document.querySelector('.zprava:not(.ok-krok)') || document.querySelector('.krok-aktualni'))?.scrollIntoView?.({ block: 'nearest' });
   }
+  if (o === 'mapa' && veVR) document.querySelector('.ostrov.aktualni')?.scrollIntoView?.({ block: 'nearest' });
+  oznam();
 }
 function prekresliVstup() {
   const el = document.getElementById('vstup');
@@ -394,13 +407,14 @@ function prekresliVstup() {
   el.innerHTML = rVstup(aktKrok());
   const z = document.getElementById('zprava'), nova = rZprava();
   if (z && z.outerHTML !== nova) z.outerHTML = nova;
+  oznam();
 }
 const tl = (a, t, styl = '', x = '') => `<button class="tl ${styl}" data-a="${a}" ${x}>${t}</button>`;
 
 function hlavicka(levy) {
   const h = hodnost();
   return `<header class="hlava">${levy || `<div class="logo">🧭 ${K.nazev}</div>`}
-    <div class="hlava-vpravo"><span class="krystaly" title="Krystaly">💎 ${postup.P.krystaly}</span><span class="hodnost">${h.nazev}</span>${tl('nastaveni', '⚙️', 'male kulate', 'aria-label="Nastavení"')}</div></header>`;
+    <div class="hlava-vpravo"><span class="krystaly" title="Krystaly">💎 ${postup.P.krystaly}</span><span class="hodnost">${h.nazev}</span>${veVR ? tl('vr-konec', 'Opustit VR', 'male') : vrMozne ? tl('vr', '🥽 Do VR', 'male hlavni') : ''}${tl('nastaveni', '⚙️', 'male kulate', 'aria-label="Nastavení"')}</div></header>`;
 }
 
 function rMapa() {

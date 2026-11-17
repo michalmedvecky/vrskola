@@ -1,8 +1,27 @@
 # Zlomková výprava
 
 Samostatná hra na zlomky pro deváťáky, příprava na přijímačky z matematiky. Adresa po nasazení: `/zlomky/`.
-Běží v prohlížeči na PC i tabletu (na telefonu taky, jen je těsnější). Bez serveru, postup jen v `localStorage`
-(klíč `zlomky-v1`).
+Běží v prohlížeči na PC i tabletu (na telefonu taky, jen je těsnější) a na Questu v plném VR (tlačítko 🥽 Do VR).
+Bez serveru, postup jen v `localStorage` (klíč `zlomky-v1`), takže v headsetu má hráč svůj vlastní postup.
+
+## VR (Quest)
+
+Tlačítko **🥽 Do VR** se ukáže jen v prohlížeči, který umí immersive-vr. Hráč stojí na písečném ostrově u moře,
+před sebou má velkou tabuli s hrou a na pultu velkou klávesnici (číslice, čárka, celé, ▲ čitatel, ▼ jmenovatel,
+⌫, OK). Do kláves se ťuká **paličkami** v rukou shora (vibrace při úderu), nebo se míří **paprskem** a mačká
+spoušť. Paprskem se klepe i na tabuli (tlačítka, volby, dílky koláče u „vybarvi“, karty u řazení), **páčkou**
+nahoru/dolů se posouvá obsah tabule (mapa, dlouhé zadání). Opustit VR jde tlačítkem v hlavičce tabule.
+
+Při souboji stojí vedle tabule strážce jako 3D příšera: správná odpověď vystřelí dělovou kouli, příšera se
+zatřese, po chybě se směje, poražená se svalí. Za správnou odpověď v tréninku vyletí jiskry a krystaly,
+za poraženého strážce a zvládnutý ostrov padají konfety.
+
+Jak to funguje: tabule je tatáž stránka jako na tabletu. Ve VR se `#app` rozloží do pevného obdélníku
+(`body.vr`), `vr.js` ji po každé změně nakreslí přes SVG `foreignObject` do canvasu (data: URL, ať canvas
+nezašpiní) a ten je texturou tabule. Klik paprskem se přepočítá na souřadnice stránky a přes
+`document.elementFromPoint` jde na skutečný prvek. Ve VR tedy funguje všechno, co na tabletu, beze změn ve hře.
+`?vrnahled=1` ukáže VR scénu na monitoru (myš = paprsek, kolečko = páčka) pro ladění. Na skutečném Questu
+zatím nevyzkoušeno.
 
 ## Jak hra běží
 
@@ -82,6 +101,7 @@ do `kustomization.yaml`.
 | `postup.js` | postup v localStorage, zvládnutí položek |
 | `hra.js` | obrazovky, průběh kurzu, klávesnice |
 | `zvuk.js` | krátké zvuky ve Web Audio |
+| `vr.js` | VR scéna (three.js z `/three.module.min.js`): ostrov, tabule se stránkou, 3D klávesnice, paličky, strážce, efekty |
 
 Kontrola generátorů a dat: `node nastroje/zlomky-test.mjs` (vyrobí 10 500 úloh a ověří, že správná odpověď projde
 a špatná ne). Testovací háček v prohlížeči: `window.__zlomky`.

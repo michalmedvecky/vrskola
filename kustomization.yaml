@@ -146,6 +146,7 @@ configMapGenerator:
       - web/zlomky/prisery.js
       - web/zlomky/postup.js
       - web/zlomky/zvuk.js
+      - web/zlomky/vr.js
       - web/zlomky/manifest.json
       - web/zlomky/ikona.svg
   - name: vrskola-zlomky-data   # témata, lekce a úlohy Zlomkové výpravy (vyměnitelná data), servíruje se z /zlomky/data/
