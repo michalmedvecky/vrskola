@@ -1,0 +1,10 @@
+{
+  "name": "Slovní zoo",
+  "short_name": "Zoo",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "background_color": "#2e7d32",
+  "theme_color": "#2e7d32",
+  "icons": [{ "src": "ikona.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

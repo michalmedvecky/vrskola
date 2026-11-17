@@ -83,6 +83,12 @@ spec:
             - name: klavir2
               mountPath: /usr/share/nginx/klavir2
               readOnly: true
+            - name: zoo
+              mountPath: /usr/share/nginx/zoo
+              readOnly: true
+            - name: zoo-data
+              mountPath: /usr/share/nginx/zoo-data
+              readOnly: true
             - name: nginx-conf
               mountPath: /etc/nginx/conf.d
               readOnly: true
@@ -128,6 +134,12 @@ spec:
         - name: klavir2
           configMap:
             name: vrskola-klavir2
+        - name: zoo
+          configMap:
+            name: vrskola-zoo
+        - name: zoo-data
+          configMap:
+            name: vrskola-zoo-data
         - name: nginx-conf
           configMap:
             name: vrskola-nginx

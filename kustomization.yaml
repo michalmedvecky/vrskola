@@ -177,6 +177,26 @@ configMapGenerator:
       - web/klavir2/zvuk.js
       - web/klavir2/manifest.json
       - web/klavir2/ikona.svg
+  - name: vrskola-zoo   # samostatná hra Slovní zoo na /zoo/ (slovní druhy, PC/tablet i VR na Questu)
+    files:
+      - web/zoo/index.html
+      - web/zoo/styl.css
+      - web/zoo/hra.js
+      - web/zoo/ulohy.js
+      - web/zoo/prisery.js
+      - web/zoo/postup.js
+      - web/zoo/zvuk.js
+      - web/zoo/vr.js
+      - web/zoo/manifest.json
+      - web/zoo/ikona.svg
+  - name: vrskola-zoo-data   # zvířata, slova, věty a výběhy Slovní zoo (vyměnitelná data), servíruje se z /zoo/data/
+    files:
+      - web/zoo/data/kurz.json
+      - web/zoo/data/druhy.json
+      - web/zoo/data/slova.json
+      - web/zoo/data/vety.json
+      - web/zoo/data/promeny.json
+      - web/zoo/data/vybehy.json
   - name: vrskola-nginx
     files:
       - deploy/default.conf

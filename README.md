@@ -64,6 +64,16 @@ od pojmu zlomku po složené zlomky a slovní úlohy: na každém lekce, trénin
 Témata, lekce a úlohy jsou vyměnitelná data (`web/zlomky/data/`), podrobnosti v [`web/zlomky/README.md`](web/zlomky/README.md).
 V k3s jsou to ConfigMapy `vrskola-zlomky` a `vrskola-zlomky-data`, nginx je servíruje z `/zlomky/`.
 
+## Slovní zoo (PC, tablet i VR, `/zoo/`)
+
+Hra na slovní druhy ve `web/zoo/` (bez serveru). Deset druhů = deset zvířat, každé se ptá svou otázkou
+(slon „Kdo? Co?“, opice „Co dělá?“…) a sní jen slova, která na ni odpovídají. V každém výběhu lekce, krmení
+do zvládnutí s mizejícími nápovědami (po chybě zvíře vysvětlí proč a úloha se vrátí), věty jako vláček, Šatna
+na ohebné × neohebné a souboj se Zmatkářem; na konci Velká zkouška. Na Questu stojí hráč uprostřed zoo a hází
+kartičky se slovy do výběhů (ohebné vlevo, neohebné vpravo). Data jsou vyměnitelná (`web/zoo/data/`), podrobnosti
+v [`web/zoo/README.md`](web/zoo/README.md). V k3s jsou to ConfigMapy `vrskola-zoo` a `vrskola-zoo-data`, nginx je
+servíruje z `/zoo/`.
+
 ## Soubory
 
 | Cesta | Co to je |
@@ -77,6 +87,7 @@ V k3s jsou to ConfigMapy `vrskola-zlomky` a `vrskola-zlomky-data`, nginx je serv
 | `web/strazcy/` | hra Strážcy klýčú pro tablet (vlastní README) |
 | `web/padam/` | hra Padám padám pro tablet, určování pádů (vlastní README) |
 | `web/zlomky/` | hra Zlomková výprava, zlomky pro přijímačky (vlastní README) |
+| `web/zoo/` | hra Slovní zoo, slovní druhy (vlastní README) |
 | `kustomization.yaml`, `deploy/` | nasazení do k3s |
 
 Lokálně: `cd web && python3 -m http.server 8000` → http://localhost:8000/ (WebXR v headsetu potřebuje https).

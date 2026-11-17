@@ -1,0 +1,21 @@
+{
+  "nazev": "Slovní zoo",
+  "podtitul": "Deset slovních druhů jako deset zvířat",
+  "trenink": { "delkaKola": 10, "podilOpakovani": 0.2 },
+  "strazce": { "otazek": 8, "zivotu": 2 },
+  "zaverecna": {
+    "nazev": "Velká zkouška",
+    "popis": "Závěrečná zkouška ze všech slovních druhů: slova, věty i celé vláčky. Bez nápověd, smíš udělat nejvýš 2 chyby.",
+    "otazek": 14,
+    "zivotu": 3,
+    "strazce": { "jmeno": "Velký Zmatkář", "barva": "#6c5ce7", "oci": 3, "rohy": 2, "hlaska": "Já jsem tu všem zvířatům popletl krmení! Rozdělíš ho správně?" }
+  },
+  "hodnosti": [
+    { "od": 0, "nazev": "Návštěvník" },
+    { "od": 40, "nazev": "Krmič" },
+    { "od": 150, "nazev": "Ošetřovatel" },
+    { "od": 350, "nazev": "Chovatel" },
+    { "od": 650, "nazev": "Zoolog" },
+    { "od": 1000, "nazev": "Ředitel zoo" }
+  ]
+}
