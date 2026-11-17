@@ -1,0 +1,189 @@
+{
+  "_popis": "Výběhy v pořadí, jak se otevírají. druh = číslo slovního druhu (null u Šatny). V textech lekcí: **tučně**, [slovo|N] = barevný štítek slova druhu N. veta = věta ve formátu vety.json, zvýrazní se v ní druh 'ukaz'. polozky: gen = typ úlohy (krmeni, veta, najdi, vlacek, cislo, satna, zkus, skupina, dvojice), serie = kolikrát za sebou napoprvé správně, aby byla dovednost zvládnutá.",
+  "vybehy": [
+    {
+      "id": "podstatna", "druh": 1, "vybeh": "Sloní výběh",
+      "strazce": { "jmeno": "Zmatkář Pletichář", "barva": "#e17055", "oci": 1, "rohy": 0, "hlaska": "Slonovi jsem do krmení přimíchal cizí slova! Najdeš ta jeho?" },
+      "lekce": [
+        { "nadpis": "Vítej ve Slovní zoo!", "text": ["Každé slovo ve větě patří k jednomu z **deseti slovních druhů**. V naší zoo má každý druh svoje zvíře a svůj výběh.", "Každé zvíře se ptá **svou otázkou**. Když na ni slovo odpovídá, zvíře si ho sní. Tak poznáš, kam slovo patří."], "zoo": true },
+        { "nadpis": "Slon a podstatná jména", "zvire": 1, "text": ["Slon se ptá: **Kdo? Co?**", "Podstatná jména **pojmenovávají** osoby, zvířata, věci a místa: [maminka|1], [pes|1], [auto|1], [Praha|1]."] },
+        { "nadpis": "Zkouška ten, ta, to", "zvire": 1, "text": ["Před podstatné jméno se dá říct **ten, ta, to**: ten [strom|1], ta [kniha|1], to [jablko|1].", "Funguje to i u věcí, na které nejde sáhnout: ta [radost|1], ten [smutek|1], ta [zima|1]."] },
+        { "nadpis": "Podstatná jména ve větě", "zvire": 1, "text": ["Ve větě se podstatné jméno mění (pes, psa, psovi), ale pořád je to podstatné jméno.", "Najdi ve větě všechno, na co se dá zeptat Kdo? Co?"], "veta": "Maminka/1 peče/5 sladký/2 koláč/1.", "ukaz": 1 },
+        { "nadpis": "Číslo jedna", "zvire": 1, "text": ["Slovní druhy mají ve škole čísla. **Podstatná jména jsou druh číslo 1.** Ve výběhu to máš napsané na cedulce.", "Teď nakrm slona. Když si nebudeš jistý, zvíře ti svou otázku napoví."] }
+      ],
+      "polozky": [
+        { "id": "krmeni", "nazev": "Nakrm slona", "gen": "krmeni", "serie": 3 },
+        { "id": "najdi", "nazev": "Najdi podstatná jména ve větě", "gen": "najdi", "serie": 2 },
+        { "id": "cislo", "nazev": "Číslo druhu", "gen": "cislo", "serie": 2 }
+      ]
+    },
+    {
+      "id": "slovesa", "druh": 5, "vybeh": "Opičí prolézačky",
+      "strazce": { "jmeno": "Zmatkář Popleta", "barva": "#fd79a8", "oci": 2, "rohy": 1, "hlaska": "Opice skáče, slon… taky skáče? Hehe, já to všechno popletu!" },
+      "lekce": [
+        { "nadpis": "Opice a slovesa", "zvire": 5, "text": ["Opice pořád něco dělá. Ptá se: **Co dělá? Co se s ním děje?**", "Slovesa říkají, co kdo **dělá** nebo co se **děje**: [běhá|5], [píše|5], [spí|5], [prší|5]."] },
+        { "nadpis": "Sloveso má mnoho tvarů", "zvire": 5, "text": ["Sloveso se mění podle toho, **kdo** to dělá a **kdy**: já [píšu|5], ty [píšeš|5], psal jsem, budu psát.", "Slovesa jsou i **je, byl, bude** (sloveso být)."] },
+        { "nadpis": "Někdy jsou to dvě slova", "zvire": 5, "text": ["Některé tvary slovesa mají dvě slova: [jsme|5] [byli|5], [budu|5] [číst|5], [nebude|5] [pršet|5]. Obě slova patří opici.", "Základní tvar slovesa končí na -t: [běhat|5], [psát|5], [jít|5]."], "veta": "Včera/6 jsme/5 byli/5 v/7 zoo/1.", "ukaz": 5 },
+        { "nadpis": "Slon, nebo opice?", "text": ["[pes|1] – **Kdo?** pes → slon. [štěká|5] – **Co dělá?** štěká → opice.", "Slovesa jsou **druh číslo 5**. Teď už máš dva výběhy, tak krm pozorně!"], "veta": "Haf/10! Pes/1 štěká/5 na/7 pošťáka/1.", "ukaz": 5 }
+      ],
+      "polozky": [
+        { "id": "krmeni", "nazev": "Slon, nebo opice?", "gen": "krmeni", "serie": 3 },
+        { "id": "veta", "nazev": "Slovo ve větě", "gen": "veta", "serie": 3 },
+        { "id": "najdi", "nazev": "Najdi slovesa", "gen": "najdi", "serie": 2 },
+        { "id": "cislo", "nazev": "Číslo druhu", "gen": "cislo", "serie": 2 }
+      ]
+    },
+    {
+      "id": "pridavna", "druh": 2, "vybeh": "Paví zahrada",
+      "strazce": { "jmeno": "Zmatkář Barvoplet", "barva": "#00b894", "oci": 3, "rohy": 0, "hlaska": "Páv je krásný… nebo krásně? Já už to nevím, a ty taky ne!" },
+      "lekce": [
+        { "nadpis": "Páv a přídavná jména", "zvire": 2, "text": ["Páv je samá ozdoba. Ptá se: **Jaký? Který? Čí?**", "Přídavná jména říkají, **jaké** něco je: [velký|2] pes, [zelená|2] tráva, [studené|2] mléko."] },
+        { "nadpis": "Čí to je?", "zvire": 2, "text": ["Páv se ptá i **Čí?** Čí je klíč? [maminčin|2]. Čí je klobouk? [otcův|2].", "I [psí|2] bouda nebo [školní|2] taška – jaká bouda? psí."] },
+        { "nadpis": "Přídavné jméno patří k podstatnému", "zvire": 2, "text": ["Přídavné jméno skoro vždycky stojí u podstatného jména a popisuje ho.", "Zeptej se od podstatného jména: **jaký** koláč? sladký."], "veta": "Maminka/1 peče/5 sladký/2 koláč/1.", "ukaz": 2 },
+        { "nadpis": "Druh číslo 2", "text": ["Přídavná jména jsou **druh číslo 2**, hned za podstatnými jmény, protože k nim patří.", "Ve vláčku teď přiřadíš zvíře každému slovu ve větě, které už znáš."], "veta": "Ona/3 nosí/5 červený/2 svetr/1.", "ukaz": 2 }
+      ],
+      "polozky": [
+        { "id": "krmeni", "nazev": "Slon, opice, nebo páv?", "gen": "krmeni", "serie": 3 },
+        { "id": "veta", "nazev": "Slovo ve větě", "gen": "veta", "serie": 3 },
+        { "id": "najdi", "nazev": "Najdi přídavná jména", "gen": "najdi", "serie": 2 },
+        { "id": "vlacek", "nazev": "Vláček", "gen": "vlacek", "serie": 2 },
+        { "id": "cislo", "nazev": "Číslo druhu", "gen": "cislo", "serie": 2 }
+      ]
+    },
+    {
+      "id": "zajmena", "druh": 3, "vybeh": "Chameleonovo terárium",
+      "strazce": { "jmeno": "Zmatkář Zástupník", "barva": "#6c5ce7", "oci": 2, "rohy": 2, "hlaska": "On, ona, ono… kdo je kdo? Já se za každého převléknu!" },
+      "lekce": [
+        { "nadpis": "Chameleon a zájmena", "zvire": 3, "text": ["Chameleon se umí převléknout za kohokoli. Zájmena taky **zastupují** jiná slova.", "Místo „Petr“ řekneme [on|3], místo „Jana a já“ řekneme [my|3]. Chameleon se ptá: **Místo koho? Místo čeho?**"] },
+        { "nadpis": "Druhy zájmen", "zvire": 3, "text": ["Osobní: [já|3], [ty|3], [on|3], [ona|3], [my|3], [vy|3], [oni|3]. Přivlastňovací: [můj|3], [tvůj|3], [náš|3], [jeho|3], [její|3], [svůj|3].", "Ukazovací: [ten|3], [tento|3], [tamten|3]. Tázací a záporná: [kdo|3], [co|3], [nikdo|3], [nic|3], [všechno|3], [každý|3]."] },
+        { "nadpis": "Pozor: jeho a můj", "zvire": 3, "text": ["[můj|3] míč, [jeho|3] míč – podobá se to přídavnému jménu (čí?), ale stojí **místo jména**: Petrův míč → [jeho|3] míč. Je to zájmeno.", "[Petrův|2] je přídavné jméno, [jeho|3] je zájmeno."], "veta": "Můj/3 bratr/1 čte/5 zajímavou/2 knihu/1.", "ukaz": 3 },
+        { "nadpis": "Druh číslo 3", "text": ["Zájmena jsou **druh číslo 3**.", "Zastupují podstatná jména (slon) i přídavná jména (páv), proto bydlí hned vedle nich."], "veta": "Ten/3 velký/2 dům/1 patří/5 nám/3.", "ukaz": 3 }
+      ],
+      "polozky": [
+        { "id": "krmeni", "nazev": "Kdo co sní?", "gen": "krmeni", "serie": 3 },
+        { "id": "veta", "nazev": "Slovo ve větě", "gen": "veta", "serie": 3 },
+        { "id": "najdi", "nazev": "Najdi zájmena", "gen": "najdi", "serie": 2 },
+        { "id": "vlacek", "nazev": "Vláček", "gen": "vlacek", "serie": 2 },
+        { "id": "cislo", "nazev": "Číslo druhu", "gen": "cislo", "serie": 2 }
+      ]
+    },
+    {
+      "id": "cislovky", "druh": 4, "vybeh": "Chobotničí akvárium",
+      "strazce": { "jmeno": "Zmatkář Počtář", "barva": "#0984e3", "oci": 4, "rohy": 0, "hlaska": "Jedna, dva, tři… nebo první, druhý? Popletu ti všechna chapadla!" },
+      "lekce": [
+        { "nadpis": "Chobotnice a číslovky", "zvire": 4, "text": ["Chobotnice počítá na osmi chapadlech. Ptá se: **Kolik? Kolikátý? Kolikrát?**", "Číslovky říkají **počet**: [tři|4] jablka, [sto|4] lidí, [dvacet|4] žáků."] },
+        { "nadpis": "Pořadí a kolikrát", "zvire": 4, "text": ["Kolikátý? [první|4], [druhý|4], [desátý|4]. I [poslední|4] se bere jako číslovka.", "Kolikrát? [dvakrát|4], [třikrát|4]."] },
+        { "nadpis": "Číslovky nemusí být přesné", "zvire": 4, "text": ["Kolik? [mnoho|4], [málo|4], [několik|4] – i to jsou číslovky.", "Pozor: [druhý|4] den je číslovka (kolikátý?), ale [druhá|4] třída taky."], "veta": "Na/7 stromě/1 sedí/5 tři/4 vrabci/1.", "ukaz": 4 },
+        { "nadpis": "Druh číslo 4", "text": ["Číslovky jsou **druh číslo 4**.", "Teď znáš pět zvířat. Všechna se dají **převléknout** – o tom bude další výběh."], "veta": "Jana/1 má/5 dva/4 bratry/1 a/8 jednu/4 sestru/1.", "ukaz": 4 }
+      ],
+      "polozky": [
+        { "id": "krmeni", "nazev": "Kdo co sní?", "gen": "krmeni", "serie": 3 },
+        { "id": "veta", "nazev": "Slovo ve větě", "gen": "veta", "serie": 3 },
+        { "id": "najdi", "nazev": "Najdi číslovky", "gen": "najdi", "serie": 2 },
+        { "id": "vlacek", "nazev": "Vláček", "gen": "vlacek", "serie": 2 },
+        { "id": "cislo", "nazev": "Číslo druhu", "gen": "cislo", "serie": 2 }
+      ]
+    },
+    {
+      "id": "satna", "druh": null, "vybeh": "Zvířecí šatna", "ikona": "👕", "nazev": "ohebné a neohebné", "barva": "#e84393",
+      "strazce": { "jmeno": "Zmatkář Šatník", "barva": "#e84393", "oci": 2, "rohy": 3, "hlaska": "Já převléknu úplně všechno! I rychle… rychlem… rychlu! Hehe." },
+      "lekce": [
+        { "nadpis": "Zvířecí šatna", "text": ["Slon, páv, chameleon, chobotnice i opice mají v šatně **spoustu oblečků**. Jejich slova se dají převléknout:", "[pes|1] → psa, psovi, psem. [velký|2] → velká, velkého. [píšu|5] → píšeš, psal."], "satna": "ohebna" },
+        { "nadpis": "Ohebné slovní druhy", "text": ["Slova, která se mění (skloňují nebo časují), jsou **ohebná**.", "Ohebné jsou druhy **1 až 5**: podstatná jména, přídavná jména, zájmena, číslovky a slovesa."], "satna": "ohebna" },
+        { "nadpis": "Neohebné slovní druhy", "text": ["Ostatní zvířata mají jen jeden oblek a nosí ho pořád: [rychle|6] je pořád rychle, [na|7] je pořád na, [a|8] je pořád a.", "Druhy **6 až 10** jsou **neohebné**: příslovce, předložky, spojky, částice a citoslovce. Ta zvířata teprve přijdou."], "satna": "neohebna" },
+        { "nadpis": "Jak to poznat", "text": ["Zkus slovo dát do jiné věty. **Změní se?** Je ohebné. **Zůstane stejné?** Je neohebné.", "Ve VR mají ohebná zvířata výběhy vlevo a neohebná vpravo."] }
+      ],
+      "polozky": [
+        { "id": "satna", "nazev": "Dá se převléknout?", "gen": "satna", "serie": 3 },
+        { "id": "zkus", "nazev": "Převlékni slovo", "gen": "zkus", "serie": 3 },
+        { "id": "skupina", "nazev": "Ohebný, nebo neohebný druh?", "gen": "skupina", "serie": 3 }
+      ]
+    },
+    {
+      "id": "prislovce", "druh": 6, "vybeh": "Šnečí zahrádka",
+      "strazce": { "jmeno": "Zmatkář Rychloslimák", "barva": "#a29bfe", "oci": 2, "rohy": 0, "hlaska": "Rychlý, rychle – to je přece úplně jedno! …Nebo ne?" },
+      "lekce": [
+        { "nadpis": "Šnek a příslovce", "zvire": 6, "text": ["Šnek leze **pomalu** a všechno pozoruje. Ptá se: **Jak? Kde? Kdy? Proč?**", "Příslovce říkají, jak, kde nebo kdy se něco děje: [rychle|6], [doma|6], [včera|6], [často|6]."] },
+        { "nadpis": "Příslovce patří ke slovesu", "zvire": 6, "text": ["Páv popisuje podstatné jméno, šnek popisuje **sloveso**: běží jak? [rychle|6]. Bydlí kde? [blízko|6]. Přijde kdy? [zítra|6].", "Příslovce jsou **neohebná** – pořád stejná."], "veta": "Malý/2 pes/1 rychle/6 běží/5 k/7 lesu/1.", "ukaz": 6 },
+        { "nadpis": "Páv, nebo šnek?", "text": ["[rychlý|2] pes (jaký?) – páv. Pes běží [rychle|6] (jak?) – šnek.", "[hezký|2] obrázek – páv. Kreslí [hezky|6] – šnek. Hlídej si konec slova!"] },
+        { "nadpis": "Slovo podle věty", "text": ["Stejné slovo může být jednou příslovce a jindy něco jiného.", "„[Ráno|6] vstávám“ – kdy? ráno → šnek. „[Ráno|1] bylo mrazivé“ – co? ráno → slon.", "Příslovce jsou **druh číslo 6**."], "veta": "Ráno/6 vstávám/5 brzy/6.", "ukaz": 6 }
+      ],
+      "polozky": [
+        { "id": "krmeni", "nazev": "Kdo co sní?", "gen": "krmeni", "serie": 3 },
+        { "id": "dvojice", "nazev": "Páv, nebo šnek?", "gen": "dvojice", "param": { "seznam": "pav-snek" }, "serie": 3 },
+        { "id": "veta", "nazev": "Slovo ve větě", "gen": "veta", "serie": 3 },
+        { "id": "najdi", "nazev": "Najdi příslovce", "gen": "najdi", "serie": 2 },
+        { "id": "vlacek", "nazev": "Vláček", "gen": "vlacek", "serie": 2 },
+        { "id": "cislo", "nazev": "Číslo druhu", "gen": "cislo", "serie": 2 }
+      ]
+    },
+    {
+      "id": "predlozky", "druh": 7, "vybeh": "Kachní rybníček",
+      "strazce": { "jmeno": "Zmatkář Předbíhač", "barva": "#fdcb6e", "oci": 1, "rohy": 2, "hlaska": "Já se vždycky předbíhám! Na, v, do… kdo je první?" },
+      "lekce": [
+        { "nadpis": "Kachna a předložky", "zvire": 7, "text": ["Kachna chodí vždycky **před** kachňátky. Předložky stojí vždycky **před jménem**.", "[na|7] stole, [do|7] školy, [pod|7] postelí, [s|7] mámou, [pro|7] tebe."] },
+        { "nadpis": "Předložka sama nic neznamená", "zvire": 7, "text": ["Předložka se nedá použít sama. Vždycky za ní je podstatné jméno nebo zájmeno: [bez|7] cukru, [k|7] babičce, [pro|7] mě.", "Předložky jsou **neohebné**."], "veta": "Žába/1 skáče/5 z/7 kamene/1 do/7 rybníka/1.", "ukaz": 7 },
+        { "nadpis": "Předložka, nebo příslovce?", "text": ["„Chodíme [kolem|7] rybníka.“ – za kolem je jméno → předložka (kachna).", "„Auta jezdí [kolem|6].“ – za kolem nic není, říká kde → příslovce (šnek)."], "veta": "Chodíme/5 kolem/7 rybníka/1.", "ukaz": 7 },
+        { "nadpis": "Druh číslo 7", "text": ["Předložky jsou **druh číslo 7**.", "Někdy dostanou na konec -e, aby se líp vyslovovaly: [ve|7] vodě, [ke|7] stolu, [ze|7] školy."], "veta": "Ve/7 třídě/1 je/5 dvacet/4 žáků/1.", "ukaz": 7 }
+      ],
+      "polozky": [
+        { "id": "krmeni", "nazev": "Kdo co sní?", "gen": "krmeni", "serie": 3 },
+        { "id": "veta", "nazev": "Slovo ve větě", "gen": "veta", "serie": 3 },
+        { "id": "najdi", "nazev": "Najdi předložky", "gen": "najdi", "serie": 2 },
+        { "id": "vlacek", "nazev": "Vláček", "gen": "vlacek", "serie": 2 },
+        { "id": "cislo", "nazev": "Číslo druhu", "gen": "cislo", "serie": 2 }
+      ]
+    },
+    {
+      "id": "spojky", "druh": 8, "vybeh": "Pavoučí síť",
+      "strazce": { "jmeno": "Zmatkář Uzlík", "barva": "#636e72", "oci": 4, "rohy": 1, "hlaska": "A… ale… protože… Já ti tu síť celou zamotám!" },
+      "lekce": [
+        { "nadpis": "Pavouk a spojky", "zvire": 8, "text": ["Pavouk spojuje vlákna do sítě. Spojky **spojují** slova a věty.", "Slova: máma [a|8] táta, pes [i|8] kočka, čaj [nebo|8] kakao."] },
+        { "nadpis": "Spojky spojují věty", "zvire": 8, "text": ["Zůstanu doma, [protože|8] prší. Vím, [že|8] přijdeš. Chtěl jsem ven, [ale|8] pršelo.", "Před spojkou často bývá **čárka**."], "veta": "Kočka/1 spí/5 pod/7 stolem/1, protože/8 je/5 unavená/2.", "ukaz": 8 },
+        { "nadpis": "Druh číslo 8", "text": ["Spojky jsou **druh číslo 8** a jsou **neohebné**.", "Časté spojky: a, i, ani, nebo, ale, však, protože, že, když, aby, kdyby, až."], "veta": "Petr/1 a/8 Jana/1 hrají/5 fotbal/1 na/7 hřišti/1.", "ukaz": 8 }
+      ],
+      "polozky": [
+        { "id": "krmeni", "nazev": "Kdo co sní?", "gen": "krmeni", "serie": 3 },
+        { "id": "veta", "nazev": "Slovo ve větě", "gen": "veta", "serie": 3 },
+        { "id": "najdi", "nazev": "Najdi spojky", "gen": "najdi", "serie": 2 },
+        { "id": "vlacek", "nazev": "Vláček", "gen": "vlacek", "serie": 2 },
+        { "id": "cislo", "nazev": "Číslo druhu", "gen": "cislo", "serie": 2 }
+      ]
+    },
+    {
+      "id": "citoslovce", "druh": 10, "vybeh": "Žabí jezírko",
+      "strazce": { "jmeno": "Zmatkář Křikloun", "barva": "#55efc4", "oci": 3, "rohy": 3, "hlaska": "BUM! PRÁSK! Kvák! Hehe, lekl ses?" },
+      "lekce": [
+        { "nadpis": "Žába a citoslovce", "zvire": 10, "text": ["Žába kváká: kvák, kvák! Citoslovce vyjadřují **city** a **zvuky**.", "City: [au|10], [jé|10], [fuj|10], [hurá|10], [ach|10]. Zvuky: [haf|10], [mňau|10], [bum|10], [prásk|10]."] },
+        { "nadpis": "Citoslovce ve větě", "zvire": 10, "text": ["Citoslovce stojí často na začátku a mívá za sebou **vykřičník** nebo čárku.", "Citoslovce jsou **neohebná**."], "veta": "Au/10, to/3 bolí/5!", "ukaz": 10 },
+        { "nadpis": "Druh číslo 10", "text": ["Citoslovce jsou **druh číslo 10** – poslední.", "Zbývá poslední zvíře: papoušek s částicemi (druh 9)."], "veta": "Hurá/10, vyhráli/5 jsme/5!", "ukaz": 10 }
+      ],
+      "polozky": [
+        { "id": "krmeni", "nazev": "Kdo co sní?", "gen": "krmeni", "serie": 3 },
+        { "id": "veta", "nazev": "Slovo ve větě", "gen": "veta", "serie": 2 },
+        { "id": "najdi", "nazev": "Najdi citoslovce", "gen": "najdi", "serie": 2 },
+        { "id": "vlacek", "nazev": "Vláček", "gen": "vlacek", "serie": 2 },
+        { "id": "cislo", "nazev": "Číslo druhu", "gen": "cislo", "serie": 2 }
+      ]
+    },
+    {
+      "id": "castice", "druh": 9, "vybeh": "Papouščí voliéra",
+      "strazce": { "jmeno": "Zmatkář Kecal", "barva": "#d63031", "oci": 2, "rohy": 2, "hlaska": "Prý to nezvládneš! Copak, bojíš se? Kéž bys prohrál!" },
+      "lekce": [
+        { "nadpis": "Papoušek a částice", "zvire": 9, "text": ["Papoušek ohlašuje, **jak je věta myšlená**: jako přání, jako pochybnost, nebo jako otázka.", "Přání: [kéž|9], [ať|9]. Pochybnost: [prý|9], [asi|9], [snad|9]. Otázka: [copak|9], [zda|9], [jestlipak|9]."] },
+        { "nadpis": "Částice uvádí celou větu", "zvire": 9, "text": ["Částice stojí většinou **na začátku věty** a nepatří k jednomu slovu, ale k celé větě.", "[Kéž|9] zítra nebude pršet! [Prý|9] přijede babička. [Copak|9] nevíš?"], "veta": "Prý/9 přijede/5 babička/1.", "ukaz": 9 },
+        { "nadpis": "Spojka, nebo částice?", "text": ["Spojka **spojuje** dvě věty: Chtěl jsem ven, [ale|8] pršelo.", "Částice nic nespojuje, jen **zesiluje** nebo uvádí: To je [ale|9] ošklivé!", "Částice jsou **druh číslo 9** a jsou neohebné. Teď znáš celou zoo!"], "veta": "Fuj/10, to/3 je/5 ale/9 ošklivé/2!", "ukaz": 9 }
+      ],
+      "polozky": [
+        { "id": "krmeni", "nazev": "Kdo co sní?", "gen": "krmeni", "serie": 3 },
+        { "id": "veta", "nazev": "Slovo ve větě", "gen": "veta", "serie": 2 },
+        { "id": "najdi", "nazev": "Najdi částice", "gen": "najdi", "serie": 2 },
+        { "id": "vlacek", "nazev": "Vláček", "gen": "vlacek", "serie": 2 },
+        { "id": "cislo", "nazev": "Číslo druhu", "gen": "cislo", "serie": 2 }
+      ]
+    }
+  ],
+  "seznamy": {
+    "pav-snek": [["rychlý", 2], ["rychle", 6], ["hezký", 2], ["hezky", 6], ["dobrý", 2], ["dobře", 6], ["pomalý", 2], ["pomalu", 6], ["tichý", 2], ["potichu", 6], ["hlasitý", 2], ["nahlas", 6], ["blízký", 2], ["blízko", 6], ["veselý", 2], ["vesele", 6], ["špatný", 2], ["špatně", 6], ["dnešní", 2], ["dnes", 6], ["zítřejší", 2], ["zítra", 6], ["domácí", 2], ["doma", 6]]
+  }
+}

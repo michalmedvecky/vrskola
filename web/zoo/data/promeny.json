@@ -1,0 +1,40 @@
+{
+  "_popis": "Šatna: ohebná slova se dají „převléknout“ (skloňovat, časovat), neohebná ne. ohebna: tvary = jak se slovo převléká, zkus = věty s mezerou ___, druhé pole je správný tvar (špatné možnosti se vezmou z ostatních tvarů). neohebna: vety = pár vět, kde je slovo pořád stejné.",
+  "ohebna": [
+    { "slovo": "pes", "druh": 1, "tvary": ["pes", "psa", "psovi", "psem", "psi"], "zkus": [["Bojím se velkého ___.", "psa"], ["Jdu ven se ___.", "psem"], ["Dám kost ___.", "psovi"]] },
+    { "slovo": "škola", "druh": 1, "tvary": ["škola", "školy", "škole", "školu", "školou"], "zkus": [["Jdu do ___.", "školy"], ["Těším se na ___.", "školu"], ["Jdu kolem ___.", "školy"], ["Učím se ve ___.", "škole"]] },
+    { "slovo": "město", "druh": 1, "tvary": ["město", "města", "městu", "městem", "městě"], "zkus": [["Bydlím ve ___.", "městě"], ["Jedeme do ___.", "města"], ["Projíždíme ___.", "městem"]] },
+    { "slovo": "kamarád", "druh": 1, "tvary": ["kamarád", "kamaráda", "kamarádovi", "kamarádem", "kamarádi"], "zkus": [["Čekám na ___.", "kamaráda"], ["Hraju si s ___.", "kamarádem"], ["Píšu dopis ___.", "kamarádovi"]] },
+    { "slovo": "velký", "druh": 2, "tvary": ["velký", "velká", "velké", "velkého", "velkým"], "zkus": [["Máme ___ dům.", "velký"], ["Ta ___ myš je moje.", "velká"], ["Vidím ___ psa.", "velkého"], ["Je to ___ auto.", "velké"]] },
+    { "slovo": "zelený", "druh": 2, "tvary": ["zelený", "zelená", "zelené", "zeleného", "zelenou"], "zkus": [["Tráva je ___.", "zelená"], ["Jablko je ___.", "zelené"], ["Píšu ___ pastelkou.", "zelenou"]] },
+    { "slovo": "maminčin", "druh": 2, "tvary": ["maminčin", "maminčina", "maminčino", "maminčiny"], "zkus": [["To je ___ klíč.", "maminčin"], ["To je ___ taška.", "maminčina"], ["To je ___ kolo.", "maminčino"]] },
+    { "slovo": "já", "druh": 3, "tvary": ["já", "mě", "mně", "mnou"], "zkus": [["Pojď se ___.", "mnou"], ["Dej to ___.", "mně"], ["___ jsem doma.", "Já"]] },
+    { "slovo": "on", "druh": 3, "tvary": ["on", "jeho", "jemu", "ním", "něm"], "zkus": [["Mluvíme o ___.", "něm"], ["Půjdu s ___.", "ním"], ["Dám to ___.", "jemu"]] },
+    { "slovo": "můj", "druh": 3, "tvary": ["můj", "moje", "mého", "mému", "mým"], "zkus": [["To je ___ pes.", "můj"], ["Hraju si s ___ bratrem.", "mým"], ["Nevidíš ___ míč?", "můj"], ["Volám ___ tátovi.", "mému"]] },
+    { "slovo": "ten", "druh": 3, "tvary": ["ten", "ta", "to", "toho", "tomu", "tím"], "zkus": [["Podej mi ___ hrnek.", "ten"], ["Bojím se ___ psa.", "toho"], ["Co je ___ za knížku?", "to"]] },
+    { "slovo": "dva", "druh": 4, "tvary": ["dva", "dvě", "dvou", "dvěma"], "zkus": [["Mám ___ bratry.", "dva"], ["Mám ___ sestry.", "dvě"], ["Jdu tam se ___ kamarády.", "dvěma"]] },
+    { "slovo": "první", "druh": 4, "tvary": ["první", "prvního", "prvnímu", "prvním"], "zkus": [["Sedím v ___ lavici.", "první"], ["Gratuluju ___ místu.", "prvnímu"], ["Jedeme ___ vlakem.", "prvním"]] },
+    { "slovo": "tři", "druh": 4, "tvary": ["tři", "tří", "třem", "třemi"], "zkus": [["Mám ___ pastelky.", "tři"], ["Šli jsme tam se ___ dětmi.", "třemi"], ["Dám bonbon ___ dětem.", "třem"]] },
+    { "slovo": "běhat", "druh": 5, "tvary": ["běhám", "běháš", "běhá", "běháme", "běhal", "budu běhat"], "zkus": [["Já ___ každý den.", "běhám"], ["Ty ___ rychle.", "běháš"], ["Včera jsem ___.", "běhal"]] },
+    { "slovo": "psát", "druh": 5, "tvary": ["píšu", "píšeš", "píše", "píšeme", "psal", "piš"], "zkus": [["Já ___ úkol.", "píšu"], ["Babička ___ dopis.", "píše"], ["___ pořádně!", "Piš"]] },
+    { "slovo": "být", "druh": 5, "tvary": ["jsem", "jsi", "je", "jsme", "byl", "budu"], "zkus": [["Já ___ doma.", "jsem"], ["Včera jsem ___ ve škole.", "byl"], ["Zítra ___ u babičky.", "budu"]] },
+    { "slovo": "zpívat", "druh": 5, "tvary": ["zpívám", "zpíváš", "zpívá", "zpívali", "zpívej"], "zkus": [["Ptáček ___.", "zpívá"], ["Děti ___ koledy.", "zpívali"], ["___ se mnou!", "Zpívej"]] }
+  ],
+  "neohebna": [
+    { "slovo": "rychle", "druh": 6, "vety": ["Běžím rychle.", "Běžela rychle.", "Poběžíme rychle."] },
+    { "slovo": "včera", "druh": 6, "vety": ["Včera pršelo.", "Byli jsme tam včera.", "Včera mi bylo smutno."] },
+    { "slovo": "doma", "druh": 6, "vety": ["Jsem doma.", "Babička je doma.", "Zůstaneme doma."] },
+    { "slovo": "tady", "druh": 6, "vety": ["Bydlím tady.", "Tady je klíč.", "Počkejte tady."] },
+    { "slovo": "na", "druh": 7, "vety": ["Kniha je na stole.", "Jedeme na výlet.", "Čekám na tebe."] },
+    { "slovo": "do", "druh": 7, "vety": ["Jdu do školy.", "Skočil do vody.", "Pojedeme do Prahy."] },
+    { "slovo": "pro", "druh": 7, "vety": ["Dárek pro mámu.", "Jdu pro chleba.", "To je pro tebe."] },
+    { "slovo": "bez", "druh": 7, "vety": ["Čaj bez cukru.", "Šel ven bez čepice.", "Bez tebe to nejde."] },
+    { "slovo": "a", "druh": 8, "vety": ["Máma a táta.", "Pes a kočka.", "Prší a fouká."] },
+    { "slovo": "protože", "druh": 8, "vety": ["Zůstanu doma, protože prší.", "Spím, protože jsem unavený.", "Směju se, protože je to vtipné."] },
+    { "slovo": "ale", "druh": 8, "vety": ["Je malý, ale silný.", "Chtěl jsem jít, ale pršelo.", "Je zima, ale svítí slunce."] },
+    { "slovo": "prý", "druh": 9, "vety": ["Prý bude sněžit.", "Prý je nemocný.", "Prý přijdou zítra."] },
+    { "slovo": "kéž", "druh": 9, "vety": ["Kéž vyhrajeme!", "Kéž by už bylo léto!", "Kéž se uzdraví!"] },
+    { "slovo": "au", "druh": 10, "vety": ["Au, to bolí!", "Au, štípla mě vosa!", "Au, moje koleno!"] },
+    { "slovo": "hurá", "druh": 10, "vety": ["Hurá, prázdniny!", "Hurá, vyhráli jsme!", "Hurá do bazénu!"] }
+  ]
+}
