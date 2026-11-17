@@ -1,0 +1,19 @@
+{
+  "id": "desetinna",
+  "nazev": "Zlomky, desetinná čísla, procenta",
+  "ikona": "🔢",
+  "ostrov": "Ostrov desetinek",
+  "strazce": { "jmeno": "Desetinka", "rod": "z", "barva": "#fdcb6e", "oci": 4, "rohy": 0, "hlaska": "Nula celá nic, to jsi ty!" },
+  "lekce": [
+    { "nadpis": "Desetiny a setiny", "text": ["Desetinné číslo je jen jiný zápis zlomku se jmenovatelem 10, 100, 1000…", "0,7 = {7/10}, 0,35 = {35/100}, 0,125 = {125/1000}.", "Kolik je desetinných míst, tolik nul má jmenovatel."] },
+    { "nadpis": "Ze zlomku na desetinné číslo", "text": ["Rozšiř zlomek na jmenovatel 10, 100 nebo 1000.", "{3/4} = {75/100} = 0,75. {3/8} = {375/1000} = 0,375.", "Jde to i dělením: {3/4} = 3 : 4 = 0,75."] },
+    { "nadpis": "Z desetinného čísla na zlomek", "text": ["0,45 = {45/100}. Pak zkrať: D(45, 100) = 5, takže {45/100} = {9/20}.", "1,5 = {15/10} = {3/2} = {1 1/2}."] },
+    { "nadpis": "Procenta", "text": ["Procento je **setina**: 1 % = {1/100}.", "{1/2} = 50 %, {1/4} = 25 %, {3/4} = 75 %, {1/5} = 20 %, {1/10} = 10 %.", "{3/5} → rozšiř na setiny: {60/100} = 60 %."] },
+    { "nadpis": "Vyplatí se umět zpaměti", "text": ["{1/2} = 0,5 · {1/4} = 0,25 · {3/4} = 0,75 · {1/5} = 0,2 · {1/8} = 0,125 · {1/20} = 0,05", "{1/3} = 0,333… se ukončit nedá – takové zlomky nech jako zlomky."] }
+  ],
+  "polozky": [
+    { "id": "na-desetinne", "gen": "na-desetinne", "nazev": "Zlomek → desetinné číslo", "serie": 3 },
+    { "id": "na-zlomek", "gen": "na-zlomek", "nazev": "Desetinné číslo → zlomek", "serie": 3 },
+    { "id": "procenta", "gen": "procenta", "nazev": "Zlomky a procenta", "serie": 3 }
+  ]
+}

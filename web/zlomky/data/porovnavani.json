@@ -1,0 +1,20 @@
+{
+  "id": "porovnavani",
+  "nazev": "Porovnávání zlomků",
+  "ikona": "⚖️",
+  "ostrov": "Ostrov vah",
+  "strazce": { "jmeno": "Váhoun", "barva": "#0984e3", "oci": 2, "rohy": 1, "hlaska": "Co je víc, čtvrt pizzy, nebo třetina? Hehe…" },
+  "lekce": [
+    { "nadpis": "Stejný jmenovatel", "text": ["Když mají zlomky **stejný jmenovatel**, díly jsou stejně velké.", "Větší je ten, kdo má **víc dílů**: {5/8} > {3/8}."], "kresba": { "typ": "vedle", "kresby": [{ "typ": "pruh", "n": 8, "k": 5, "popis": "5/8" }, { "typ": "pruh", "n": 8, "k": 3, "popis": "3/8" }] } },
+    { "nadpis": "Stejný čitatel", "text": ["Když mají **stejný čitatel**, máš stejný počet dílů. Rozhoduje jejich velikost.", "Čím víc dílů celek má, tím jsou menší. Proto {1/3} > {1/5} a {2/7} < {2/5}."], "kresba": { "typ": "vedle", "kresby": [{ "typ": "kolac", "n": 3, "k": 1, "popis": "1/3" }, { "typ": "kolac", "n": 5, "k": 1, "popis": "1/5" }] } },
+    { "nadpis": "Společný jmenovatel", "text": ["Jinak převeď oba zlomky na **společný jmenovatel** (nejlépe nejmenší společný násobek jmenovatelů).", "{2/3} a {3/5}: společný jmenovatel 15. {2/3} = {10/15}, {3/5} = {9/15}.", "10 > 9, takže {2/3} > {3/5}."] },
+    { "nadpis": "Jak najít společný jmenovatel", "text": ["Vezmi větší jmenovatel a procházej jeho násobky, dokud nenajdeš číslo dělitelné i tím druhým.", "4 a 6: násobky 6 jsou 6, **12** … 12 : 4 = 3 ✔. Společný jmenovatel je 12.", "Když nemají jmenovatelé společného dělitele (3 a 5), stačí je vynásobit: 15."] },
+    { "nadpis": "Rychlá kontrola", "text": ["Pomůže i odhad: {1/2} je hranice. {3/7} je méně než polovina (3 < 3,5), {5/9} víc.", "Nebo převeď na desetinné číslo: {3/8} = 0,375 a {2/5} = 0,4."] }
+  ],
+  "polozky": [
+    { "id": "snadne", "gen": "porovnej-snadne", "nazev": "Porovnej (stejné části)", "serie": 3 },
+    { "id": "porovnej", "gen": "porovnej", "nazev": "Porovnej přes společný jmenovatel", "serie": 3 },
+    { "id": "serad", "gen": "serad", "nazev": "Seřaď zlomky", "serie": 2 },
+    { "id": "mezi", "gen": "mezi", "nazev": "Zlomek mezi dvěma", "serie": 2 }
+  ]
+}

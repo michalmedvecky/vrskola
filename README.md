@@ -56,6 +56,14 @@ Pád se vždy hledá přes pádovou otázku a nápovědy se postupně schovávaj
 (`web/padam/data/`), podrobnosti v [`web/padam/README.md`](web/padam/README.md). V k3s jsou to ConfigMapy
 `vrskola-padam` a `vrskola-padam-data`, nginx je servíruje z `/padam/`.
 
+## Zlomková výprava (PC a tablet, `/zlomky/`)
+
+Hra na zlomky pro deváťáky před přijímačkami z matematiky ve `web/zlomky/` (bez VR, bez serveru). Deset ostrovů
+od pojmu zlomku po složené zlomky a slovní úlohy: na každém lekce, trénink do zvládnutí všech dovedností
+(složitější příklady se kontrolují po krocích) a souboj se strážcem; na konci závěrečná zkouška Brána přijímaček.
+Témata, lekce a úlohy jsou vyměnitelná data (`web/zlomky/data/`), podrobnosti v [`web/zlomky/README.md`](web/zlomky/README.md).
+V k3s jsou to ConfigMapy `vrskola-zlomky` a `vrskola-zlomky-data`, nginx je servíruje z `/zlomky/`.
+
 ## Soubory
 
 | Cesta | Co to je |
@@ -68,6 +76,7 @@ Pád se vždy hledá přes pádovou otázku a nápovědy se postupně schovávaj
 | `server/server.mjs` | mini server pro Souboj třídy (Node.js 22, bez závislostí) |
 | `web/strazcy/` | hra Strážcy klýčú pro tablet (vlastní README) |
 | `web/padam/` | hra Padám padám pro tablet, určování pádů (vlastní README) |
+| `web/zlomky/` | hra Zlomková výprava, zlomky pro přijímačky (vlastní README) |
 | `kustomization.yaml`, `deploy/` | nasazení do k3s |
 
 Lokálně: `cd web && python3 -m http.server 8000` → http://localhost:8000/ (WebXR v headsetu potřebuje https).

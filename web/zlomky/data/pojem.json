@@ -1,0 +1,20 @@
+{
+  "id": "pojem",
+  "nazev": "Co je zlomek",
+  "ikona": "🍕",
+  "ostrov": "Pizzový ostrov",
+  "strazce": { "jmeno": "Pizzožrout", "barva": "#e17055", "oci": 1, "rohy": 0, "hlaska": "Kdo neví, kolik je tři čtvrtiny, tomu sním celou pizzu!" },
+  "lekce": [
+    { "nadpis": "Celek a díly", "text": ["Zlomek říká, **jakou část celku** máš.", "Pizzu rozkrojíme na 8 stejných dílů. Vezmeš si 3 díly. Máš {3/8} pizzy."], "kresba": { "typ": "kolac", "n": 8, "k": 3 } },
+    { "nadpis": "Čitatel a jmenovatel", "text": ["**Jmenovatel** (dole) říká, na kolik stejných dílů je celek rozdělený.", "**Čitatel** (nahoře) říká, kolik takových dílů máš.", "Čára mezi nimi je zlomková čára a znamená dělení: {3/4} = 3 : 4."], "kresba": { "typ": "pruh", "n": 4, "k": 3 } },
+    { "nadpis": "Díly musí být stejné", "text": ["Zlomek má smysl, jen když jsou všechny díly stejně velké.", "Čokoláda má 12 kostiček, snědl jsi 5. Snědl jsi {5/12} čokolády."], "kresba": { "typ": "cokolada", "n": 12, "k": 5 } },
+    { "nadpis": "Zlomek z čísla", "text": ["Kolik je {3/4} z 20? Nejdřív zjisti, kolik je **jedna čtvrtina**: 20 : 4 = 5.", "Pak vezmi **tři** čtvrtiny: 5 · 3 = 15.", "Pravidlo: vyděl jmenovatelem, vynásob čitatelem."], "kresba": { "typ": "pruh", "n": 4, "k": 3 } },
+    { "nadpis": "Zlomek na číselné ose", "text": ["Úsek od 0 do 1 rozdělíš na tolik dílků, kolik je jmenovatel.", "{3/5} je třetí dílek od nuly, když je úsek 0–1 rozdělený na 5 dílků.", "Zlomky můžou být i větší než 1: {7/5} je za jedničkou."], "kresba": { "typ": "osa", "do": 2, "deleni": 5, "body": [{ "pismeno": "3/5", "c": 3 }, { "pismeno": "7/5", "c": 7 }] } }
+  ],
+  "polozky": [
+    { "id": "obrazek", "gen": "obrazek", "nazev": "Zlomek z obrázku", "serie": 2 },
+    { "id": "vybarvi", "gen": "vybarvi", "nazev": "Vybarvi zlomek", "serie": 2 },
+    { "id": "cast", "gen": "cast-z-cisla", "nazev": "Zlomek z čísla", "serie": 3 },
+    { "id": "osa", "gen": "osa", "nazev": "Zlomek na ose", "serie": 2 }
+  ]
+}

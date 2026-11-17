@@ -1,0 +1,19 @@
+{
+  "id": "nasobeni",
+  "nazev": "Násobení zlomků",
+  "ikona": "✖️",
+  "ostrov": "Ostrov krátů",
+  "strazce": { "jmeno": "Násobník", "barva": "#d63031", "oci": 2, "rohy": 4, "hlaska": "Než se naděješ, budou z toho stovky!" },
+  "lekce": [
+    { "nadpis": "Zlomek krát celé číslo", "text": ["{2/7} · 3 = {6/7}. Čitatel vynásob, jmenovatel opiš.", "Je to jako sečíst {2/7} třikrát."] },
+    { "nadpis": "Zlomek krát zlomek", "text": ["Čitatel krát čitatel, jmenovatel krát jmenovatel. **Žádný** společný jmenovatel není potřeba!", "{2/3} · {4/5} = {8/15}."] },
+    { "nadpis": "Krácení do kříže", "text": ["Před násobením můžeš krátit kterýkoli čitatel s kterýmkoli jmenovatelem.", "{4/9} · {3/8}: 4 a 8 krátíš 4, 3 a 9 krátíš 3 → {1/3} · {1/2} = {1/6}.", "Ušetříš si velká čísla a výsledek je hned v základním tvaru."] },
+    { "nadpis": "„Z“ znamená „krát“", "text": ["{2/3} z 12 = {2/3} · 12 = 8.", "{1/2} ze {3/4} = {1/2} · {3/4} = {3/8}. To se hodí ve slovních úlohách."] },
+    { "nadpis": "Smíšená čísla", "text": ["Smíšené číslo převeď na zlomek, pak násob.", "{1 1/2} · {2/3} = {3/2} · {2/3} = 1.", "Pozor: {1 1/2} · {2/3} **není** 1 · {1/2} · {2/3}!"] }
+  ],
+  "polozky": [
+    { "id": "cele", "gen": "nasob-cele", "nazev": "Zlomek krát celé číslo", "serie": 2 },
+    { "id": "nasob", "gen": "nasob", "nazev": "Zlomek krát zlomek", "serie": 3 },
+    { "id": "smisena", "gen": "nasob-smisene", "nazev": "Násobení smíšeného čísla", "serie": 2 }
+  ]
+}
