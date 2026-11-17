@@ -1,0 +1,94 @@
+:root {
+  --pozadi: #1d1b33;
+  --panel: #2a2748;
+  --text: #f4f1ff;
+  --tlumeny: #b7b1d9;
+  --zlata: #ffd166;
+  --zelena: #3ddc84;
+  --cervena: #ff5c5c;
+  --modra: #5cc8ff;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; height: 100%; overflow: hidden; }
+body { background: radial-gradient(ellipse at top, #34306a 0%, var(--pozadi) 60%); color: var(--text);
+  font-family: "Nunito", "Segoe UI", system-ui, sans-serif; display: flex; flex-direction: column;
+  user-select: none; -webkit-user-select: none; overscroll-behavior: none;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left); }
+button { font: inherit; color: inherit; cursor: pointer; touch-action: manipulation; }
+
+#hlava { display: flex; align-items: center; gap: 12px; padding: 10px 16px 6px; }
+#nadpis { font-size: clamp(18px, 2.6vw, 26px); font-weight: 800; flex: 1; min-width: 0; }
+#stitek { color: var(--tlumeny); font-weight: 700; white-space: nowrap; }
+#pokrok-obal { height: 6px; margin: 0 16px; background: #ffffff1a; border-radius: 3px; overflow: hidden; }
+#pokrok-obal[hidden] { visibility: hidden; display: block; }
+#pokrok { height: 100%; background: linear-gradient(90deg, var(--modra), var(--zelena)); transition: width .3s; }
+
+#panel { flex: 1; min-height: 0; overflow-y: auto; padding: 14px 16px 18px; display: flex; flex-direction: column; align-items: center; gap: 12px; touch-action: pan-y; }
+#panel > * { width: min(860px, 100%); }
+#panel p { margin: 0; font-size: clamp(17px, 2.2vw, 22px); line-height: 1.45; }
+.pokrok-text { color: var(--tlumeny); font-weight: 700; }
+.zadani { font-size: clamp(20px, 3vw, 30px); font-weight: 800; line-height: 1.3; }
+.napoveda { color: var(--tlumeny); font-size: 18px; }
+.napoveda.klav { color: var(--zlata); font-weight: 700; }
+
+.tl { border: none; border-radius: 14px; background: #3b3766; box-shadow: 0 4px 0 #15132a; padding: 11px 18px; font-weight: 800; font-size: 19px; transition: transform .08s; }
+.tl:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 #15132a; }
+.tl.hlavni { background: var(--zlata); color: #2a2000; box-shadow: 0 4px 0 #a8862d; }
+.tl.velke { font-size: 22px; padding: 16px 26px; }
+.tl.male { padding: 7px 12px; font-size: 16px; border-radius: 11px; }
+.tl.nebezpecne { background: #5a2a3a; color: #ffc9d2; }
+.tlacitka { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+.tlacitka.dole { margin-top: 6px; }
+
+.moznosti { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+.moznost { position: relative; font-size: 22px; padding: 16px 12px; }
+.moznost small { position: absolute; left: 9px; top: 5px; font-size: 12px; opacity: .45; }
+.moznost.ok { background: var(--zelena); color: #062b14; box-shadow: 0 4px 0 #1f8b50; }
+.moznost.chyba { background: var(--cervena); color: #fff; box-shadow: 0 4px 0 #a33; }
+.moznost.tlumeno { opacity: .35; }
+.moznost:disabled { cursor: default; }
+
+.radek { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.ton { min-width: 52px; padding: 8px 8px; border-radius: 10px; background: #ffffff12; text-align: center; font-size: 21px; font-weight: 800; }
+.ton.aktivni { outline: 3px solid var(--zlata); background: #ffd16622; }
+.ton.ok { background: #3ddc8433; color: #b6ffd5; }
+.ton.chyba { background: #ff5c5c44; }
+.ton.oprava { background: #5cc8ff33; color: #cdeeff; }
+
+.zprava { border-radius: 14px; padding: 12px 16px; font-size: 20px; font-weight: 700; line-height: 1.4; }
+.zprava.ok { background: #3ddc8426; color: #b6ffd5; }
+.zprava.chyba { background: #ff5c5c26; color: #ffd0d0; }
+
+.seznam { display: flex; flex-direction: column; gap: 8px; }
+.jednotka { display: flex; align-items: center; gap: 12px; background: var(--panel); border-radius: 14px; padding: 8px 12px; }
+.jednotka.zamceno { opacity: .45; }
+.jednotka.aktualni { outline: 2px solid var(--zlata); }
+.j-ikona { font-size: 24px; width: 34px; text-align: center; }
+.j-telo { flex: 1; min-width: 0; }
+.j-nazev { font-weight: 800; font-size: 17px; }
+.j-lista { height: 6px; background: #ffffff1a; border-radius: 3px; margin-top: 5px; overflow: hidden; }
+.j-lista div { height: 100%; background: var(--zelena); }
+.jednotka.slabe .j-lista div { background: var(--zlata); }
+.j-akce { display: flex; gap: 6px; }
+.vyber { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.vyber b { width: 100%; color: var(--tlumeny); }
+
+/* ---------- klaviatura ---------- */
+#klaviatura { position: relative; flex: none; height: clamp(150px, 30vh, 250px); margin: 0 max(6px, env(safe-area-inset-right)) max(8px, env(safe-area-inset-bottom)) max(6px, env(safe-area-inset-left)); touch-action: none; }
+.klavesa { position: absolute; top: 0; border-radius: 0 0 8px 8px; display: flex; align-items: flex-end; justify-content: center; transition: background .08s; }
+.klavesa.bila { height: 100%; background: linear-gradient(#fff 80%, #e9e6f5); border: 1px solid #1d1b33; color: #444; z-index: 1; }
+.klavesa.cerna { height: 60%; background: linear-gradient(#333, #111); border: 1px solid #000; color: #eee; z-index: 2; border-radius: 0 0 6px 6px; }
+.popisek { font-weight: 800; font-size: clamp(11px, 1.8vw, 18px); padding-bottom: 8px; pointer-events: none; text-align: center; }
+.klavesa.cerna .popisek { font-size: clamp(9px, 1.4vw, 15px); padding-bottom: 6px; }
+.klavesa.zvyr.bila { background: linear-gradient(#fff, #bfe9ff); }
+.klavesa.zvyr.cerna { background: linear-gradient(#2d6e96, #174a69); }
+.klavesa.ok.bila { background: linear-gradient(#fff, #9ff5c6); }
+.klavesa.ok.cerna { background: linear-gradient(#25a35e, #0f6b39); }
+.klavesa.chyba.bila { background: linear-gradient(#fff, #ffb3b3); }
+.klavesa.chyba.cerna { background: linear-gradient(#c83c3c, #7d1d1d); }
+.klavesa.hraje.bila, .klavesa.stisk.bila { background: linear-gradient(#fff, var(--zlata)); }
+.klavesa.hraje.cerna, .klavesa.stisk.cerna { background: linear-gradient(#a8862d, #6d5513); }
+
+body[data-obrazovka="domu"] #klaviatura, body[data-obrazovka="nastaveni"] #klaviatura, body[data-obrazovka="smazat"] #klaviatura, body[data-obrazovka="souhrn"] #klaviatura { height: clamp(110px, 20vh, 180px); }
+@media (max-height: 520px) { #klaviatura { height: 42vh; } #panel { padding-top: 6px; gap: 8px; } }

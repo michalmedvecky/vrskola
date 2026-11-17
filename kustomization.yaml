@@ -162,6 +162,21 @@ configMapGenerator:
       - web/zlomky/data/deleni.json
       - web/zlomky/data/slozene.json
       - web/zlomky/data/slovni.json
+  - name: vrskola-klavir2   # zkušební kopie /klavir/ s hraním prsty ve VR (sledování rukou na Questu)
+    files:
+      - web/klavir2/index.html
+      - web/klavir2/styl.css
+      - web/klavir2/main.js
+      - web/klavir2/hra.js
+      - web/klavir2/ui.js
+      - web/klavir2/vr.js
+      - web/klavir2/hudba.js
+      - web/klavir2/kurz.js
+      - web/klavir2/cviceni.js
+      - web/klavir2/postup.js
+      - web/klavir2/zvuk.js
+      - web/klavir2/manifest.json
+      - web/klavir2/ikona.svg
   - name: vrskola-nginx
     files:
       - deploy/default.conf
