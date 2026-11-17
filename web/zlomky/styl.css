@@ -231,3 +231,14 @@ main.uloha > .zadani-karta { overflow-y: auto; min-height: 0; overscroll-behavio
 .vyhra { overflow: hidden; }
 .konfety i { position: absolute; top: -20px; left: calc(var(--i) * 4.2%); width: 10px; height: 16px; background: hsl(calc(var(--i) * 47), 85%, 58%); animation: pad 2.6s calc(var(--i) * -0.13s) linear infinite; }
 @keyframes pad { to { transform: translateY(560px) rotate(720deg); } }
+
+/* ---------- VR (Quest): stránka se rozloží do pevného obdélníku, který vr.js kreslí na panel ---------- */
+body.vr { overflow: hidden; }
+body.vr #app { position: fixed; left: 0; top: 0; width: var(--vrw); height: var(--vrh); max-width: none; min-height: 0; margin: 0; overflow-y: auto; overflow-x: hidden; }
+body.vr .klavesnice-obal, .vr-koren .klavesnice-obal { display: none; }  /* ve VR se píše na 3D klávesnici na pultu */
+body.vr main.uloha.s-klavesnici, .vr-koren main.uloha.s-klavesnici { grid-template-columns: minmax(0, 1fr); }
+.vr-koren .blika, .vr-koren .ostrov.aktualni, .vr-koren .prisera, .vr-koren .combo.hori, .vr-koren .zprava { animation: none; }
+.vr-koren { width: 100%; height: 100%; overflow: hidden; color: var(--hneda); font-family: "Nunito", "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+  background: radial-gradient(ellipse at 20% 0%, #4fc3dc 0%, transparent 55%), linear-gradient(180deg, var(--more2) 0%, var(--more) 70%, #08465c 100%); }
+.vr-koren #app { position: static !important; height: 100% !important; overflow: hidden !important; }
+.vr-koren .pole.fokus::after { animation: none; }

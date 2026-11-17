@@ -56,9 +56,9 @@ Pád se vždy hledá přes pádovou otázku a nápovědy se postupně schovávaj
 (`web/padam/data/`), podrobnosti v [`web/padam/README.md`](web/padam/README.md). V k3s jsou to ConfigMapy
 `vrskola-padam` a `vrskola-padam-data`, nginx je servíruje z `/padam/`.
 
-## Zlomková výprava (PC a tablet, `/zlomky/`)
+## Zlomková výprava (PC, tablet i VR, `/zlomky/`)
 
-Hra na zlomky pro deváťáky před přijímačkami z matematiky ve `web/zlomky/` (bez VR, bez serveru). Deset ostrovů
+Hra na zlomky pro deváťáky před přijímačkami z matematiky ve `web/zlomky/` (bez serveru). Na Questu jde do plného VR: tabule s hrou, 3D klávesnice na paličky, strážci jako 3D příšery. Deset ostrovů
 od pojmu zlomku po složené zlomky a slovní úlohy: na každém lekce, trénink do zvládnutí všech dovedností
 (složitější příklady se kontrolují po krocích) a souboj se strážcem; na konci závěrečná zkouška Brána přijímaček.
 Témata, lekce a úlohy jsou vyměnitelná data (`web/zlomky/data/`), podrobnosti v [`web/zlomky/README.md`](web/zlomky/README.md).
