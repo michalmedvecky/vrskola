@@ -135,6 +135,32 @@ configMapGenerator:
       - web/klavir/zvuk.js
       - web/klavir/manifest.json
       - web/klavir/ikona.svg
+  - name: vrskola-zlomky   # samostatná hra Zlomková výprava na /zlomky/ (zlomky pro přijímačky, PC a tablet)
+    files:
+      - web/zlomky/index.html
+      - web/zlomky/styl.css
+      - web/zlomky/hra.js
+      - web/zlomky/generatory.js
+      - web/zlomky/zlomek.js
+      - web/zlomky/kresby.js
+      - web/zlomky/prisery.js
+      - web/zlomky/postup.js
+      - web/zlomky/zvuk.js
+      - web/zlomky/manifest.json
+      - web/zlomky/ikona.svg
+  - name: vrskola-zlomky-data   # témata, lekce a úlohy Zlomkové výpravy (vyměnitelná data), servíruje se z /zlomky/data/
+    files:
+      - web/zlomky/data/kurz.json
+      - web/zlomky/data/pojem.json
+      - web/zlomky/data/kraceni.json
+      - web/zlomky/data/porovnavani.json
+      - web/zlomky/data/desetinna.json
+      - web/zlomky/data/smisena.json
+      - web/zlomky/data/scitani.json
+      - web/zlomky/data/nasobeni.json
+      - web/zlomky/data/deleni.json
+      - web/zlomky/data/slozene.json
+      - web/zlomky/data/slovni.json
   - name: vrskola-nginx
     files:
       - deploy/default.conf

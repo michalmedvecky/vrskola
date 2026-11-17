@@ -1,0 +1,17 @@
+{
+  "id": "smisena",
+  "nazev": "Smíšená čísla",
+  "ikona": "🥧",
+  "ostrov": "Koláčový ostrov",
+  "strazce": { "jmeno": "Smíšák", "barva": "#a29bfe", "oci": 2, "rohy": 3, "hlaska": "Dva a půl koláče? Nebo pět polovin? Zmatu tě!" },
+  "lekce": [
+    { "nadpis": "Víc než celek", "text": ["Zlomek může být větší než 1, když je čitatel větší než jmenovatel: {7/4}.", "To jsou 4 čtvrtiny (celý koláč) a ještě 3 čtvrtiny.", "Zapíšeme to i jako **smíšené číslo**: {1 3/4} (jedna celá a tři čtvrtiny)."], "kresba": { "typ": "vice", "pocet": 2, "k": 7, "vzor": { "typ": "kolac", "n": 4 } } },
+    { "nadpis": "Zlomek → smíšené číslo", "text": ["Vyděl čitatel jmenovatelem se zbytkem.", "{17/5}: 17 : 5 = 3, zbytek 2. Takže {17/5} = {3 2/5}.", "Podíl = celá část, zbytek = nový čitatel, jmenovatel zůstává."] },
+    { "nadpis": "Smíšené číslo → zlomek", "text": ["Celou část vynásob jmenovatelem a přičti čitatel.", "{2 3/4}: 2 · 4 + 3 = 11. Takže {2 3/4} = {11/4}.", "Na násobení a dělení musíš smíšená čísla vždycky převést na zlomek!"] },
+    { "nadpis": "Pozor na zkracování", "text": ["Zlomek ve smíšeném čísle musí být menší než 1 a v základním tvaru.", "{14/4} = {3 2/4} = {3 1/2}."] }
+  ],
+  "polozky": [
+    { "id": "na-smisene", "gen": "na-smisene", "nazev": "Zlomek → smíšené číslo", "serie": 3 },
+    { "id": "na-nepravy", "gen": "na-nepravy", "nazev": "Smíšené číslo → zlomek", "serie": 3 }
+  ]
+}

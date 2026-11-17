@@ -1,0 +1,70 @@
+{
+  "id": "slovni",
+  "nazev": "Slovní úlohy",
+  "ikona": "🧭",
+  "ostrov": "Ostrov příběhů",
+  "strazce": { "jmeno": "Úlohář", "barva": "#2d3436", "oci": 1, "rohy": 3, "hlaska": "Tady už ti nikdo neřekne, co máš počítat. Musíš na to přijít sám!" },
+  "lekce": [
+    { "nadpis": "Část z celku", "text": ["„Kolik je {3/5} z 40 km?“ → 40 : 5 · 3 = 24 km.", "Slovíčko **„z“** znamená **krát**: {3/5} · 40."] },
+    { "nadpis": "Celek z části", "text": ["„{2/5} třídy je 10 žáků. Kolik má třída žáků?“", "2 díly = 10 žáků, **1 díl** = 5 žáků, celá třída má **5 dílů** = 25 žáků.", "Když znáš část a ptají se na celek, vždycky nejdřív zjisti jeden díl."] },
+    { "nadpis": "Kolik zbývá", "text": ["Celek je vždycky **1** (= {12/12}, {20/20}…).", "Přečetl {1/3} knihy a pak {1/4}: dohromady {7/12}, zbývá {5/12}."] },
+    { "nadpis": "Pozor na „ze zbytku“", "text": ["„Utratil {1/3} peněz, pak {1/4} **zbytku**.“", "Zbytek je {2/3}. {1/4} ze zbytku = {1/4} · {2/3} = {1/6} celku (ne {1/4}!).", "Zůstalo {2/3} − {1/6} = {1/2}."] },
+    { "nadpis": "Jak na slovní úlohu", "text": ["1. Přečti si ji celou a zjisti, **co je celek**.", "2. Zapiš si zlomky, které znáš.", "3. Spočítej, a nakonec si **odpověz celou větou** a zkontroluj, jestli to dává smysl (třída nemá 7,5 žáka)."] }
+  ],
+  "polozky": [
+    { "id": "cast", "gen": "slovni-cast", "nazev": "Část z celku", "serie": 2 },
+    { "id": "celek", "gen": "slovni-celek", "nazev": "Celek z části", "serie": 3 },
+    { "id": "zbytek", "gen": "slovni-zbytek", "nazev": "Kolik zbývá", "serie": 2 },
+    { "id": "zbytku", "gen": "slovni-zbytku", "nazev": "Část ze zbytku", "serie": 3 },
+    { "id": "prijimacky", "gen": "pevne", "param": { "sada": "cermat" }, "nazev": "Úlohy jako u přijímaček", "serie": 3 }
+  ],
+  "sablony": {
+    "slovni-cast": [
+      { "text": "Trasa výletu měří {N} km. Do oběda jsme ušli {z} trasy. Kolik kilometrů jsme ušli do oběda?", "jednotka": "km", "rozsah": [2, 6] },
+      { "text": "Ve škole je {N} žáků. {z} z nich jezdí do školy autobusem. Kolik žáků jezdí autobusem?", "jednotka": "žáků", "rozsah": [10, 40] },
+      { "text": "Kolo stálo {N} Kč. Na podzim zlevnilo o {z} ceny. O kolik korun zlevnilo?", "jednotka": "Kč", "rozsah": [100, 900] },
+      { "text": "Lahev má {N} ml. Vypil jsem {z} lahve. Kolik mililitrů jsem vypil?", "jednotka": "ml", "rozsah": [50, 150] },
+      { "text": "Hra trvá {N} minut. Už uplynuly {z} hry. Kolik minut uplynulo?", "jednotka": "min", "rozsah": [3, 12] }
+    ],
+    "slovni-celek": [
+      { "text": "{z} třídy jsou dívky, je jich {X}. Kolik žáků má celá třída?", "jednotka": "žáků", "rozsah": [2, 6] },
+      { "text": "Zatím jsem přečetl {X} stran, což je {z} knihy. Kolik stran má celá kniha?", "jednotka": "stran", "rozsah": [8, 40] },
+      { "text": "Na účtu výletu jsme už zaplatili {X} Kč, to je {z} celkové ceny. Kolik stojí celý výlet?", "jednotka": "Kč", "rozsah": [50, 300] },
+      { "text": "Nádrž obsahuje {X} litrů vody a je plná ze {z}. Kolik litrů se vejde do plné nádrže?", "jednotka": "l", "rozsah": [5, 30] }
+    ],
+    "slovni-zbytek": [
+      { "text": "První den přečetla Eva {z1} knihy, druhý den {z2} knihy.", "otazkaN": "Kniha má {N} stran. Kolik stran jí zbývá přečíst?", "jednotka": "stran", "rozsah": [2, 8] },
+      { "text": "Na zahradě zabírá trávník {z1} plochy a záhony {z2} plochy. Zbytek je dvorek.", "otazkaN": "Zahrada má {N} m². Kolik m² má dvorek?", "jednotka": "m²", "rozsah": [3, 10] },
+      { "text": "Z kapesného dal Tomáš {z1} za lístek do kina a {z2} za svačinu.", "otazkaN": "Kapesné bylo {N} Kč. Kolik korun mu zbylo?", "jednotka": "Kč", "rozsah": [3, 15] },
+      { "text": "Malíři natřeli v pondělí {z1} plotu a v úterý {z2} plotu." }
+    ],
+    "slovni-zbytku": [
+      { "text": "Klára utratila {z1} svých úspor za boty. Ze zbytku dala {z2} za knihu.", "otazkaN": "Úspory byly {N} Kč. Kolik korun jí zůstalo?", "jednotka": "Kč", "rozsah": [5, 20] },
+      { "text": "Turisté ušli první den {z1} trasy, druhý den {z2} zbytku.", "otazkaN": "Celá trasa měří {N} km. Kolik kilometrů jim zbývá?", "jednotka": "km", "rozsah": [1, 4] },
+      { "text": "Ze sudu vylili {z1} vody, pak ještě {z2} toho, co zbylo." },
+      { "text": "Na brigádě vydělal Ondra peníze. {z1} dal rodičům a {z2} ze zbytku utratil.", "otazkaN": "Vydělal {N} Kč. Kolik mu zbylo?", "jednotka": "Kč", "rozsah": [10, 30] }
+    ]
+  },
+  "pevne": {
+    "cermat": [
+      { "zadani": "Vypočtěte a výsledek zapište zlomkem v základním tvaru: {3/4} − {2/3} · {3/8}", "kroky": [{ "otazka": "Nejdřív násobení: {2/3} · {3/8} =", "spravne": "1/4", "tvar": "libovolny", "napoveda": "Násobení má přednost. Krať do kříže." }, { "spravne": "1/2", "napoveda": "{3/4} − {1/4}" }], "vysvetleni": "{2/3} · {3/8} = {6/24} = {1/4}; {3/4} − {1/4} = {2/4} = {1/2}." },
+      { "zadani": "Vypočtěte a výsledek zapište zlomkem v základním tvaru: ({5/6} − {1/2}) : {2/9}", "kroky": [{ "otazka": "Nejdřív závorka: {5/6} − {1/2} =", "spravne": "1/3", "tvar": "libovolny", "napoveda": "Společný jmenovatel 6." }, { "spravne": "3/2", "napoveda": "{1/3} : {2/9} = {1/3} · {9/2}" }], "vysvetleni": "{5/6} − {3/6} = {2/6} = {1/3}; {1/3} · {9/2} = {9/6} = {3/2} = {1 1/2}." },
+      { "zadani": "Kolik je {2/5} ze {3/4} z 80?", "kroky": [{ "typ": "cislo", "otazka": "Kolik je {3/4} z 80?", "spravne": "60", "napoveda": "80 : 4 · 3" }, { "typ": "cislo", "otazka": "Kolik je {2/5} z toho?", "spravne": "24", "napoveda": "60 : 5 · 2" }], "vysvetleni": "{3/4} z 80 je 60, {2/5} z 60 je 24." },
+      { "zadani": "Do školy chodí 360 žáků. Dívky tvoří {5/9} všech žáků. O kolik je dívek víc než chlapců?", "kroky": [{ "typ": "cislo", "otazka": "Kolik je dívek?", "spravne": "200", "jednotka": "dívek", "napoveda": "360 : 9 · 5" }, { "typ": "cislo", "otazka": "Kolik je chlapců?", "spravne": "160", "napoveda": "360 − 200" }, { "typ": "cislo", "otazka": "O kolik je dívek víc?", "spravne": "40", "napoveda": "200 − 160" }], "vysvetleni": "Dívek je {5/9} z 360 = 200, chlapců 160, rozdíl 40. (Rychleji: rozdíl je {1/9} z 360.)" },
+      { "zadani": "Honza utratil {1/3} kapesného za knihu a {1/4} kapesného za kino. Zbylo mu 150 Kč. Kolik korun měl kapesného?", "kroky": [{ "otazka": "Jaká část kapesného mu zbyla?", "spravne": "5/12", "napoveda": "1 − {1/3} − {1/4}, společný jmenovatel 12." }, { "typ": "cislo", "otazka": "Kolik korun je {1/12} kapesného?", "spravne": "30", "napoveda": "{5/12} je 150 Kč, {1/12} je 150 : 5." }, { "typ": "cislo", "otazka": "Kolik měl kapesného?", "spravne": "360", "jednotka": "Kč", "napoveda": "30 · 12" }], "vysvetleni": "Zbylo 1 − {4/12} − {3/12} = {5/12}. {5/12} = 150 Kč, {1/12} = 30 Kč, celé kapesné 360 Kč." },
+      { "zadani": "Nádrž je naplněná ze {2/3}. Když do ní přilijeme 12 litrů, bude plná ze {4/5}. Kolik litrů se vejde do plné nádrže?", "kroky": [{ "otazka": "Jakou část nádrže tvoří 12 litrů?", "spravne": "2/15", "napoveda": "{4/5} − {2/3}" }, { "typ": "cislo", "otazka": "Kolik litrů je {1/15} nádrže?", "spravne": "6", "napoveda": "12 : 2" }, { "typ": "cislo", "otazka": "Kolik litrů se vejde do plné nádrže?", "spravne": "90", "jednotka": "l", "napoveda": "6 · 15" }], "vysvetleni": "{4/5} − {2/3} = {12/15} − {10/15} = {2/15}. To je 12 l, {1/15} = 6 l, celá nádrž 90 l." },
+      { "zadani": "Které z čísel je největší?", "kroky": [{ "typ": "volba", "moznosti": ["{5/8}", "0,6", "{3/5}", "{7/12}"], "spravne": 0, "napoveda": "Převeď všechno na desetinná čísla." }], "vysvetleni": "{5/8} = 0,625; 0,6; {3/5} = 0,6; {7/12} ≈ 0,583. Největší je {5/8}." },
+      { "zadani": "Vypočtěte: (1 + {1/2}) : (2 − {1/4}). Výsledek zapište v základním tvaru.", "kroky": [{ "otazka": "1 + {1/2} =", "spravne": "3/2", "tvar": "libovolny" }, { "otazka": "2 − {1/4} =", "spravne": "7/4", "tvar": "libovolny" }, { "spravne": "6/7", "napoveda": "{3/2} : {7/4} = {3/2} · {4/7}" }], "vysvetleni": "{3/2} : {7/4} = {3/2} · {4/7} = {12/14} = {6/7}." },
+      { "zadani": "Vypočtěte: {2 1/3} − {1 3/4}", "kroky": [{ "otazka": "Převeď na zlomky a odečti. Výsledek:", "spravne": "7/12", "napoveda": "{7/3} − {7/4} = {28/12} − {21/12}" }], "vysvetleni": "{7/3} − {7/4} = {28/12} − {21/12} = {7/12}." },
+      { "zadani": "Na výlet jely {3/5} třídy, tedy 18 žáků. Kolik žáků nejelo?", "kroky": [{ "typ": "cislo", "otazka": "Kolik žáků je {1/5} třídy?", "spravne": "6", "napoveda": "18 : 3" }, { "typ": "cislo", "otazka": "Kolik žáků má třída?", "spravne": "30", "napoveda": "6 · 5" }, { "typ": "cislo", "otazka": "Kolik žáků nejelo?", "spravne": "12", "jednotka": "žáků", "napoveda": "Nejely {2/5} třídy." }], "vysvetleni": "{1/5} třídy je 6 žáků, nejely {2/5} = 12 žáků." },
+      { "zadani": "Záhony zabírají {1/4} zahrady, trávník {2/5} zahrady a zbytek, 42 m², je sad. Jakou rozlohu má celá zahrada?", "kroky": [{ "otazka": "Jakou část zahrady zabírá sad?", "spravne": "7/20", "napoveda": "1 − {1/4} − {2/5}, společný jmenovatel 20." }, { "typ": "cislo", "otazka": "Kolik m² je {1/20} zahrady?", "spravne": "6", "napoveda": "42 : 7" }, { "typ": "cislo", "otazka": "Rozloha zahrady:", "spravne": "120", "jednotka": "m²", "napoveda": "6 · 20" }], "vysvetleni": "Sad je {7/20} zahrady = 42 m², {1/20} = 6 m², zahrada 120 m²." },
+      { "zadani": "Zvětšete číslo {3/8} o jeho třetinu. Výsledek zapište v základním tvaru.", "kroky": [{ "otazka": "Kolik je třetina z {3/8}?", "spravne": "1/8", "tvar": "libovolny", "napoveda": "{1/3} · {3/8}" }, { "spravne": "1/2", "napoveda": "{3/8} + {1/8}" }], "vysvetleni": "{1/3} · {3/8} = {1/8}; {3/8} + {1/8} = {4/8} = {1/2}." },
+      { "zadani": "Obdélník má délku {3 1/2} cm a šířka je {2/3} délky. Jaký má obvod?", "kroky": [{ "otazka": "Šířka v cm:", "spravne": "7/3", "tvar": "libovolny", "napoveda": "{2/3} · {7/2}" }, { "otazka": "Obvod v cm:", "spravne": "35/3", "napoveda": "o = 2 · ({7/2} + {7/3})" }], "vysvetleni": "Šířka {2/3} · {7/2} = {7/3} cm. o = 2 · ({21/6} + {14/6}) = 2 · {35/6} = {35/3} = {11 2/3} cm." },
+      { "zadani": "Které číslo patří do rámečku? {3/4} · ☐ = {9/10}", "kroky": [{ "otazka": "Rámeček = {9/10} : {3/4}. Převrácené číslo k {3/4}:", "spravne": "4/3", "tvar": "libovolny" }, { "spravne": "6/5", "napoveda": "{9/10} · {4/3}" }], "vysvetleni": "☐ = {9/10} : {3/4} = {9/10} · {4/3} = {36/30} = {6/5}. Zkouška: {3/4} · {6/5} = {18/20} = {9/10} ✔" },
+      { "zadani": "Kolik minut je {5/12} hodiny?", "kroky": [{ "typ": "cislo", "otazka": "Kolik minut je {1/12} hodiny?", "spravne": "5", "napoveda": "60 : 12" }, { "typ": "cislo", "otazka": "{5/12} hodiny je … minut", "spravne": "25", "jednotka": "min", "napoveda": "5 · 5" }], "vysvetleni": "60 : 12 = 5 minut, {5/12} hodiny = 25 minut." },
+      { "zadani": "Které tvrzení platí?", "kroky": [{ "typ": "volba", "moznosti": ["{2/3} > {3/4}", "{5/6} < {7/8}", "{3/5} = {5/3}", "{4/9} > {1/2}"], "spravne": 1, "napoveda": "Porovnávej přes společný jmenovatel nebo desetinná čísla." }], "vysvetleni": "{5/6} = {20/24} a {7/8} = {21/24}, takže {5/6} < {7/8}. Ostatní neplatí: {2/3} < {3/4}, {3/5} < 1 < {5/3}, {4/9} < {1/2}." },
+      { "zadani": "Cyklista ujel první den {2/7} trasy, druhý den {3/5} zbytku. Zbývá mu ujet 40 km. Jak dlouhá je celá trasa?", "kroky": [{ "otazka": "Jaká část trasy zbyla po prvním dni?", "spravne": "5/7" }, { "otazka": "Jakou část celé trasy ujel druhý den?", "spravne": "3/7", "napoveda": "{3/5} · {5/7}" }, { "otazka": "Jaká část trasy mu zbývá?", "spravne": "2/7", "napoveda": "{5/7} − {3/7}" }, { "typ": "cislo", "otazka": "Délka trasy v km:", "spravne": "140", "jednotka": "km", "napoveda": "{2/7} je 40 km, {1/7} je 20 km." }], "vysvetleni": "Zbylo {5/7}, druhý den {3/5} · {5/7} = {3/7}, zbývá {2/7} = 40 km, celá trasa 7 · 20 = 140 km." },
+      { "zadani": "Vypočtěte: 0,5 + {1/3}. Výsledek zapište zlomkem v základním tvaru.", "kroky": [{ "otazka": "0,5 jako zlomek:", "spravne": "1/2", "tvar": "libovolny" }, { "spravne": "5/6", "napoveda": "{3/6} + {2/6}" }], "vysvetleni": "0,5 = {1/2}; {1/2} + {1/3} = {3/6} + {2/6} = {5/6}." }
+    ]
+  }
+}

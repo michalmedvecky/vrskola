@@ -1,0 +1,10 @@
+{
+  "name": "Zlomková výprava",
+  "short_name": "Zlomky",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "background_color": "#0b5e7a",
+  "theme_color": "#0b5e7a",
+  "icons": [{ "src": "ikona.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

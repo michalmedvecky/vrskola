@@ -1,0 +1,23 @@
+{
+  "nazev": "Zlomková výprava",
+  "podtitul": "Zlomky od úplných základů po úlohy z přijímaček",
+  "temata": ["pojem", "kraceni", "porovnavani", "desetinna", "smisena", "scitani", "nasobeni", "deleni", "slozene", "slovni"],
+  "trenink": { "delkaKola": 10, "podilOpakovani": 0.2 },
+  "strazce": { "otazek": 8, "zivotu": 2 },
+  "zaverecna": {
+    "nazev": "Brána přijímaček",
+    "popis": "Závěrečná zkouška ze všech ostrovů. Jen výsledky, žádné kroky – jako u přijímaček. Smíš udělat nejvýš 2 chyby.",
+    "otazek": 16,
+    "zivotu": 3,
+    "pevnychUloh": 4,
+    "strazce": { "jmeno": "Strážce brány", "barva": "#6c5ce7", "oci": 3, "rohy": 2, "hlaska": "Tudy projde jen ten, kdo zvládne všechno." }
+  },
+  "hodnosti": [
+    { "od": 0, "nazev": "Plavčík" },
+    { "od": 60, "nazev": "Lodník" },
+    { "od": 200, "nazev": "Kormidelník" },
+    { "od": 450, "nazev": "Navigátor" },
+    { "od": 800, "nazev": "Kapitán" },
+    { "od": 1300, "nazev": "Admirál zlomků" }
+  ]
+}

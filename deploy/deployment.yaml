@@ -74,6 +74,12 @@ spec:
             - name: klavir
               mountPath: /usr/share/nginx/klavir
               readOnly: true
+            - name: zlomky
+              mountPath: /usr/share/nginx/zlomky
+              readOnly: true
+            - name: zlomky-data
+              mountPath: /usr/share/nginx/zlomky-data
+              readOnly: true
             - name: nginx-conf
               mountPath: /etc/nginx/conf.d
               readOnly: true
@@ -110,6 +116,12 @@ spec:
         - name: klavir
           configMap:
             name: vrskola-klavir
+        - name: zlomky
+          configMap:
+            name: vrskola-zlomky
+        - name: zlomky-data
+          configMap:
+            name: vrskola-zlomky-data
         - name: nginx-conf
           configMap:
             name: vrskola-nginx

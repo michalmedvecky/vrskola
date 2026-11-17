@@ -1,0 +1,18 @@
+{
+  "id": "deleni",
+  "nazev": "Dělení zlomků",
+  "ikona": "➗",
+  "ostrov": "Ostrov obrácených",
+  "strazce": { "jmeno": "Převracák", "barva": "#00cec9", "oci": 2, "rohy": 2, "hlaska": "Všechno vzhůru nohama! Zvládneš to?" },
+  "lekce": [
+    { "nadpis": "Převrácené číslo", "text": ["Převrácené číslo vznikne prohozením čitatele a jmenovatele.", "K {3/5} je převrácené {5/3}. K číslu 4 (= {4/1}) je převrácené {1/4}.", "Číslo krát jeho převrácené číslo je vždycky 1."] },
+    { "nadpis": "Dělení zlomkem", "text": ["**Dělit zlomkem = násobit převráceným číslem.**", "{2/3} : {4/5} = {2/3} · {5/4} = {10/12} = {5/6}.", "Převrací se jen to, **čím** dělíš (druhé číslo)!"] },
+    { "nadpis": "Dělení celým číslem", "text": ["{6/7} : 3 = {6/7} · {1/3} = {2/7}.", "4 : {2/3} = 4 · {3/2} = 6. (Kolikrát se {2/3} vejdou do 4? Šestkrát.)"] },
+    { "nadpis": "Když dělíš zlomkem menším než 1", "text": ["Výsledek je **větší** než dělenec: 2 : {1/2} = 4.", "Do dvou pizz se vejdou čtyři poloviny. Hodí se jako kontrola."], "kresba": { "typ": "vice", "pocet": 2, "k": 4, "vzor": { "typ": "kolac", "n": 2 } } }
+  ],
+  "polozky": [
+    { "id": "prevracene", "gen": "prevracene", "nazev": "Převrácené číslo", "serie": 2 },
+    { "id": "del", "gen": "del", "nazev": "Zlomek děleno zlomkem", "serie": 3 },
+    { "id": "cele", "gen": "del-cele", "nazev": "Dělení celým číslem", "serie": 2 }
+  ]
+}

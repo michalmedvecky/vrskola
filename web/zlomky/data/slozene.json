@@ -1,0 +1,18 @@
+{
+  "id": "slozene",
+  "nazev": "Složené zlomky a výrazy",
+  "ikona": "🏰",
+  "ostrov": "Patrový ostrov",
+  "strazce": { "jmeno": "Patrovec", "barva": "#636e72", "oci": 3, "rohy": 2, "hlaska": "Zlomek na zlomku na zlomku… Ztratíš se v patrech!" },
+  "lekce": [
+    { "nadpis": "Pořadí operací", "text": ["Platí stejně jako u celých čísel: **závorky**, pak **násobení a dělení**, nakonec **sčítání a odčítání**.", "{1/2} + {1/3} · {3/4} = {1/2} + {1/4} = {3/4}. Nejdřív násobení!"] },
+    { "nadpis": "Složený zlomek", "text": ["Složený zlomek má v čitateli nebo ve jmenovateli další zlomek.", "Hlavní (nejdelší) zlomková čára znamená **dělení**: horní část děleno dolní částí."] },
+    { "nadpis": "Jak ho vypočítat", "text": ["Zlomek {3/4} nad zlomkem {5/6} = {3/4} : {5/6} = {3/4} · {6/5} = {18/20} = {9/10}.", "Zkratka: „vnější krát vnější“ (3 · 6) do čitatele, „vnitřní krát vnitřní“ (4 · 5) do jmenovatele."] },
+    { "nadpis": "Výrazy v patrech", "text": ["Když jsou nahoře nebo dole výrazy, spočítej **nejdřív horní patro, pak dolní**, každé zvlášť.", "Až pak vyděl horní výsledek dolním.", "V přijímačkách bývá výsledek „hezké“ číslo. Když ti vyjde {187/312}, něco je špatně."] }
+  ],
+  "polozky": [
+    { "id": "poradi", "gen": "poradi", "nazev": "Pořadí operací", "serie": 3 },
+    { "id": "slozeny", "gen": "slozeny", "nazev": "Složený zlomek", "serie": 2 },
+    { "id": "vyraz", "gen": "slozeny-vyraz", "nazev": "Složený zlomek s výrazy", "serie": 3 }
+  ]
+}

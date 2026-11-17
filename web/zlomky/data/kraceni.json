@@ -1,0 +1,20 @@
+{
+  "id": "kraceni",
+  "nazev": "Rozšiřování a krácení",
+  "ikona": "✂️",
+  "ostrov": "Ostrov nůžek",
+  "strazce": { "jmeno": "Krátič", "barva": "#00b894", "oci": 2, "rohy": 2, "hlaska": "Já krátím všechno. Hlavně tvoje šance!" },
+  "lekce": [
+    { "nadpis": "Stejná část, jiný zápis", "text": ["Polovina pizzy je pořád stejně pizzy, ať ji rozkrojíš na 2, 4 nebo 8 dílů.", "{1/2} = {2/4} = {4/8}. Tyhle zlomky mají **stejnou hodnotu**."], "kresba": { "typ": "vedle", "kresby": [{ "typ": "kolac", "n": 2, "k": 1, "popis": "1/2" }, { "typ": "kolac", "n": 4, "k": 2, "popis": "2/4" }, { "typ": "kolac", "n": 8, "k": 4, "popis": "4/8" }] } },
+    { "nadpis": "Rozšiřování", "text": ["Rozšířit zlomek = vynásobit čitatel i jmenovatel **stejným** číslem.", "{3/4} rozšíříme na jmenovatel 20: 20 : 4 = 5, takže 3 · 5 = 15. {3/4} = {15/20}.", "Hodnota se nemění, jen jsou díly menší a je jich víc."] },
+    { "nadpis": "Krácení", "text": ["Krátit zlomek = vydělit čitatel i jmenovatel **stejným** číslem.", "{18/24}: obě čísla jdou vydělit 6. {18/24} = {3/4}.", "Krátit můžeš i po kouscích: nejdřív 2, pak 3. Výsledek je stejný."] },
+    { "nadpis": "Základní tvar", "text": ["Zlomek je v **základním tvaru**, když už ho nejde zkrátit (čitatel a jmenovatel nemají společného dělitele kromě 1).", "Nejrychleji tam dojdeš, když krátíš **největším společným dělitelem** D(čitatel, jmenovatel).", "D(18, 24) = 6, protože 6 je největší číslo, které dělí 18 i 24."] },
+    { "nadpis": "Tipy na dělitele", "text": ["Dělitelné **2**: končí sudou číslicí. **5**: končí 0 nebo 5. **10**: končí 0.", "Dělitelné **3**: ciferný součet je dělitelný 3 (51 → 5 + 1 = 6 ✔).", "V přijímačkách se výsledek skoro vždy píše v základním tvaru. Zvykni si krátit pokaždé."] }
+  ],
+  "polozky": [
+    { "id": "rozsir", "gen": "rozsir", "nazev": "Rozšiř na jmenovatel", "serie": 2 },
+    { "id": "dopln", "gen": "dopln", "nazev": "Doplň do rovnosti", "serie": 3 },
+    { "id": "zkrat", "gen": "zkrat", "nazev": "Zkrať na základní tvar", "serie": 3 },
+    { "id": "zakladni", "gen": "zakladni-tvar", "nazev": "Poznej základní tvar", "serie": 2 }
+  ]
+}
