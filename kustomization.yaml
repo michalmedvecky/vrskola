@@ -120,6 +120,21 @@ configMapGenerator:
       - web/padam/data/vety.json
       - web/padam/data/ptacek.json
       - web/padam/data/promeny.json
+  - name: vrskola-klavir   # samostatná aplikace Stupnice a sluch na /klavir/ (hudební teorie, klavír, PC/tablet i VR na Questu)
+    files:
+      - web/klavir/index.html
+      - web/klavir/styl.css
+      - web/klavir/main.js
+      - web/klavir/hra.js
+      - web/klavir/ui.js
+      - web/klavir/vr.js
+      - web/klavir/hudba.js
+      - web/klavir/kurz.js
+      - web/klavir/cviceni.js
+      - web/klavir/postup.js
+      - web/klavir/zvuk.js
+      - web/klavir/manifest.json
+      - web/klavir/ikona.svg
   - name: vrskola-nginx
     files:
       - deploy/default.conf
