@@ -1,0 +1,10 @@
+{
+  "name": "Dvojvrch – soustavy rovnic",
+  "short_name": "Dvojvrch",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "background_color": "#2f5d7c",
+  "theme_color": "#2f5d7c",
+  "icons": [{ "src": "ikona.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

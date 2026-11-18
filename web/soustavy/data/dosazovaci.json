@@ -1,0 +1,20 @@
+{
+  "id": "dosazovaci",
+  "nazev": "Dosazovací metoda",
+  "ikona": "🔗",
+  "misto": "Tábor u vodopádu",
+  "strazce": { "jmeno": "Závorkáč", "barva": "#6c5ce7", "oci": 2, "rohy": 3, "hlaska": "Závorky? Ty přece nikdo nepotřebuje…" },
+  "lekce": [
+    { "nadpis": "Postup dosazovací metody", "text": ["1. Z jedné rovnice **vyjádři** jednu neznámou (nejlépe tu s koeficientem 1 nebo −1).", "2. Výraz **dosaď** do **druhé** rovnice (v závorce!).", "3. Vyřeš rovnici s jednou neznámou.", "4. **Dopočítej** druhou neznámou z vyjádření.", "5. Udělej **zkoušku** v obou rovnicích."] },
+    { "nadpis": "Celý příklad", "text": ["[[x + 2y = 8 ; 3x − y = 3]]", "1. Z první: x = 8 − 2y.", "2. Do druhé: 3(8 − 2y) − y = 3.", "3. 24 − 6y − y = 3 → −7y = −21 → y = 3.", "4. x = 8 − 2 · 3 = 2.", "5. Zkouška: 2 + 6 = 8 ✔, 6 − 3 = 3 ✔. **Řešení x = 2, y = 3.**"] },
+    { "nadpis": "Do které rovnice dosadit", "text": ["Výraz vždy dosazuj do **té druhé** rovnice. Kdybys ho dosadil zpátky do rovnice, ze které vznikl, vyjde 0 = 0 nebo 8 = 8 a nic se nedozvíš."] },
+    { "nadpis": "Když už je jedna neznámá vyjádřená", "text": ["[[y = 2x − 1 ; 3x + y = 14]]", "První rovnice už říká, čemu se rovná y. Rovnou dosadíme: 3x + (2x − 1) = 14 → 5x = 15 → x = 3, y = 2 · 3 − 1 = 5.", "Na přijímačkách je to častý tvar. Je to nejrychlejší situace pro dosazovací metodu."] },
+    { "nadpis": "Pozor na znaménka", "text": ["Dosazujeme-li za y do členu −2y, vznikne −2(…): všechna znaménka v závorce se otočí.", "x − 2(5 − 3x) = x − 10 **+** 6x.", "Kontrolou je zkouška. Když nevyjde, hledej chybu nejdřív u minusů."] }
+  ],
+  "polozky": [
+    { "id": "y", "gen": "dosazovaci", "param": { "prom": "y" }, "nazev": "Vyjádři y a dosaď", "serie": 2 },
+    { "id": "x", "gen": "dosazovaci", "param": { "prom": "x" }, "nazev": "Vyjádři x a dosaď", "serie": 2 },
+    { "id": "vyjadreno", "gen": "dosazovaci-vyjadreno", "nazev": "Jedna rovnice už je vyjádřená", "serie": 2 },
+    { "id": "zkouska", "gen": "dosazovaci", "param": { "zkouska": true }, "nazev": "Celé řešení i se zkouškou", "serie": 2 }
+  ]
+}

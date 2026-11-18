@@ -1,0 +1,18 @@
+{
+  "id": "upravy",
+  "nazev": "Závorky a zlomky v soustavě",
+  "ikona": "🧹",
+  "misto": "Tábor pod skalou",
+  "strazce": { "jmeno": "Zlomoun", "barva": "#fdcb6e", "oci": 3, "rohy": 4, "hlaska": "Zlomky, závorky, neznámé na obou stranách… všechno ti zamotám." },
+  "lekce": [
+    { "nadpis": "Nejdřív uklidit", "text": ["U přijímaček rovnice v soustavě skoro nikdy nejsou hezky ve tvaru ax + by = c. Mají závorky, zlomky, neznámé na obou stranách.", "Postup: **každou rovnici zvlášť uprav** na tvar ax + by = c. Teprve pak řeš dosazovací nebo sčítací metodou."] },
+    { "nadpis": "Rovnice se závorkou", "text": ["3(x + 2) − y = x + 10", "Roznásob: 3x + 6 − y = x + 10.", "Neznámé doleva, čísla doprava: 3x − x − y = 10 − 6.", "Hotovo: **2x − y = 4**."] },
+    { "nadpis": "Rovnice se zlomky", "text": ["{x + 1/2} + {y/3} = 4 &nbsp;|&nbsp; · 6", "3(x + 1) + 2y = 24 → 3x + 3 + 2y = 24 → **3x + 2y = 21**.", "Nezapomeň vynásobit i pravou stranu a čitatel s víc členy dát do závorky."] },
+    { "nadpis": "Stejná rovnice, jiný zápis", "text": ["2x + 4y = 6 a x + 2y = 3 jsou **tatáž rovnice** (druhá je polovina první). Ve hře se uznávají obě.", "Pro počítání je ale lepší tvar s menšími čísly. Když jdou všechna čísla vydělit, vyděl je."] },
+    { "nadpis": "Celý příklad", "text": ["[[2(x − 1) + y = 3y + 4 ; {x/2} − {y/4} = 1]]", "1. rovnice: 2x − 2 + y = 3y + 4 → 2x − 2y = 6 → x − y = 3.", "2. rovnice · 4: 2x − y = 4.", "Odečteme: (2x − y) − (x − y) = 4 − 3 → x = 1, y = −2.", "Zkouška: 2 · 0 + (−2) = −2 a 3 · (−2) + 4 = −2 ✔; {1/2} + {2/4} = 1 ✔"] }
+  ],
+  "polozky": [
+    { "id": "zavorky", "gen": "upravy", "param": { "druh": "zavorky" }, "nazev": "Soustava se závorkami", "serie": 2 },
+    { "id": "zlomky", "gen": "upravy", "param": { "druh": "zlomky" }, "nazev": "Soustava se zlomky", "serie": 2 }
+  ]
+}

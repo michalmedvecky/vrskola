@@ -89,6 +89,12 @@ spec:
             - name: zoo-data
               mountPath: /usr/share/nginx/zoo-data
               readOnly: true
+            - name: soustavy
+              mountPath: /usr/share/nginx/soustavy
+              readOnly: true
+            - name: soustavy-data
+              mountPath: /usr/share/nginx/soustavy-data
+              readOnly: true
             - name: nginx-conf
               mountPath: /etc/nginx/conf.d
               readOnly: true
@@ -140,6 +146,12 @@ spec:
         - name: zoo-data
           configMap:
             name: vrskola-zoo-data
+        - name: soustavy
+          configMap:
+            name: vrskola-soustavy
+        - name: soustavy-data
+          configMap:
+            name: vrskola-soustavy-data
         - name: nginx-conf
           configMap:
             name: vrskola-nginx

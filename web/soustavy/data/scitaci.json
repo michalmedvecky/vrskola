@@ -1,0 +1,19 @@
+{
+  "id": "scitaci",
+  "nazev": "Sčítací metoda",
+  "ikona": "➕",
+  "misto": "Tábor na hřebeni",
+  "strazce": { "jmeno": "Sčítaná", "rod": "z", "barva": "#fd79a8", "oci": 4, "rohy": 2, "hlaska": "Sečtu, odečtu… a ty nevíš, co ti zbylo!" },
+  "lekce": [
+    { "nadpis": "Rovnice se dají sčítat", "text": ["Když platí a = b a c = d, platí i a + c = b + d. Rovnice tedy můžeme **sečíst**: levé strany zvlášť, pravé zvlášť.", "[[3x + 2y = 16 ; 5x − 2y = 8]]", "Sečtením: 8x + 0y = 24. Člen s y zmizel, protože 2y a −2y jsou **opačné** členy. x = 3."] },
+    { "nadpis": "Dopočítání", "text": ["x = 3 dosadíme do kterékoli rovnice, třeba do první: 9 + 2y = 16 → 2y = 7 → y = {7/2}.", "Řešení nemusí být celé číslo. Na přijímačkách bývají i zlomky. Píšeme je v základním tvaru, ve hře s lomítkem: 7/2."] },
+    { "nadpis": "Když koeficienty nejsou opačné", "text": ["[[2x + 3y = 13 ; x + y = 5]]", "Druhou rovnici vynásobíme **−3**: −3x − 3y = −15. Násobíme **každý člen i pravou stranu**!", "Sečteme: 2x − 3x = 13 − 15 → −x = −2 → x = 2. Pak y = 5 − 2 = 3."] },
+    { "nadpis": "Násobíme obě rovnice", "text": ["[[2x + 3y = 12 ; 3x − 2y = 5]]", "Odečteme x: koeficienty 2 a 3 převedeme na **nejmenší společný násobek 6**. První rovnici · 3, druhou · (−2):", "6x + 9y = 36 a −6x + 4y = −10. Sečteme: 13y = 26 → y = 2, pak x = 3."] },
+    { "nadpis": "Kterou neznámou odečíst", "text": ["Vyber tu, u které jsou čísla **menší nebo už opačná**. Méně násobení = méně chyb.", "Místo „vynásobit kladným číslem a odečíst“ je bezpečnější „vynásobit záporným a sečíst“. Odečítání rovnic svádí k chybám ve znaménkách."] }
+  ],
+  "polozky": [
+    { "id": "hned", "gen": "scitaci", "param": { "druh": "hned" }, "nazev": "Opačné koeficienty: rovnou sečti", "serie": 2 },
+    { "id": "jedna", "gen": "scitaci", "param": { "druh": "jedna" }, "nazev": "Vynásob jednu rovnici", "serie": 3 },
+    { "id": "obe", "gen": "scitaci", "param": { "druh": "obe" }, "nazev": "Vynásob obě rovnice", "serie": 3 }
+  ]
+}

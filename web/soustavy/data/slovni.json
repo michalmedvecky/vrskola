@@ -1,0 +1,44 @@
+{
+  "id": "slovni",
+  "nazev": "Slovní úlohy",
+  "ikona": "📜",
+  "misto": "Tábor u horské chaty",
+  "strazce": { "jmeno": "Slovožrout", "barva": "#55efc4", "oci": 2, "rohy": 0, "hlaska": "Spolknu ti zadání a necháme jen x a y. Ale které je které?" },
+  "lekce": [
+    { "nadpis": "Čtyři kroky", "text": ["1. **Označ neznámé**: napiš si, co je x a co y (třeba x = počet dětí, y = počet dospělých).", "2. **Přepiš každý údaj** ze zadání na jednu rovnici.", "3. **Vyřeš** soustavu.", "4. **Odpověz na otázku**. Pozor, úloha se často ptá jen na jedno z čísel, nebo na něco, co se z nich spočítá."] },
+    { "nadpis": "Počet kusů a cena", "text": ["Do kina přišlo 50 diváků. Dětská vstupenka stála 80 Kč, dospělá 120 Kč, vybralo se 5 000 Kč.", "x = dětí, y = dospělých. Lidí je 50: **x + y = 50**. Peníze: každé dítě 80, každý dospělý 120: **80x + 120y = 5 000**.", "Z první y = 50 − x, dosadit: 80x + 6 000 − 120x = 5 000 → −40x = −1 000 → x = 25, y = 25."] },
+    { "nadpis": "Hlavy a nohy", "text": ["Slepice a králíci mají dohromady 20 hlav a 56 nohou.", "x = slepic, y = králíků: **x + y = 20**, **2x + 4y = 56**.", "Druhou vydělíme 2: x + 2y = 28. Odečteme první: y = 8 králíků, x = 12 slepic."] },
+    { "nadpis": "O kolik a kolikrát", "text": ["„Petr má o 6 víc než Jana“: **x = y + 6**, neboli x − y = 6.", "„Petr má třikrát víc než Jana“: **x = 3y**. Ne 3x = y! Trojnásobek patří k **menšímu** číslu, aby se vyrovnalo většímu.", "Zkontroluj to dosazením malých čísel: Jana 2, Petr 6. Platí 6 = 3 · 2 ✔"] },
+    { "nadpis": "Věk", "text": ["„Otec je o 26 let starší než syn. Za 5 let bude třikrát starší.“", "Teď: x − y = 26. Za 5 let budou oba o 5 let starší: **x + 5 = 3(y + 5)**. Závorka je nutná, trojnásobek je z celého věku syna za 5 let.", "Dosazením x = y + 26: y + 31 = 3y + 15 → 2y = 16 → syn 8 let, otec 34."] }
+  ],
+  "polozky": [
+    { "id": "sv", "gen": "slovni-sv", "nazev": "Kusy, ceny, hlavy a nohy", "serie": 2 },
+    { "id": "rozdil", "gen": "slovni-rozdil", "nazev": "Součet a rozdíl", "serie": 2 },
+    { "id": "nasobek", "gen": "slovni-nasobek", "nazev": "Kolikrát víc", "serie": 2 },
+    { "id": "vek", "gen": "slovni-vek", "nazev": "Úlohy o věku", "serie": 2 }
+  ],
+  "sablony": {
+    "slovni-sv": [
+      { "text": "Do kina přišlo {S} diváků, děti a dospělí. Dětská vstupenka stála {p} Kč, dospělá {q} Kč. Za vstupné se vybralo {T} Kč. Kolik přišlo dětí?", "x": "počet dětí", "y": "počet dospělých", "p": [60, 100, 10], "q": [120, 180, 10], "rozsah": [5, 40], "udaj1": "celkový počet diváků", "udaj2": "celkové vstupné", "ptaSe": "x", "otazka": "Kolik přišlo dětí?", "odpoved": "Dětí:" },
+      { "text": "Na dvoře pobíhají slepice a králíci. Dohromady mají {S} hlav a {T} nohou. Kolik je na dvoře králíků?", "x": "počet slepic", "y": "počet králíků", "p": 2, "q": 4, "rozsah": [3, 20], "udaj1": "počet hlav", "udaj2": "počet nohou", "napoveda2": "Slepice má 2 nohy, králík 4. Kolik nohou mají x slepic? A y králíků?", "ptaSe": "y", "otazka": "Kolik je králíků?", "odpoved": "Králíků:" },
+      { "text": "V pokladničce jsou jen dvoukoruny a pětikoruny, celkem {S} mincí v hodnotě {T} Kč. Kolik je tam pětikorun?", "x": "počet dvoukorun", "y": "počet pětikorun", "p": 2, "q": 5, "rozsah": [4, 30], "udaj1": "počet mincí", "udaj2": "hodnotu mincí", "ptaSe": "y", "otazka": "Kolik je pětikorun?", "odpoved": "Pětikorun:" },
+      { "text": "Horská chata má {S} pokojů, dvoulůžkové a třílůžkové, dohromady s {T} lůžky. Kolik je na chatě dvoulůžkových pokojů?", "x": "počet dvoulůžkových pokojů", "y": "počet třílůžkových pokojů", "p": 2, "q": 3, "rozsah": [3, 15], "udaj1": "počet pokojů", "udaj2": "počet lůžek", "ptaSe": "x", "otazka": "Kolik je dvoulůžkových pokojů?", "odpoved": "Dvoulůžkových:" },
+      { "text": "Na parkovišti u lanovky stojí jen auta a motorky, celkem {S} vozidel, která mají dohromady {T} kol. Kolik je na parkovišti motorek?", "x": "počet aut", "y": "počet motorek", "p": 4, "q": 2, "rozsah": [3, 25], "udaj1": "počet vozidel", "udaj2": "počet kol", "ptaSe": "y", "otazka": "Kolik je motorek?", "odpoved": "Motorek:" },
+      { "text": "Za {S} kg jablek a hrušek jsme zaplatili {T} Kč. Kilogram jablek stál {p} Kč, kilogram hrušek {q} Kč. Kolik kilogramů hrušek jsme koupili?", "x": "kilogramy jablek", "y": "kilogramy hrušek", "p": [25, 40, 5], "q": [45, 70, 5], "rozsah": [1, 8], "udaj1": "celkovou hmotnost", "udaj2": "celkovou cenu", "ptaSe": "y", "otazka": "Kolik kilogramů hrušek?", "odpoved": "Hrušek:", "jednotka": "kg" }
+    ],
+    "slovni-rozdil": [
+      { "text": "Dvě čísla mají součet {S} a jejich rozdíl je {D}. Jaké je větší z nich?", "x": "větší číslo", "y": "menší číslo", "rozsah": [5, 60], "rozsahD": [2, 30], "udaj1": "součet", "udaj2": "rozdíl", "ptaSe": "x", "otazka": "Větší číslo:", "odpoved": "" },
+      { "text": "Petr a Jana mají dohromady {S} Kč. Petr má o {D} Kč víc než Jana. Kolik korun má Jana?", "x": "Petrovy peníze", "y": "Janiny peníze", "rozsah": [20, 300], "rozsahD": [10, 120], "udaj1": "kolik mají dohromady", "udaj2": "že Petr má o {D} Kč víc", "ptaSe": "y", "otazka": "Kolik má Jana?", "odpoved": "Jana má", "jednotka": "Kč" },
+      { "text": "Ve třídě je {S} žáků. Dívek je o {D} víc než chlapců. Kolik je ve třídě chlapců?", "x": "počet dívek", "y": "počet chlapců", "rozsah": [8, 14], "rozsahD": [1, 6], "udaj1": "počet žáků", "udaj2": "že dívek je o {D} víc", "ptaSe": "y", "otazka": "Kolik je chlapců?", "odpoved": "Chlapců:" }
+    ],
+    "slovni-nasobek": [
+      { "text": "Mirek nasbíral {k}krát víc hub než Ondra. Dohromady nasbírali {S} hub. Kolik hub nasbíral Ondra?", "x": "Mirkovy houby", "y": "Ondrovy houby", "k": [2, 5], "rozsah": [3, 15], "udaj1": "že Mirek má {k}krát víc", "udaj2": "kolik nasbírali dohromady", "napoveda1": "Mirek má víc. Aby se čísla rovnala, musí se Ondrovo číslo vynásobit {k}.", "ptaSe": "y", "otazka": "Kolik hub nasbíral Ondra?", "odpoved": "Ondra:" },
+      { "text": "Otec je {k}krát starší než syn a je o {D} let starší než on. Kolik let je synovi?", "druh": "rozdil", "x": "věk otce", "y": "věk syna", "k": [3, 4], "rozsah": [6, 14], "udaj1": "že otec je {k}krát starší", "udaj2": "že otec je o {D} let starší", "napoveda1": "Otec je starší. Aby se věky rovnaly, vynásob věk syna {k}.", "ptaSe": "y", "otazka": "Kolik let je synovi?", "odpoved": "Synovi je", "jednotka": "let" },
+      { "text": "V sadu roste {k}krát víc jabloní než hrušní, dohromady {S} stromů. Kolik je v sadu jabloní?", "x": "počet jabloní", "y": "počet hrušní", "k": [2, 4], "rozsah": [4, 20], "udaj1": "že jabloní je {k}krát víc", "udaj2": "počet stromů", "ptaSe": "x", "otazka": "Kolik je jabloní?", "odpoved": "Jabloní:" }
+    ],
+    "slovni-vek": [
+      { "text": "Maminka je o {D} let starší než dcera. Za {n} let bude maminka {k}krát starší než dcera. Kolik let je teď dceři?", "x": "věk maminky teď", "y": "věk dcery teď", "k": [2, 3], "za": [2, 10], "rozsah": [3, 14], "udaj1": "rozdíl věků", "udaj2": "co bude za {n} let", "napoveda2": "Za {n} let budou obě o {n} let starší: x + {n} a y + {n}. Pak je jedno {k}krát větší než druhé.", "ptaSe": "y", "otazka": "Kolik let je dceři?", "odpoved": "Dceři je", "jednotka": "let" },
+      { "text": "Dědeček je o {D} let starší než vnuk. Za {n} let bude dědeček {k}krát starší než vnuk. Kolik let je dědečkovi teď?", "x": "věk dědečka teď", "y": "věk vnuka teď", "k": [3, 4], "za": [2, 8], "rozsah": [4, 15], "maxX": 80, "udaj1": "rozdíl věků", "udaj2": "co bude za {n} let", "napoveda2": "Za {n} let budou oba o {n} let starší. Trojnásobek (čtyřnásobek) je z celého věku vnuka, proto závorka.", "ptaSe": "x", "otazka": "Kolik let je dědečkovi?", "odpoved": "Dědečkovi je", "jednotka": "let" }
+    ]
+  }
+}

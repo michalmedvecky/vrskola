@@ -1,0 +1,78 @@
+{
+  "id": "prijimacky",
+  "nazev": "Úlohy jako u přijímaček",
+  "ikona": "🎯",
+  "misto": "Tábor pod vrcholem",
+  "strazce": { "jmeno": "Zkoušeč", "barva": "#d63031", "oci": 3, "rohy": 2, "hlaska": "Dám ti úlohy jako u přijímaček. Času dost, ale chyby nepromíjím." },
+  "lekce": [
+    { "nadpis": "Jak vypadají soustavy u přijímaček", "text": ["Zadání bývá „Vyřešte soustavu rovnic“ a rovnice mají **zlomky, závorky nebo desetinná čísla**.", "Hodnotí se výsledek, ale v otevřených úlohách i **postup**. Piš úpravy čitelně pod sebe.", "Řešení bývá celé číslo, ale **zlomek** není chyba. Když vyjde ošklivě, zkontroluj úpravy a udělej zkoušku."] },
+    { "nadpis": "Kterou metodu", "text": ["Má-li některá neznámá koeficient **1 nebo −1**, nebo je už vyjádřená → **dosazovací**.", "Jinak → **sčítací**. Je kratší a nevznikají v ní zlomky uprostřed výpočtu.", "Obě metody dají stejný výsledek. Vyber tu, ve které uděláš méně chyb."] },
+    { "nadpis": "Desetinná čísla", "text": ["0,5x + 0,2y = 1,6 vynásob **10**: 5x + 2y = 16.", "Stejně jako u zlomků: násobíme tak, aby zmizely desetinné čárky, a **násobíme i pravou stranu**."] },
+    { "nadpis": "Kontrola na konec", "text": ["Zkouška trvá minutu a odhalí skoro každou chybu ve znaménku.", "Dosazuj do **původního** zadání, ne do upravené soustavy. Chyba mohla vzniknout už při úpravě.", "Ve slovní úloze zkontroluj, jestli výsledek dává smysl: počet lidí nemůže být záporný ani necelý."] }
+  ],
+  "polozky": [
+    { "id": "cermat", "gen": "pevne", "param": { "sada": "cermat" }, "nazev": "Úlohy ve stylu přijímaček", "serie": 3 },
+    { "id": "zlomkove", "gen": "zlomkove-reseni", "nazev": "Řešení ve zlomcích", "serie": 2 },
+    { "id": "mix", "gen": "mix", "nazev": "Smíšené soustavy", "serie": 3 }
+  ],
+  "pevne": {
+    "cermat": [
+      { "zadani": "Vyřešte soustavu rovnic: [[{x/2} + y = 4 ; x − {y/3} = 1]]", "kroky": [
+        { "typ": "rce", "otazka": "1. rovnici vynásob 2 a zapiš ve tvaru ax + by = c:", "spravne": ["1", "2", "8"], "napoveda": "Násob každý člen: {x/2} · 2 = x, y · 2 = 2y, 4 · 2 = 8." },
+        { "typ": "rce", "otazka": "2. rovnici vynásob 3:", "spravne": ["3", "−1", "3"], "napoveda": "x · 3 = 3x, {y/3} · 3 = y, 1 · 3 = 3." },
+        { "typ": "xy", "spravne": ["2", "3"], "napoveda": "Z 2. rovnice y = 3x − 3 a dosaď do 1." } ],
+        "vysvetleni": "Po vynásobení: x + 2y = 8 a 3x − y = 3. Z druhé y = 3x − 3, dosazením x + 6x − 6 = 8, x = 2, y = 3." },
+      { "zadani": "Vyřešte soustavu rovnic: [[2(x − y) = x + 1 ; 3x − 2(y + 1) = 4]]", "kroky": [
+        { "typ": "rce", "otazka": "Uprav 1. rovnici na tvar ax + by = c:", "spravne": ["1", "−2", "1"], "napoveda": "2x − 2y = x + 1, x převeď doleva." },
+        { "typ": "rce", "otazka": "Uprav 2. rovnici na tvar ax + by = c:", "spravne": ["3", "−2", "6"], "napoveda": "3x − 2y − 2 = 4" },
+        { "typ": "xy", "spravne": ["5/2", "3/4"], "napoveda": "Od 2. rovnice odečti 1.: 2x = 5. Řešení nejsou celá čísla, piš zlomky s lomítkem." } ],
+        "vysvetleni": "x − 2y = 1 a 3x − 2y = 6. Odečtením 2x = 5, x = {5/2}. Pak 2y = x − 1 = {3/2}, y = {3/4}." },
+      { "zadani": "Eva zaplatila za 3 rohlíky a 2 housky 22 Kč. Pavel za 2 rohlíky a 3 housky zaplatil 23 Kč. Kolik korun stojí jedna houska?", "kroky": [
+        { "typ": "rce", "otazka": "x = cena rohlíku, y = cena housky. Evin nákup jako rovnice:", "spravne": ["3", "2", "22"] },
+        { "typ": "rce", "otazka": "Pavlův nákup jako rovnice:", "spravne": ["2", "3", "23"] },
+        { "typ": "xy", "spravne": ["4", "5"], "napoveda": "Sečti rovnice: 5x + 5y = 45, tedy x + y = 9. Odečti je: x − y = −1." },
+        { "otazka": "Jedna houska stojí:", "spravne": "5", "jednotka": "Kč" } ],
+        "vysvetleni": "3x + 2y = 22, 2x + 3y = 23. Součet: x + y = 9, rozdíl: x − y = −1. Rohlík 4 Kč, houska 5 Kč." },
+      { "zadani": "Součet dvou přirozených čísel je 47. Když větší číslo vydělíme menším, vyjde podíl 3 a zbytek 3. Určete menší číslo.", "kroky": [
+        { "typ": "rce", "otazka": "x = větší číslo, y = menší číslo. Součet:", "spravne": ["1", "1", "47"] },
+        { "typ": "rce", "otazka": "Dělení se zbytkem (x = 3y + 3) zapiš ve tvaru ax + by = c:", "spravne": ["1", "−3", "3"], "napoveda": "Větší číslo = 3 · menší + zbytek. Člen 3y převeď doleva." },
+        { "typ": "xy", "spravne": ["36", "11"] },
+        { "otazka": "Menší číslo:", "spravne": "11" } ],
+        "vysvetleni": "x + y = 47 a x = 3y + 3. Dosazením 4y + 3 = 47, y = 11, x = 36. Zkouška: 36 : 11 = 3 zbytek 3 ✔" },
+      { "zadani": "Kolik řešení má soustava [[3x − 6y = 9 ; −x + 2y = −3]] ?", "kroky": [
+        { "otazka": "Čím vynásobíš 2. rovnici, abys dostal levou stranu 1. rovnice?", "spravne": "−3" },
+        { "typ": "volba", "otazka": "Kolik řešení má soustava?", "moznosti": ["Žádné řešení", "Právě jedno řešení", "Nekonečně mnoho řešení"], "spravne": 2, "napoveda": "Po vynásobení −3: 3x − 6y = 9. Je to celá 1. rovnice?" } ],
+        "vysvetleni": "2. rovnice · (−3) dá 3x − 6y = 9, přesně 1. rovnici. Je to tatáž rovnice, řešení je nekonečně mnoho." },
+      { "zadani": "Pro které číslo k nemá soustava [[kx + 2y = 3 ; 6x + 4y = 5]] žádné řešení?", "kroky": [
+        { "otazka": "Kolikrát je koeficient u y ve 2. rovnici větší než v 1.?", "spravne": "2" },
+        { "otazka": "k =", "pred": "k =", "spravne": "3", "napoveda": "Aby byla levá strana 2. rovnice dvojnásobkem levé strany 1., musí platit 6 = 2k." } ],
+        "vysvetleni": "Ve 2. rovnici je u y dvojnásobek. Pro k = 3 je celá levá strana dvojnásobkem, ale pravá ne (5 ≠ 2 · 3). Rovnice si odporují, soustava nemá řešení." },
+      { "zadani": "Ve třídách 9.A a 9.B je dohromady 52 žáků. Na výlet jela polovina žáků 9.A a třetina žáků 9.B, celkem 21 žáků. Kolik žáků má 9.B?", "kroky": [
+        { "typ": "rce", "otazka": "x = žáků 9.A, y = žáků 9.B. Kolik žáků je celkem:", "spravne": ["1", "1", "52"] },
+        { "typ": "rce", "otazka": "Kolik jich jelo na výlet (rovnici můžeš rovnou vynásobit 6):", "spravne": ["3", "2", "126"], "napoveda": "Polovina 9.A je {x/2}, třetina 9.B je {y/3}. Dohromady 21." },
+        { "typ": "xy", "spravne": ["22", "30"] },
+        { "otazka": "Žáků 9.B:", "spravne": "30" } ],
+        "vysvetleni": "x + y = 52 a {x/2} + {y/3} = 21, po vynásobení 6: 3x + 2y = 126. Odečtením trojnásobku 1. rovnice: −y = −30, y = 30, x = 22. Zkouška: 11 + 10 = 21 ✔" },
+      { "zadani": "Loďka pluje po proudu 24 km za 2 hodiny a proti proudu stejnou trasu za 3 hodiny. Jakou rychlostí teče řeka?", "kroky": [
+        { "typ": "rce", "otazka": "x = rychlost loďky ve stojaté vodě, y = rychlost proudu (km/h). Po proudu ujede za hodinu 12 km:", "spravne": ["1", "1", "12"], "napoveda": "Po proudu se rychlosti sčítají. 24 km za 2 h je 12 km/h." },
+        { "typ": "rce", "otazka": "Proti proudu ujede za hodinu 8 km:", "spravne": ["1", "−1", "8"], "napoveda": "Proti proudu se rychlost proudu odečítá." },
+        { "typ": "xy", "spravne": ["10", "2"] },
+        { "otazka": "Rychlost proudu:", "spravne": "2", "jednotka": "km/h" } ],
+        "vysvetleni": "x + y = 12 a x − y = 8. Sečtením 2x = 20, x = 10 km/h, proud y = 2 km/h." },
+      { "zadani": "Vyřešte soustavu rovnic: [[0,5x + 0,2y = 1,6 ; x − y = −1]]", "kroky": [
+        { "typ": "rce", "otazka": "1. rovnici vynásob 10:", "spravne": ["5", "2", "16"] },
+        { "typ": "xy", "spravne": ["2", "3"], "napoveda": "Z 2. rovnice x = y − 1, dosaď do 5x + 2y = 16." } ],
+        "vysvetleni": "5x + 2y = 16 a x = y − 1. Dosazením 5y − 5 + 2y = 16, 7y = 21, y = 3, x = 2." },
+      { "zadani": "Obvod obdélníku je 46 cm. Kdybychom delší stranu zkrátili o 3 cm a kratší prodloužili o 2 cm, vznikl by čtverec. Jaký obsah má obdélník?", "kroky": [
+        { "typ": "rce", "otazka": "x = delší strana, y = kratší strana. Obvod (můžeš vydělit 2):", "spravne": ["1", "1", "23"], "napoveda": "Obvod = 2x + 2y." },
+        { "typ": "rce", "otazka": "Čtverec: x − 3 = y + 2. Ve tvaru ax + by = c:", "spravne": ["1", "−1", "5"] },
+        { "typ": "xy", "spravne": ["14", "9"] },
+        { "otazka": "Obsah obdélníku:", "spravne": "126", "jednotka": "cm²", "napoveda": "Obsah = x · y" } ],
+        "vysvetleni": "x + y = 23 a x − y = 5, tedy x = 14 cm, y = 9 cm. Obsah 14 · 9 = 126 cm². Zkouška: 11 = 11 ✔" },
+      { "zadani": "Za 2 kg jablek a 1 kg hrušek zaplatíme 100 Kč. Kilogram hrušek je o 10 Kč dražší než kilogram jablek. (x = cena 1 kg jablek, y = cena 1 kg hrušek)", "kroky": [
+        { "typ": "volba", "otazka": "Která soustava popisuje úlohu?", "moznosti": ["[[2x + y = 100 ; x = y + 10]]", "[[x + 2y = 100 ; y = x + 10]]", "[[2x + y = 100 ; y = x + 10]]", "[[2x + y = 100 ; y = 10x]]"], "spravne": 2, "napoveda": "Dražší jsou hrušky, takže y je o 10 víc než x." },
+        { "otazka": "Kolik stojí kilogram hrušek?", "spravne": "40", "jednotka": "Kč", "napoveda": "Dosaď: 2x + x + 10 = 100." } ],
+        "vysvetleni": "2x + y = 100 a y = x + 10. Dosazením 3x + 10 = 100, x = 30 Kč, hrušky y = 40 Kč." }
+    ]
+  }
+}

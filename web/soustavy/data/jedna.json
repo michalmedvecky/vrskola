@@ -1,0 +1,20 @@
+{
+  "id": "jedna",
+  "nazev": "Rovnice o jedné neznámé",
+  "ikona": "⚖️",
+  "misto": "Tábor pod horou",
+  "strazce": { "jmeno": "Rovnítko", "barva": "#00b894", "oci": 1, "rohy": 2, "hlaska": "Co uděláš vlevo, nemusíš dělat vpravo. Nebo snad musíš?" },
+  "lekce": [
+    { "nadpis": "Proč začínáme jednou neznámou", "text": ["Každá soustava dvou rovnic se nakonec **převede na jednu rovnici s jednou neznámou**. Kdo ji umí rychle a bez chyb, má polovinu práce hotovou.", "Rovnice je jako **váha v rovnováze**. Smíš s ní dělat cokoli, ale **vždycky s oběma stranami stejně**: přičíst, odečíst, vynásobit, vydělit (ne nulou)."] },
+    { "nadpis": "Převod na druhou stranu", "text": ["3x + 7 = 22. Od obou stran odečteme 7: 3x = 15.", "Zkráceně říkáme: **člen převedeme na druhou stranu a změníme mu znaménko**. +7 vlevo se změní na −7 vpravo.", "Nakonec obě strany vydělíme číslem u x: x = 15 : 3 = **5**."] },
+    { "nadpis": "Neznámá na obou stranách", "text": ["5x − 4 = 2x + 11", "Členy s x dej doleva, čísla doprava (se změnou znaménka): 5x − 2x = 11 + 4.", "Sečti: 3x = 15, takže x = **5**.", "**Zkouška:** vlevo 5 · 5 − 4 = 21, vpravo 2 · 5 + 11 = 21 ✔"] },
+    { "nadpis": "Závorky a minus před závorkou", "text": ["Číslo před závorkou násobí **každý** člen v závorce: 3(x − 2) = 3x − 6.", "Minus před závorkou otočí **všechna** znaménka v ní: −(x − 4) = −x + 4, −2(x + 3) = −2x − 6.", "Nejčastější chyba u přijímaček: 5 − 2(x − 1) = 5 − 2x **−** 2. Správně je 5 − 2x **+** 2."] },
+    { "nadpis": "Zlomky v rovnici", "text": ["Zlomků se zbavíš tak, že **celou rovnici vynásobíš společným jmenovatelem**.", "{x/2} + {x/3} = 10 &nbsp;|&nbsp; · 6 → 3x + 2x = 60 → 5x = 60 → x = 12.", "Má-li zlomek v čitateli víc členů, dej ho do závorky: {x + 1/2} · 6 = 3(x + 1)."] }
+  ],
+  "polozky": [
+    { "id": "jednoducha", "gen": "rce-jednoducha", "nazev": "ax + b = c", "serie": 2 },
+    { "id": "obe", "gen": "rce-obe-strany", "nazev": "Neznámá na obou stranách", "serie": 2 },
+    { "id": "zavorky", "gen": "rce-zavorky", "nazev": "Rovnice se závorkami", "serie": 2 },
+    { "id": "zlomky", "gen": "rce-zlomky", "nazev": "Rovnice se zlomky", "serie": 2 }
+  ]
+}
