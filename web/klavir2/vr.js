@@ -172,7 +172,8 @@ function kresliPanel() {
   // výška klaviatury (každý stojí/sedí jinak a prsty musí na klávesy dosáhnout pohodlně)
   tlacitko(g, 'vr-niz', '▼', PW - L - 180, PH - 70, 80, 52, '', 26);
   tlacitko(g, 'vr-vys', '▲', PW - L - 80, PH - 70, 80, 52, '', 26);
-  g.fillStyle = '#b7b1d9'; g.font = 'bold 20px system-ui, sans-serif'; g.textAlign = 'right'; g.fillText('výška klaviatury', PW - L - 190, PH - 36);
+  g.fillStyle = '#b7b1d9'; g.font = 'bold 20px system-ui, sans-serif'; g.textAlign = 'center'; g.fillText('výška klaviatury', PW - L - 90, PH - 80);
+  if (diagnostika) { g.textAlign = 'left'; g.fillStyle = '#7f79a8'; g.font = '18px system-ui, sans-serif'; g.fillText(diagnostika, 20, PH - 12); }
   if (vm.pokrok) { obdelnik(g, L, 88, MAXW, 10, 5, '#ffffff22'); obdelnik(g, L, 88, Math.max(10, MAXW * vm.pokrok.hodnota), 10, 5, '#3ddc84'); }
   let y = 130;
   const text = (t, vel, barva = '#f4f1ff', tucne = false, rozestup = 1.3) => {
@@ -265,17 +266,19 @@ function postavOvladace() {
     const kulicka = new THREE.Mesh(new THREE.SphereGeometry(0.016), new THREE.MeshStandardMaterial({ color: i ? 0x5cc8ff : 0xff7eb6, emissive: i ? 0x103a50 : 0x501030 }));
     kulicka.position.set(0, -0.072, -0.14);
     palicka.add(nasada, kulicka); grip.add(palicka); scene.add(grip);
-    // ruka (sledování rukou): kuličky na kloubech, špička ukazováčku zvýrazněná – ta hraje
-    const ruka = renderer.xr.getHand(i);
-    scene.add(ruka);
+    ovladace.push({ c, grip, palicka, paprsek, tecka, kulicka, zdroj: null, cil: null, hroty: { palicka: { drzi: null, predY: null } } });
+  }
+  // ruce (sledování rukou): kuličky na kloubech, špička ukazováčku zvýrazněná – ta hraje
+  const matKloub = new THREE.MeshStandardMaterial({ color: 0xe8e2ff, roughness: 0.6, transparent: true, opacity: 0.85 });
+  for (const [strana, barva, zar] of [['left', 0xff7eb6, 0x501030], ['right', 0x5cc8ff, 0x103a50]]) {
     const klouby = [];
-    const matKloub = new THREE.MeshStandardMaterial({ color: 0xe8e2ff, roughness: 0.6, transparent: true, opacity: 0.85 });
     for (let j = 0; j < 25; j++) { const k = new THREE.Mesh(new THREE.SphereGeometry(0.0055), matKloub); k.visible = false; scene.add(k); klouby.push(k); }
-    const spicka = new THREE.Mesh(new THREE.SphereGeometry(0.009), new THREE.MeshStandardMaterial({ color: i ? 0x5cc8ff : 0xff7eb6, emissive: i ? 0x103a50 : 0x501030 }));
+    const spicka = new THREE.Mesh(new THREE.SphereGeometry(0.009), new THREE.MeshStandardMaterial({ color: barva, emissive: zar }));
     spicka.visible = false; scene.add(spicka);
-    ovladace.push({ c, grip, palicka, paprsek, tecka, kulicka, ruka, klouby, spicka, zdroj: null, cil: null, hroty: { prst: { drzi: null, predY: null }, palicka: { drzi: null, predY: null } } });
+    RUKY[strana] = { klouby, spicka, hrot: { drzi: null, predY: null } };
   }
 }
+const RUKY = {};
 function vibruj(i, sila = 0.4, ms = 25) {
   const h = ovladace[i].zdroj?.gamepad?.hapticActuators?.[0];
   if (h?.pulse) h.pulse(sila, ms);
@@ -299,20 +302,40 @@ const KLOUBY = ['wrist', 'thumb-metacarpal', 'thumb-phalanx-proximal', 'thumb-ph
   'ring-finger-metacarpal', 'ring-finger-phalanx-proximal', 'ring-finger-phalanx-intermediate', 'ring-finger-phalanx-distal', 'ring-finger-tip',
   'pinky-finger-metacarpal', 'pinky-finger-phalanx-proximal', 'pinky-finger-phalanx-intermediate', 'pinky-finger-phalanx-distal', 'pinky-finger-tip'];
 const prstPoz = new THREE.Vector3();
-// Rozmístí kuličky na klouby ruky; vrátí světovou polohu špičky ukazováčku, nebo null (ruka se nesleduje).
-function poziceRuky(o) {
-  const j = o.ruka.joints, spickaJ = j?.['index-finger-tip'];
-  const sleduje = !!(spickaJ && spickaJ.visible && o.zdroj?.hand);
-  KLOUBY.forEach((n, k) => {
-    const kl = j?.[n], mesh = o.klouby[k];
-    mesh.visible = sleduje && !!kl?.visible && n !== 'index-finger-tip';
-    if (mesh.visible) kl.getWorldPosition(mesh.position);
-  });
-  o.spicka.visible = sleduje;
-  if (!sleduje) return null;
-  spickaJ.getWorldPosition(prstPoz);
-  o.spicka.position.copy(prstPoz);
-  return prstPoz;
+let diagnostika = '';
+// Ruce čteme přímo z XRFrame (getJointPose), nezávisle na tom, jak three.js přiřadí ruce k ovladačům.
+// Vrací text pro diagnostický řádek na panelu.
+function obsluhaRukou() {
+  const session = renderer.xr.getSession(), frame = renderer.xr.getFrame(), ref = renderer.xr.getReferenceSpace();
+  const videne = new Set();
+  const funkce = session?.enabledFeatures;
+  const povoleno = funkce ? (funkce.includes('hand-tracking') ? 'povoleno' : 'NEPOVOLENO') : '?';
+  let ovl = 0, rukou = 0;
+  if (session && frame && ref) {
+    for (const src of session.inputSources) {
+      if (!src.hand) { if (src.gamepad) ovl++; continue; }
+      rukou++;
+      const r = RUKY[src.handedness === 'left' ? 'left' : 'right'];
+      if (videne.has(r)) continue;
+      let tip = null;
+      KLOUBY.forEach((n, k) => {
+        const js = src.hand.get(n), pose = js ? frame.getJointPose(js, ref) : null;
+        if (n === 'index-finger-tip') { if (pose) { const p = pose.transform.position; tip = prstPoz.set(p.x, p.y, p.z); } return; }
+        const mesh = r.klouby[k];
+        mesh.visible = !!pose;
+        if (pose) { const p = pose.transform.position; mesh.position.set(p.x, p.y, p.z); }
+      });
+      if (!tip) continue;
+      videne.add(r);
+      r.spicka.visible = true; r.spicka.position.copy(tip);
+      tukni(r.hrot, tip, 0.008, -1, false);
+    }
+  }
+  for (const r of Object.values(RUKY)) {
+    if (videne.has(r)) continue;
+    r.spicka.visible = false; r.klouby.forEach((k) => { k.visible = false; }); r.hrot.predY = null; r.hrot.drzi = null;
+  }
+  return `ruce: ${rukou} (sledované ${videne.size}) · ovladače: ${ovl} · sledování rukou: ${povoleno}`;
 }
 // Ťuknutí hrotem (prst / palička) shora do klávesy. Hystereze: klávesa se znovu zahraje, až hrot vyjede nad ni.
 function tukni(h, svet, polomer, i, haptika) {
@@ -360,13 +383,12 @@ function snimek() {
         if (r) noveHover = r.id;
       } else o.cil = { typ: 'klavesa', m: hit.object.userData.m };
     }
-    // ruka: rozmístit klouby, špička ukazováčku hraje
-    const prst = poziceRuky(o);
-    if (prst) tukni(o.hroty.prst, prst, 0.008, i, false); else o.hroty.prst.predY = null;
     // palička: ťuknutí shora do klávesy (jen když je ovladač v ruce)
     o.palicka.visible = !o.zdroj?.hand; // s rukama bez ovladače palička není
     if (o.grip.visible && !o.zdroj?.hand) { o.kulicka.getWorldPosition(v); tukni(o.hroty.palicka, v, 0.012, i, true); } else o.hroty.palicka.predY = null;
   });
+  const d = obsluhaRukou();
+  if (d !== diagnostika) { diagnostika = d; prekreslit = true; }
   if (noveHover !== hover) { hover = noveHover; prekreslit = true; }
   if (prekreslit) { prekreslit = false; kresliPanel(); kresliKlaviaturu(); }
   renderer.render(scene, camera);
@@ -389,5 +411,5 @@ export function nahledVR() {
   });
   const smycka = () => { if (prekreslit) { prekreslit = false; kresliPanel(); kresliKlaviaturu(); } renderer.render(scene, camera); requestAnimationFrame(smycka); };
   render(); smycka();
-  window.__vr2 = { tukni, kbd, klavesy, THREE }; // pro testy hraní prstem
+  window.__vr2 = { tukni, kbd, klavesy, THREE, obsluhaRukou, renderer, RUKY }; // pro testy hraní prstem
 }
