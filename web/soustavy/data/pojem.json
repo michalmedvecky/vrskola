@@ -1,0 +1,19 @@
+{
+  "id": "pojem",
+  "nazev": "Co je soustava rovnic",
+  "ikona": "🧩",
+  "misto": "Tábor na rozcestí",
+  "strazce": { "jmeno": "Dvojhlavec", "barva": "#0984e3", "oci": 2, "rohy": 1, "hlaska": "Stačí přece splnit jednu rovnici, ne? Ta druhá se nebude zlobit." },
+  "lekce": [
+    { "nadpis": "Jedna rovnice, dvě neznámé", "text": ["Rovnice x + y = 5 má **nekonečně mnoho** řešení: x = 1, y = 4; x = 2, y = 3; x = 0,5, y = 4,5…", "Z jedné rovnice tedy x a y nezjistíme. Potřebujeme **druhou informaci**."] },
+    { "nadpis": "Soustava", "text": ["Dvě rovnice, které musí platit **zároveň**, tvoří soustavu:", "[[x + y = 5 ; x − y = 1]]", "Řešení soustavy je **dvojice čísel** x a y, která splní **obě** rovnice. Tady x = 3, y = 2: 3 + 2 = 5 ✔ a 3 − 2 = 1 ✔.", "Dvojice x = 4, y = 1 splní první rovnici, ale druhou ne (4 − 1 = 3). Řešením **není**."] },
+    { "nadpis": "Jak ověřit řešení (zkouška)", "text": ["Dosaď x a y do **každé** rovnice zvlášť a spočítej levou stranu.", "Vyjde-li v obou rovnicích pravá strana, je to řešení. Stačí jedna nesedící rovnice a řešením to není.", "Pozor na záporná čísla: 3x − 2y pro x = −1, y = −4 je 3 · (−1) − 2 · (−4) = −3 + 8 = 5."] },
+    { "nadpis": "Obrázek: dvě přímky", "text": ["Všechna řešení jedné rovnice leží na **přímce**. Soustava = dvě přímky.", "Řešení soustavy je bod, který leží na obou přímkách: jejich **průsečík**. Tady [3; 2]."], "kresba": { "typ": "graf", "primky": [{ "e": [1, 1, 5], "popis": "x + y = 5" }, { "e": [1, -1, 1], "popis": "x − y = 1" }], "body": [{ "x": 3, "y": 2, "popis": "[3; 2]" }] } },
+    { "nadpis": "Když známe jednu neznámou", "text": ["Ve 3x + 2y = 16 je x = 2. Dosadíme: 6 + 2y = 16, tedy 2y = 10 a **y = 5**.", "Přesně tohle se dělá na konci každého řešení soustavy: jednu neznámou spočítáme a druhou **dopočítáme dosazením**."] }
+  ],
+  "polozky": [
+    { "id": "je-reseni", "gen": "je-reseni", "nazev": "Je to řešení? (zkouška)", "serie": 3 },
+    { "id": "dopocitej", "gen": "dopocitej", "nazev": "Dopočítej druhou neznámou", "serie": 2 },
+    { "id": "graf", "gen": "graf-prusecik", "nazev": "Řešení z grafu", "serie": 2 }
+  ]
+}

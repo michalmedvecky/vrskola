@@ -1,0 +1,20 @@
+{
+  "id": "vyjadreni",
+  "nazev": "Vyjádření neznámé",
+  "ikona": "🔁",
+  "misto": "Tábor u potoka",
+  "strazce": { "jmeno": "Převracák", "barva": "#e17055", "oci": 3, "rohy": 0, "hlaska": "Přehodím ti znaménka a ani si toho nevšimneš!" },
+  "lekce": [
+    { "nadpis": "Co znamená vyjádřit", "text": ["Vyjádřit y znamená upravit rovnici tak, aby vlevo zůstalo **jen y**.", "2x + y = 7 → y = 7 − 2x. Člen 2x jsme převedli na druhou stranu a změnili mu znaménko.", "Pro políčka ve hře píšeme výsledek jako y = −2x + 7 (koeficient u x je −2, číslo +7). Je to totéž."] },
+    { "nadpis": "Když je před neznámou minus", "text": ["3x − y = 4 → −y = 4 − 3x.", "Teď **změníme všechna znaménka** (vynásobíme −1): y = −4 + 3x, tedy y = 3x − 4.", "Častá chyba: zapomenout otočit i druhý člen."] },
+    { "nadpis": "Když je před neznámou číslo", "text": ["4x + 2y = 10 → 2y = 10 − 4x → vydělíme 2: y = 5 − 2x.", "Dělíme **každý** člen. Kdyby nešel vydělit beze zbytku, vznikly by zlomky. Proto vybíráme neznámou s koeficientem **1 nebo −1**."] },
+    { "nadpis": "Dosazení výrazu", "text": ["Máme [[2x + y = 7 ; 3x + 4y = 18]] Z první rovnice y = 7 − 2x.", "Do druhé rovnice napíšeme místo y celý výraz **v závorce**: 3x + 4(7 − 2x) = 18.", "Bez závorky (3x + 4 · 7 − 2x) bychom násobili jen sedmičku. To je chyba."] },
+    { "nadpis": "Úprava po dosazení", "text": ["3x + 4(7 − 2x) = 18", "Roznásobíme: 3x + 28 − 8x = 18.", "Sečteme x: −5x + 28 = 18 → −5x = −10 → **x = 2**.", "Zbylo vypočítat y = 7 − 2 · 2 = 3. To už je celá dosazovací metoda, uvidíš v dalším táboře."] }
+  ],
+  "polozky": [
+    { "id": "vyjadri1", "gen": "vyjadri", "param": { "jenJedna": true }, "nazev": "Vyjádři (koeficient 1 nebo −1)", "serie": 2 },
+    { "id": "vyjadri", "gen": "vyjadri", "nazev": "Vyjádři (i s dělením)", "serie": 2 },
+    { "id": "co", "gen": "co-vyjadrit", "nazev": "Co se vyplatí vyjádřit", "serie": 2 },
+    { "id": "dosad", "gen": "dosad-vyraz", "nazev": "Dosaď výraz a dopočítej", "serie": 3 }
+  ]
+}

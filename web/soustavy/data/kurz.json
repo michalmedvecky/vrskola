@@ -1,0 +1,24 @@
+{
+  "nazev": "Dvojvrch",
+  "podtitul": "Soustavy dvou rovnic o dvou neznámých od základů po úlohy z přijímaček",
+  "temata": ["jedna", "pojem", "vyjadreni", "dosazovaci", "scitaci", "upravy", "pocet", "slovni", "prijimacky"],
+  "trenink": { "delkaKola": 8, "podilOpakovani": 0.2 },
+  "strazce": { "otazek": 6, "zivotu": 2 },
+  "zaverecna": {
+    "nazev": "Vrchol Dvojvrchu",
+    "popis": "Závěrečná zkouška ze všech táborů. Jen výsledky, žádné kroky, jako u přijímaček. Smíš udělat nejvýš 2 chyby.",
+    "otazek": 12,
+    "zivotu": 3,
+    "pevnychUloh": 3,
+    "pevnaPolozka": "prijimacky:cermat",
+    "strazce": { "jmeno": "Sněžný strážce", "barva": "#dfe6e9", "oci": 2, "rohy": 2, "hlaska": "Na vrchol pustím jen toho, kdo zvládne obě neznámé." }
+  },
+  "hodnosti": [
+    { "od": 0, "nazev": "Turista" },
+    { "od": 50, "nazev": "Stopař" },
+    { "od": 160, "nazev": "Horolezec" },
+    { "od": 380, "nazev": "Průvodce" },
+    { "od": 700, "nazev": "Horský vůdce" },
+    { "od": 1100, "nazev": "Pán Dvojvrchu" }
+  ]
+}

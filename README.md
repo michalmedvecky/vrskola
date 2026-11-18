@@ -74,6 +74,17 @@ kartičky se slovy do výběhů (ohebné vlevo, neohebné vpravo). Data jsou vym
 v [`web/zoo/README.md`](web/zoo/README.md). V k3s jsou to ConfigMapy `vrskola-zoo` a `vrskola-zoo-data`, nginx je
 servíruje z `/zoo/`.
 
+## Dvojvrch – soustavy rovnic (PC, tablet i VR, `/soustavy/`)
+
+Hra na soustavy dvou rovnic o dvou neznámých pro deváťáky před přijímačkami ve `web/soustavy/` (bez serveru).
+Devět táborů cestou na horu: rovnice o jedné neznámé, co je soustava (zkouška, graf), vyjádření neznámé,
+dosazovací metoda, sčítací metoda, závorky a zlomky, kolik má soustava řešení (i s parametrem), slovní úlohy
+a úlohy ve stylu přijímaček; nakonec závěrečná zkouška Vrchol Dvojvrchu. V každém táboře lekce, trénink do zvládnutí
+(napoprvé po krocích s nápovědou, pak jen výsledek; chyba = řešení + úloha se vrátí) a souboj se strážcem.
+Na Questu stejně jako Zlomková výprava: tabule s hrou a 3D klávesnice na paličky, tentokrát na horské louce.
+Data jsou vyměnitelná (`web/soustavy/data/`), podrobnosti v [`web/soustavy/README.md`](web/soustavy/README.md).
+V k3s jsou to ConfigMapy `vrskola-soustavy` a `vrskola-soustavy-data`, nginx je servíruje z `/soustavy/`.
+
 ## Soubory
 
 | Cesta | Co to je |
@@ -88,6 +99,7 @@ servíruje z `/zoo/`.
 | `web/padam/` | hra Padám padám pro tablet, určování pádů (vlastní README) |
 | `web/zlomky/` | hra Zlomková výprava, zlomky pro přijímačky (vlastní README) |
 | `web/zoo/` | hra Slovní zoo, slovní druhy (vlastní README) |
+| `web/soustavy/` | hra Dvojvrch, soustavy rovnic pro přijímačky (vlastní README) |
 | `kustomization.yaml`, `deploy/` | nasazení do k3s |
 
 Lokálně: `cd web && python3 -m http.server 8000` → http://localhost:8000/ (WebXR v headsetu potřebuje https).

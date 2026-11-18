@@ -1,0 +1,19 @@
+{
+  "id": "pocet",
+  "nazev": "Kolik má soustava řešení",
+  "ikona": "♾️",
+  "misto": "Tábor v mlze",
+  "strazce": { "jmeno": "Nulík", "barva": "#a29bfe", "oci": 1, "rohy": 1, "hlaska": "Vyšlo ti 0 = 5? U mě je možné všechno!" },
+  "lekce": [
+    { "nadpis": "Tři možnosti", "text": ["Dvě přímky v rovině můžou být:", "**různoběžné**: protnou se v jednom bodě, soustava má **právě jedno** řešení,", "**rovnoběžné**: nemají společný bod, soustava **nemá řešení**,", "**totožné** (splývají): každý bod je společný, řešení je **nekonečně mnoho**."], "kresba": { "typ": "graf", "primky": [{ "e": [1, -1, -1], "popis": "p" }, { "e": [1, -1, 2], "popis": "q" }] } },
+    { "nadpis": "Žádné řešení", "text": ["[[x + 2y = 4 ; 2x + 4y = 5]]", "Levá strana druhé rovnice je **dvojnásobek** levé strany první. Pravá strana ale 2 · 4 = 8 není 5.", "Sčítací metodou (první · (−2) a sečíst) vyjde **0 = −3**. To nikdy neplatí, soustava nemá řešení."] },
+    { "nadpis": "Nekonečně mnoho řešení", "text": ["[[x + 2y = 4 ; 2x + 4y = 8]]", "Druhá rovnice je celá dvojnásobek první, i s pravou stranou. Je to **tatáž rovnice**.", "Sčítací metodou vyjde **0 = 0**. Platí to vždycky: vyhovuje každá dvojice, která splní x + 2y = 4."] },
+    { "nadpis": "Rychlé pravidlo", "text": ["Porovnej koeficienty: je druhá rovnice vlevo **k-násobkem** první (u x i u y stejné k)?", "**Ne** → právě jedno řešení.", "**Ano** a pravá strana je taky k-násobek → nekonečně mnoho řešení.", "**Ano**, ale pravá strana ne → žádné řešení."] },
+    { "nadpis": "Úloha s parametrem", "text": ["Pro které a nemá soustava [[2x + 3y = 5 ; 4x + a·y = 7]] řešení?", "U x je ve 2. rovnici dvojnásobek (4 = 2 · 2). Aby byly levé strany násobky, musí být a = 2 · 3 = **6**.", "Pravá strana 7 ≠ 2 · 5 = 10, takže pro a = 6 řešení není."] }
+  ],
+  "polozky": [
+    { "id": "pocet", "gen": "pocet-reseni", "nazev": "Kolik řešení (z rovnic)", "serie": 3 },
+    { "id": "graf", "gen": "graf-pocet", "nazev": "Kolik řešení (z grafu)", "serie": 2 },
+    { "id": "parametr", "gen": "parametr", "nazev": "Úloha s parametrem", "serie": 2 }
+  ]
+}

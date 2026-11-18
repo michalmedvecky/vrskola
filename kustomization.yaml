@@ -197,6 +197,32 @@ configMapGenerator:
       - web/zoo/data/vety.json
       - web/zoo/data/promeny.json
       - web/zoo/data/vybehy.json
+  - name: vrskola-soustavy   # samostatná hra Dvojvrch na /soustavy/ (soustavy rovnic pro přijímačky, PC/tablet i VR na Questu)
+    files:
+      - web/soustavy/index.html
+      - web/soustavy/styl.css
+      - web/soustavy/hra.js
+      - web/soustavy/generatory.js
+      - web/soustavy/cisla.js
+      - web/soustavy/kresby.js
+      - web/soustavy/prisery.js
+      - web/soustavy/postup.js
+      - web/soustavy/zvuk.js
+      - web/soustavy/vr.js
+      - web/soustavy/manifest.json
+      - web/soustavy/ikona.svg
+  - name: vrskola-soustavy-data   # tábory, lekce, šablony slovních úloh a úlohy ve stylu přijímaček (vyměnitelná data), servíruje se z /soustavy/data/
+    files:
+      - web/soustavy/data/kurz.json
+      - web/soustavy/data/jedna.json
+      - web/soustavy/data/pojem.json
+      - web/soustavy/data/vyjadreni.json
+      - web/soustavy/data/dosazovaci.json
+      - web/soustavy/data/scitaci.json
+      - web/soustavy/data/upravy.json
+      - web/soustavy/data/pocet.json
+      - web/soustavy/data/slovni.json
+      - web/soustavy/data/prijimacky.json
   - name: vrskola-nginx
     files:
       - deploy/default.conf
