@@ -1,0 +1,472 @@
+{
+  "id": "posazavi",
+  "nazev": "Posázaví",
+  "sirka": 2722,
+  "vyska": 1871,
+  "start": "kounice",
+  "vLokale": "v Kounicích",
+  "mesta": [
+    {
+      "id": "kounice",
+      "nazev": "Kounice",
+      "velikost": 3,
+      "x": 1456,
+      "y": 1101
+    },
+    {
+      "id": "zruc",
+      "nazev": "Zruč nad Sázavou",
+      "velikost": 2,
+      "x": 740,
+      "y": 827
+    },
+    {
+      "id": "ledec",
+      "nazev": "Ledeč nad Sázavou",
+      "velikost": 2,
+      "x": 1792,
+      "y": 1295
+    },
+    {
+      "id": "kacov",
+      "nazev": "Kácov",
+      "velikost": 1,
+      "x": 275,
+      "y": 482
+    },
+    {
+      "id": "soutice",
+      "nazev": "Soutice",
+      "velikost": 1,
+      "x": 385,
+      "y": 964
+    },
+    {
+      "id": "stepanov",
+      "nazev": "Trhový Štěpánov",
+      "velikost": 1,
+      "x": 183,
+      "y": 1125
+    },
+    {
+      "id": "chaberice",
+      "nazev": "Chabeřice",
+      "velikost": 1,
+      "x": 520,
+      "y": 699
+    },
+    {
+      "id": "vlastejovice",
+      "nazev": "Vlastějovice",
+      "velikost": 1,
+      "x": 1150,
+      "y": 898
+    },
+    {
+      "id": "pertoltice",
+      "nazev": "Pertoltice",
+      "velikost": 1,
+      "x": 1046,
+      "y": 643
+    },
+    {
+      "id": "rendejov",
+      "nazev": "Řendějov",
+      "velikost": 1,
+      "x": 783,
+      "y": 388
+    },
+    {
+      "id": "bohdanec",
+      "nazev": "Bohdaneč",
+      "velikost": 1,
+      "x": 1468,
+      "y": 501
+    },
+    {
+      "id": "zbraslavice",
+      "nazev": "Zbraslavice",
+      "velikost": 1,
+      "x": 1303,
+      "y": 161
+    },
+    {
+      "id": "cestin",
+      "nazev": "Čestín",
+      "velikost": 1,
+      "x": 703,
+      "y": 180
+    },
+    {
+      "id": "hnevkovice",
+      "nazev": "Hněvkovice",
+      "velikost": 1,
+      "x": 1333,
+      "y": 1342
+    },
+    {
+      "id": "kralovice",
+      "nazev": "Dolní Kralovice",
+      "velikost": 1,
+      "x": 1193,
+      "y": 1739
+    },
+    {
+      "id": "hradec",
+      "nazev": "Hradec",
+      "velikost": 1,
+      "x": 1939,
+      "y": 1040
+    },
+    {
+      "id": "habrek",
+      "nazev": "Habrek",
+      "velikost": 1,
+      "x": 2128,
+      "y": 1418
+    },
+    {
+      "id": "svetla",
+      "nazev": "Světlá nad Sázavou",
+      "velikost": 2,
+      "x": 2557,
+      "y": 1531
+    },
+    {
+      "id": "zdislavice",
+      "nazev": "Zdislavice",
+      "velikost": 1,
+      "x": 765,
+      "y": 1323
+    },
+    {
+      "id": "keblov",
+      "nazev": "Keblov",
+      "velikost": 1,
+      "x": 520,
+      "y": 1512
+    },
+    {
+      "id": "bela",
+      "nazev": "Bělá",
+      "velikost": 1,
+      "x": 2171,
+      "y": 1172
+    },
+    {
+      "id": "prosicka",
+      "nazev": "Prosíčka",
+      "velikost": 1,
+      "x": 1621,
+      "y": 1569
+    },
+    {
+      "id": "kozli",
+      "nazev": "Kožlí",
+      "velikost": 1,
+      "x": 1927,
+      "y": 1607
+    },
+    {
+      "id": "cihost",
+      "nazev": "Číhošť",
+      "velikost": 1,
+      "x": 2183,
+      "y": 832
+    },
+    {
+      "id": "vilemovice",
+      "nazev": "Vilémovice",
+      "velikost": 1,
+      "x": 1425,
+      "y": 1654
+    }
+  ],
+  "cesty": [
+    [
+      "kounice",
+      "ledec"
+    ],
+    [
+      "kounice",
+      "hnevkovice"
+    ],
+    [
+      "kounice",
+      "vlastejovice"
+    ],
+    [
+      "kounice",
+      "bohdanec"
+    ],
+    [
+      "kounice",
+      "prosicka"
+    ],
+    [
+      "vlastejovice",
+      "zruc"
+    ],
+    [
+      "vlastejovice",
+      "pertoltice"
+    ],
+    [
+      "zruc",
+      "soutice"
+    ],
+    [
+      "zruc",
+      "chaberice"
+    ],
+    [
+      "zruc",
+      "zdislavice"
+    ],
+    [
+      "soutice",
+      "stepanov"
+    ],
+    [
+      "soutice",
+      "keblov"
+    ],
+    [
+      "chaberice",
+      "kacov"
+    ],
+    [
+      "kacov",
+      "rendejov"
+    ],
+    [
+      "rendejov",
+      "cestin"
+    ],
+    [
+      "cestin",
+      "zbraslavice"
+    ],
+    [
+      "zbraslavice",
+      "bohdanec"
+    ],
+    [
+      "rendejov",
+      "pertoltice"
+    ],
+    [
+      "pertoltice",
+      "bohdanec"
+    ],
+    [
+      "bohdanec",
+      "cihost"
+    ],
+    [
+      "cihost",
+      "hradec"
+    ],
+    [
+      "hradec",
+      "ledec"
+    ],
+    [
+      "ledec",
+      "bela"
+    ],
+    [
+      "bela",
+      "svetla"
+    ],
+    [
+      "ledec",
+      "habrek"
+    ],
+    [
+      "habrek",
+      "svetla"
+    ],
+    [
+      "ledec",
+      "kozli"
+    ],
+    [
+      "kozli",
+      "prosicka"
+    ],
+    [
+      "prosicka",
+      "vilemovice"
+    ],
+    [
+      "vilemovice",
+      "kralovice"
+    ],
+    [
+      "kralovice",
+      "hnevkovice"
+    ],
+    [
+      "kralovice",
+      "keblov"
+    ],
+    [
+      "keblov",
+      "zdislavice"
+    ],
+    [
+      "zdislavice",
+      "hnevkovice"
+    ],
+    [
+      "stepanov",
+      "keblov"
+    ]
+  ],
+  "reky": [
+    {
+      "nazev": "Sázava",
+      "sirka": 18,
+      "body": [
+        [2722, 1588],
+        [2508, 1522],
+        [2294, 1418],
+        [2018, 1337],
+        [1804, 1252],
+        [1621, 1182],
+        [1468, 1054],
+        [1284, 964],
+        [1131, 945],
+        [948, 870],
+        [752, 865],
+        [550, 737],
+        [367, 567],
+        [183, 425],
+        [0, 284]
+      ]
+    },
+    {
+      "nazev": "Želivka",
+      "sirka": 26,
+      "body": [
+        [1346, 1871],
+        [1070, 1720],
+        [887, 1560],
+        [673, 1399],
+        [550, 1182],
+        [434, 1011]
+      ]
+    }
+  ],
+  "lesy": [
+    {
+      "body": [
+        [214, 47],
+        [520, 95],
+        [520, 331],
+        [245, 302]
+      ]
+    },
+    {
+      "body": [
+        [734, 662],
+        [887, 567],
+        [948, 737],
+        [795, 775]
+      ]
+    },
+    {
+      "body": [
+        [1621, 331],
+        [1927, 284],
+        [1988, 567],
+        [1743, 614]
+      ]
+    },
+    {
+      "body": [
+        [1651, 945],
+        [1835, 898],
+        [1804, 1087],
+        [1682, 1134]
+      ]
+    },
+    {
+      "body": [
+        [948, 1465],
+        [1162, 1418],
+        [1131, 1607],
+        [979, 1654]
+      ]
+    },
+    {
+      "body": [
+        [2232, 1654],
+        [2538, 1701],
+        [2416, 1815],
+        [2202, 1796]
+      ]
+    },
+    {
+      "body": [
+        [2355, 1087],
+        [2599, 945],
+        [2630, 1229],
+        [2416, 1276]
+      ]
+    },
+    {
+      "body": [
+        [92, 1182],
+        [336, 1229],
+        [275, 1371],
+        [61, 1323]
+      ]
+    }
+  ],
+  "kopce": [
+    {
+      "r": 150,
+      "x": 1070,
+      "y": 284
+    },
+    {
+      "r": 120,
+      "x": 1009,
+      "y": 1229
+    },
+    {
+      "r": 110,
+      "x": 1743,
+      "y": 1701
+    },
+    {
+      "r": 130,
+      "x": 1927,
+      "y": 662
+    },
+    {
+      "r": 100,
+      "x": 581,
+      "y": 567
+    }
+  ],
+  "popisky": [
+    {
+      "text": "Posázaví",
+      "x": 1713,
+      "y": 586
+    },
+    {
+      "text": "Ledečsko",
+      "x": 2079,
+      "y": 1749
+    },
+    {
+      "text": "Kácovsko",
+      "x": 336,
+      "y": 142
+    }
+  ]
+}

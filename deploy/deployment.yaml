@@ -95,6 +95,12 @@ spec:
             - name: soustavy-data
               mountPath: /usr/share/nginx/soustavy-data
               readOnly: true
+            - name: dostihy
+              mountPath: /usr/share/nginx/dostihy
+              readOnly: true
+            - name: dostihy-data
+              mountPath: /usr/share/nginx/dostihy-data
+              readOnly: true
             - name: nginx-conf
               mountPath: /etc/nginx/conf.d
               readOnly: true
@@ -152,6 +158,12 @@ spec:
         - name: soustavy-data
           configMap:
             name: vrskola-soustavy-data
+        - name: dostihy
+          configMap:
+            name: vrskola-dostihy
+        - name: dostihy-data
+          configMap:
+            name: vrskola-dostihy-data
         - name: nginx-conf
           configMap:
             name: vrskola-nginx

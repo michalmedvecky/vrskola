@@ -1,0 +1,71 @@
+{
+  "id": "posazavi",
+  "nazev": "Posázaví",
+  "pxNaKm": 85,
+  "okraj": { "sever": 49.83, "jih": 49.632, "zapad": 14.985, "vychod": 15.43 },
+  "start": "kounice",
+  "vLokale": "v Kounicích",
+  "mesta": [
+    { "id": "kounice", "nazev": "Kounice", "gps": [49.7135, 15.2230], "velikost": 3 },
+    { "id": "zruc", "nazev": "Zruč nad Sázavou", "gps": [49.7425, 15.1060], "velikost": 2 },
+    { "id": "ledec", "nazev": "Ledeč nad Sázavou", "gps": [49.6930, 15.2780], "velikost": 2 },
+    { "id": "kacov", "nazev": "Kácov", "gps": [49.7790, 15.0300], "velikost": 1 },
+    { "id": "soutice", "nazev": "Soutice", "gps": [49.7280, 15.0480], "velikost": 1 },
+    { "id": "stepanov", "nazev": "Trhový Štěpánov", "gps": [49.7110, 15.0150], "velikost": 1 },
+    { "id": "chaberice", "nazev": "Chabeřice", "gps": [49.7560, 15.0700], "velikost": 1 },
+    { "id": "vlastejovice", "nazev": "Vlastějovice", "gps": [49.7350, 15.1730], "velikost": 1 },
+    { "id": "pertoltice", "nazev": "Pertoltice", "gps": [49.7620, 15.1560], "velikost": 1 },
+    { "id": "rendejov", "nazev": "Řendějov", "gps": [49.7890, 15.1130], "velikost": 1 },
+    { "id": "bohdanec", "nazev": "Bohdaneč", "gps": [49.7770, 15.2250], "velikost": 1 },
+    { "id": "zbraslavice", "nazev": "Zbraslavice", "gps": [49.8130, 15.1980], "velikost": 1 },
+    { "id": "cestin", "nazev": "Čestín", "gps": [49.8110, 15.1000], "velikost": 1 },
+    { "id": "hnevkovice", "nazev": "Hněvkovice", "gps": [49.6880, 15.2030], "velikost": 1 },
+    { "id": "kralovice", "nazev": "Dolní Kralovice", "gps": [49.6460, 15.1800], "velikost": 1 },
+    { "id": "hradec", "nazev": "Hradec", "gps": [49.7200, 15.3020], "velikost": 1 },
+    { "id": "habrek", "nazev": "Habrek", "gps": [49.6800, 15.3330], "velikost": 1 },
+    { "id": "svetla", "nazev": "Světlá nad Sázavou", "gps": [49.6680, 15.4030], "velikost": 2 },
+    { "id": "zdislavice", "nazev": "Zdislavice", "gps": [49.6900, 15.1100], "velikost": 1 },
+    { "id": "keblov", "nazev": "Keblov", "gps": [49.6700, 15.0700], "velikost": 1 },
+    { "id": "bela", "nazev": "Bělá", "gps": [49.7060, 15.3400], "velikost": 1 },
+    { "id": "prosicka", "nazev": "Prosíčka", "gps": [49.6640, 15.2500], "velikost": 1 },
+    { "id": "kozli", "nazev": "Kožlí", "gps": [49.6600, 15.3000], "velikost": 1 },
+    { "id": "cihost", "nazev": "Číhošť", "gps": [49.7420, 15.3420], "velikost": 1 },
+    { "id": "vilemovice", "nazev": "Vilémovice", "gps": [49.6550, 15.2180], "velikost": 1 }
+  ],
+  "cesty": [
+    ["kounice", "ledec"], ["kounice", "hnevkovice"], ["kounice", "vlastejovice"], ["kounice", "bohdanec"], ["kounice", "prosicka"],
+    ["vlastejovice", "zruc"], ["vlastejovice", "pertoltice"], ["zruc", "soutice"], ["zruc", "chaberice"], ["zruc", "zdislavice"],
+    ["soutice", "stepanov"], ["soutice", "keblov"], ["chaberice", "kacov"], ["kacov", "rendejov"], ["rendejov", "cestin"],
+    ["cestin", "zbraslavice"], ["zbraslavice", "bohdanec"], ["rendejov", "pertoltice"], ["pertoltice", "bohdanec"],
+    ["bohdanec", "cihost"], ["cihost", "hradec"], ["hradec", "ledec"], ["ledec", "bela"], ["bela", "svetla"],
+    ["ledec", "habrek"], ["habrek", "svetla"], ["ledec", "kozli"], ["kozli", "prosicka"], ["prosicka", "vilemovice"],
+    ["vilemovice", "kralovice"], ["kralovice", "hnevkovice"], ["kralovice", "keblov"], ["keblov", "zdislavice"],
+    ["zdislavice", "hnevkovice"], ["stepanov", "keblov"]
+  ],
+  "reky": [
+    { "nazev": "Sázava", "sirka": 18, "gps": [[49.6620, 15.4300], [49.6690, 15.3950], [49.6800, 15.3600], [49.6885, 15.3150], [49.6975, 15.2800], [49.7050, 15.2500], [49.7185, 15.2250], [49.7280, 15.1950], [49.7300, 15.1700], [49.7380, 15.1400], [49.7385, 15.1080], [49.7520, 15.0750], [49.7700, 15.0450], [49.7850, 15.0150], [49.8000, 14.9850]] },
+    { "nazev": "Želivka", "sirka": 26, "gps": [[49.6320, 15.2050], [49.6480, 15.1600], [49.6650, 15.1300], [49.6820, 15.0950], [49.7050, 15.0750], [49.7230, 15.0560]] }
+  ],
+  "lesy": [
+    { "gps": [[49.8250, 15.0200], [49.8200, 15.0700], [49.7950, 15.0700], [49.7980, 15.0250]] },
+    { "gps": [[49.7600, 15.1050], [49.7700, 15.1300], [49.7520, 15.1400], [49.7480, 15.1150]] },
+    { "gps": [[49.7950, 15.2500], [49.8000, 15.3000], [49.7700, 15.3100], [49.7650, 15.2700]] },
+    { "gps": [[49.7300, 15.2550], [49.7350, 15.2850], [49.7150, 15.2800], [49.7100, 15.2600]] },
+    { "gps": [[49.6750, 15.1400], [49.6800, 15.1750], [49.6600, 15.1700], [49.6550, 15.1450]] },
+    { "gps": [[49.6550, 15.3500], [49.6500, 15.4000], [49.6380, 15.3800], [49.6400, 15.3450]] },
+    { "gps": [[49.7150, 15.3700], [49.7300, 15.4100], [49.7000, 15.4150], [49.6950, 15.3800]] },
+    { "gps": [[49.7050, 15.0000], [49.7000, 15.0400], [49.6850, 15.0300], [49.6900, 14.9950]] }
+  ],
+  "kopce": [
+    { "gps": [49.8000, 15.1600], "r": 150 },
+    { "gps": [49.7000, 15.1500], "r": 120 },
+    { "gps": [49.6500, 15.2700], "r": 110 },
+    { "gps": [49.7600, 15.3000], "r": 130 },
+    { "gps": [49.7700, 15.0800], "r": 100 }
+  ],
+  "popisky": [
+    { "text": "Posázaví", "gps": [49.7680, 15.2650] },
+    { "text": "Ledečsko", "gps": [49.6450, 15.3250] },
+    { "text": "Kácovsko", "gps": [49.8150, 15.0400] }
+  ]
+}

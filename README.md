@@ -48,6 +48,15 @@ vesnici odemyká truhličku a za vyřešenou úlohu dostane klíč; klíči odem
 jsou vyměnitelná data (`web/strazcy/data/`), podrobnosti v [`web/strazcy/README.md`](web/strazcy/README.md).
 V k3s jsou to ConfigMapy `vrskola-strazcy` a `vrskola-strazcy-data`, nginx je servíruje z `/strazcy/`.
 
+## Dukáty a dostihy (tablet a mobil, `/dostihy/`)
+
+Hra na písemné sčítání, odčítání, násobení a dělení až do 9 cifer ve `web/dostihy/` (bez VR, bez serveru), kostra je ze
+Strážců klýčú. Holčička na hobbyhorsovi jezdí po stylizované mapě Posázaví (Zruč – Kounice – Ledeč), otevírá truhličky
+příklady (1–5 dukátů podle obtížnosti) a v Kounicích za dukáty vylepšuje starou kobylu (zdraví, síla, obratnost, krása)
+a jezdí s ní dostihy ve třech ligách. Data jsou vyměnitelná (`web/dostihy/data/`), podrobnosti a vyvážení dostihů
+v [`web/dostihy/README.md`](web/dostihy/README.md). V k3s jsou to ConfigMapy `vrskola-dostihy` a `vrskola-dostihy-data`,
+nginx je servíruje z `/dostihy/`.
+
 ## Padám padám (tablet, `/padam/`)
 
 Hra na určování pádů podstatných jmen pro tablet (bez VR, bez serveru) ve `web/padam/`. Městečko se čtyřmi minihrami
@@ -96,6 +105,7 @@ V k3s jsou to ConfigMapy `vrskola-soustavy` a `vrskola-soustavy-data`, nginx je 
 | `web/three.module.min.js` | three.js 0.160 |
 | `server/server.mjs` | mini server pro Souboj třídy (Node.js 22, bez závislostí) |
 | `web/strazcy/` | hra Strážcy klýčú pro tablet (vlastní README) |
+| `web/dostihy/` | hra Dukáty a dostihy pro tablet a mobil, písemné počítání (vlastní README) |
 | `web/padam/` | hra Padám padám pro tablet, určování pádů (vlastní README) |
 | `web/zlomky/` | hra Zlomková výprava, zlomky pro přijímačky (vlastní README) |
 | `web/zoo/` | hra Slovní zoo, slovní druhy (vlastní README) |

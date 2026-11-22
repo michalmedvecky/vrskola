@@ -223,6 +223,28 @@ configMapGenerator:
       - web/soustavy/data/pocet.json
       - web/soustavy/data/slovni.json
       - web/soustavy/data/prijimacky.json
+  - name: vrskola-dostihy   # samostatná hra Dukáty a dostihy na /dostihy/ (písemné počítání, kůň, dostihy; tablet a mobil)
+    files:
+      - web/dostihy/index.html
+      - web/dostihy/styl.css
+      - web/dostihy/hra.js
+      - web/dostihy/mapa.js
+      - web/dostihy/postava.js
+      - web/dostihy/kun.js
+      - web/dostihy/ulohy.js
+      - web/dostihy/ulohy-ui.js
+      - web/dostihy/dostihy.js
+      - web/dostihy/dostihy-ui.js
+      - web/dostihy/zvuky.js
+      - web/dostihy/manifest.json
+      - web/dostihy/ikona.svg
+  - name: vrskola-dostihy-data   # mapa, rozsahy příkladů, obchod a dostihové ligy (vyměnitelná data), servíruje se z /dostihy/data/
+    files:
+      - web/dostihy/data/mapy.json
+      - web/dostihy/data/mapa-posazavi.json
+      - web/dostihy/data/ukoly.json
+      - web/dostihy/data/obchod.json
+      - web/dostihy/data/dostihy.json
   - name: vrskola-nginx
     files:
       - deploy/default.conf

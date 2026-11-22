@@ -1,0 +1,10 @@
+{
+  "name": "Dukáty a dostihy",
+  "short_name": "Dostihy",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "background_color": "#5fb3c9",
+  "theme_color": "#5fb3c9",
+  "icons": [{ "src": "ikona.svg", "sizes": "any", "type": "image/svg+xml" }]
+}
