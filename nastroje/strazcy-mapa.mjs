@@ -21,6 +21,7 @@ const mapa = {
   nazev: zdroj.nazev,
   sirka, vyska,
   start: zdroj.start,
+  ...(zdroj.vLokale ? { vLokale: zdroj.vLokale } : {}),
   ...(zdroj.pozadi ? { pozadi: zdroj.pozadi } : {}),
   mesta: zdroj.mesta.map(({ gps, ...m }) => { const [x, y] = bod(gps); return { ...m, x, y }; }),
   cesty: zdroj.cesty,

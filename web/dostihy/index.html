@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#5fb3c9">
+<title>Dukáty a dostihy</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="ikona.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="ikona.svg">
+<link rel="stylesheet" href="styl.css">
+</head>
+<body>
+<canvas id="mapa"></canvas>
+
+<div id="hud" hidden>
+  <button id="mesec" class="hud-tl" aria-label="Měšec s dukáty"><span class="mesec-ikona">💰</span><b id="dukaty">0</b></button>
+  <button id="kun-stav" class="hud-tl" aria-label="Můj kůň"></button>
+  <div class="hud-vpravo">
+    <button id="tl-nastaveni" class="hud-tl kulate" aria-label="Pro rodiče">⚙️</button>
+  </div>
+</div>
+<div id="bublina" hidden></div>
+
+<div id="panel" class="panel-obal" hidden>
+  <div class="panel">
+    <button id="panel-zavrit" class="zavrit" aria-label="Zavřít">✕</button>
+    <div id="panel-obsah"></div>
+  </div>
+</div>
+
+<div id="splash" class="splash" hidden>
+  <div class="splash-nebe"></div>
+  <div class="splash-obsah">
+    <div class="splash-klice"><span>🪙</span><span>🏆</span><span>🪙</span></div>
+    <h1 class="splash-nazev">Dukáty a dostihy</h1>
+    <canvas class="splash-kun" width="680" height="340"></canvas>
+    <div class="splash-stat"></div>
+    <button class="tl velke hlavni splash-hrat">Hrát ▶</button>
+  </div>
+</div>
+
+<div id="nacitani" class="nacitani">Sedlám koně…</div>
+<div id="konfety"></div>
+
+<script type="module" src="hra.js"></script>
+</body>
+</html>

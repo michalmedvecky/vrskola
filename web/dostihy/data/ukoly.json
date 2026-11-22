@@ -1,0 +1,51 @@
+{
+  "nazev": "Písemné počítání do 9 cifer",
+  "popis": "Rozsahy jsou počty cifer [od, do]. Obtížnost 1–5 = počet dukátů v truhle. minPrechodu = kolikrát nejméně se přechází přes desítku (přenos / výpůjčka).",
+  "operace": {
+    "+": {
+      "nazev": "Sčítání pod sebou",
+      "pokyn": "Sečti pod sebou. Piš od jednotek, tedy zprava.",
+      "urovne": [
+        { "a": [3, 3], "b": [2, 3], "minPrechodu": 1 },
+        { "a": [4, 4], "b": [3, 4], "minPrechodu": 2 },
+        { "a": [5, 6], "b": [4, 6], "minPrechodu": 2 },
+        { "a": [7, 7], "b": [5, 7], "minPrechodu": 3 },
+        { "a": [8, 9], "b": [7, 8], "minPrechodu": 4 }
+      ]
+    },
+    "-": {
+      "nazev": "Odčítání pod sebou",
+      "pokyn": "Odečti pod sebou. Piš od jednotek, tedy zprava.",
+      "urovne": [
+        { "a": [3, 3], "b": [2, 3], "minPrechodu": 1 },
+        { "a": [4, 4], "b": [3, 4], "minPrechodu": 2 },
+        { "a": [5, 6], "b": [4, 6], "minPrechodu": 2 },
+        { "a": [7, 7], "b": [5, 7], "minPrechodu": 3 },
+        { "a": [8, 9], "b": [6, 9], "minPrechodu": 4 }
+      ]
+    },
+    "×": {
+      "nazev": "Násobení pod sebou",
+      "pokyn": "Vynásob pod sebou. Piš od jednotek, tedy zprava.",
+      "pokynVicemistne": "Vynásob pod sebou. Nejdřív jednotkami, pak desítkami (o místo doleva)… nakonec mezivýsledky sečti.",
+      "urovne": [
+        { "a": [2, 3], "b": [1, 1] },
+        { "a": [4, 4], "b": [1, 1] },
+        { "a": [3, 4], "b": [2, 2] },
+        { "a": [5, 6], "b": [2, 2] },
+        { "a": [5, 6], "b": [3, 3] }
+      ]
+    },
+    ":": {
+      "nazev": "Dělení",
+      "pokyn": "Vyděl písemně. Kolikrát se dělitel vejde? Kolik zbude? Pak připiš další číslici.",
+      "urovne": [
+        { "delenec": [2, 3], "delitel": [1, 1], "zbytek": false },
+        { "delenec": [4, 4], "delitel": [1, 1], "zbytek": false },
+        { "delenec": [5, 6], "delitel": [1, 1], "zbytek": true },
+        { "delenec": [4, 5], "delitel": [2, 2], "zbytek": true },
+        { "delenec": [7, 9], "delitel": [2, 2], "zbytek": true }
+      ]
+    }
+  }
+}

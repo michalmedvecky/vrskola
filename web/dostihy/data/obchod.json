@@ -1,0 +1,64 @@
+{
+  "nazev": "Obchod s koňmi v Kounicích",
+  "popis": "Každá věc se kupuje jednou a koně natrvalo vylepší o jeden stupeň. Ceny rostou. Síla a obratnost potřebují zdravého koně: vyšší stupně se dají koupit, až když má kůň dost zdraví.",
+  "vlastnosti": [
+    {
+      "id": "kondice", "nazev": "Zdraví", "ikona": "❤️",
+      "ucinek": "Delší sprint, rychleji se vzpamatuje po zakopnutí, přestane kulhat.",
+      "veci": [
+        { "id": "veterinar", "nazev": "Prohlídka u veterináře", "ikona": "🩺", "cena": 4 },
+        { "id": "podkovy", "nazev": "Nové podkovy", "ikona": "🧲", "cena": 7 },
+        { "id": "vitaminy", "nazev": "Vitamíny", "ikona": "💊", "cena": 11 },
+        { "id": "deka", "nazev": "Teplá deka do stáje", "ikona": "🧣", "cena": 16 },
+        { "id": "masaz", "nazev": "Masáž zad", "ikona": "💆", "cena": 22 },
+        { "id": "plavani", "nazev": "Plavání v Sázavě", "ikona": "🏊", "cena": 30 },
+        { "id": "zubar", "nazev": "Koňský zubař", "ikona": "🦷", "cena": 40 },
+        { "id": "lazne", "nazev": "Koňské lázně", "ikona": "♨️", "cena": 52 }
+      ]
+    },
+    {
+      "id": "rychlost", "nazev": "Síla", "ikona": "💪",
+      "ucinek": "Vyšší rychlost a rychlejší rozběh.",
+      "potrebuje": "kondice",
+      "veci": [
+        { "id": "oves", "nazev": "Pytel ovsa", "ikona": "🌾", "cena": 5 },
+        { "id": "mrkve", "nazev": "Sladké mrkve", "ikona": "🥕", "cena": 8 },
+        { "id": "jablka", "nazev": "Jablka z kounického sadu", "ikona": "🍎", "cena": 12 },
+        { "id": "kopec", "nazev": "Běh do kopce", "ikona": "⛰️", "cena": 17 },
+        { "id": "trenerka", "nazev": "Trénink s trenérkou", "ikona": "⏱️", "cena": 23 },
+        { "id": "sedlo", "nazev": "Lehké závodní sedlo", "ikona": "🏇", "cena": 31 },
+        { "id": "zavodni-podkovy", "nazev": "Závodní podkovy", "ikona": "⚡", "cena": 41 },
+        { "id": "musli", "nazev": "Šampionské müsli", "ikona": "🥣", "cena": 54 }
+      ]
+    },
+    {
+      "id": "skok", "nazev": "Obratnost", "ikona": "🦘",
+      "ucinek": "Snadnější skok (delší chvilka, kdy se dá skočit) a méně zakopávání o překážky.",
+      "potrebuje": "kondice",
+      "veci": [
+        { "id": "kavaletky", "nazev": "Kavaletky", "ikona": "🪵", "cena": 5 },
+        { "id": "mala-prekazka", "nazev": "Malá překážka na louce", "ikona": "🚧", "cena": 8 },
+        { "id": "skokovy-trenink", "nazev": "Skokový trénink", "ikona": "🦘", "cena": 12 },
+        { "id": "rovnovaha", "nazev": "Trénink rovnováhy", "ikona": "⚖️", "cena": 17 },
+        { "id": "kmen", "nazev": "Skákání přes kmeny v lese", "ikona": "🌲", "cena": 23 },
+        { "id": "skola", "nazev": "Skoková škola", "ikona": "🏫", "cena": 31 },
+        { "id": "tabor", "nazev": "Jezdecký tábor", "ikona": "⛺", "cena": 41 },
+        { "id": "mistr", "nazev": "Mistrovský trenér", "ikona": "🏆", "cena": 54 }
+      ]
+    },
+    {
+      "id": "krasa", "nazev": "Krása", "ikona": "✨",
+      "ucinek": "Kůň je hezčí a diváci mu po každém dostihu přihodí dukáty navíc.",
+      "veci": [
+        { "id": "koupel", "nazev": "Koupel", "ikona": "🛁", "cena": 3 },
+        { "id": "hrbelec", "nazev": "Hřbelec a kartáč", "ikona": "🪮", "cena": 6 },
+        { "id": "strihani", "nazev": "Stříhání hřívy", "ikona": "✂️", "cena": 9 },
+        { "id": "lak", "nazev": "Lesk na kopyta", "ikona": "💅", "cena": 13 },
+        { "id": "masle", "nazev": "Mašle do hřívy", "ikona": "🎀", "cena": 18 },
+        { "id": "cabraka", "nazev": "Barevná čabraka", "ikona": "🟪", "cena": 24 },
+        { "id": "ohlavka", "nazev": "Třpytivá ohlávka", "ikona": "💎", "cena": 32 },
+        { "id": "zlata", "nazev": "Zlatá uzdečka", "ikona": "👑", "cena": 42 }
+      ]
+    }
+  ]
+}
