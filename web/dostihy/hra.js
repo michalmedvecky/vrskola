@@ -3,7 +3,8 @@
 import { Mapa } from './mapa.js';
 import { nakresliJezdkyni, VOLBY, POPISY, VYCHOZI, VOLBY_HOBBY, POPISY_HOBBY, VYCHOZI_HOBBY, NAZVY_VOLEB } from './postava.js';
 import { vytvorUlohu, OPERACE, ZNAK, zamichej, hezky } from './ulohy.js';
-import { spustUlohu } from './ulohy-ui.js';
+import { spustUlohu, psaciPlocha } from './ulohy-ui.js';
+import { nactiModel, ulozVzorek, smazRukopis, pocetVzorku } from './cislice.js';
 import { zvuk, nastavZtlumeni } from './zvuky.js';
 import { nakresliKone, VYCHOZI_KUN, SRST, NAZVY_SRSTI, HRIVA, DOPLNKY, stupne, dalsiVec, bonusKrasy, prezdivka } from './kun.js';
 import { spustDostih } from './dostihy-ui.js';
@@ -16,7 +17,7 @@ const params = new URLSearchParams(location.search);
 // ---------- stav ----------
 const VYCHOZI_NASTAVENI = {
   operace: { '+': true, '-': true, '×': true, ':': true }, minObt: 1, maxObt: 5, zivoty: 2, pauza: 1, obnova: 15,
-  odpocinek: null, prenos: true, pomoc: 0, zvuk: true, mapa: null,
+  odpocinek: null, prenos: true, psani: true, pomoc: 0, zvuk: true, mapa: null,
 };
 let stav = nactiStav();
 function nactiStav() {
@@ -306,8 +307,9 @@ async function resitTruhlu(id, t, scena, plocha) {
   plocha.append(uEl);
   const uloha = vytvorUlohu(ukoly, t.op, t.obtiznost);
   const zivoty = stav.nastaveni.zivoty + (t.obtiznost >= 3 ? 1 : 0) + (t.obtiznost >= 5 ? 1 : 0);
+  if (stav.nastaveni.psani) await nactiModel().catch(() => {}); // bez sítě zůstane klávesnice
   $('#panel-zavrit').hidden = true; // úloha se dodělá (nebo prohraje), neutíká se od ní
-  const vysledek = await spustUlohu(uEl, uloha, { zivoty, prenos: stav.nastaveni.prenos });
+  const vysledek = await spustUlohu(uEl, uloha, { zivoty, prenos: stav.nastaveni.prenos, psani: stav.nastaveni.psani });
   $('#panel-zavrit').hidden = false;
   zapisStatistiku(t, uloha, vysledek);
   plocha.innerHTML = '';
@@ -593,6 +595,13 @@ function nastaveni() {
   const pr = document.createElement('input'); pr.type = 'checkbox'; pr.checked = n.prenos;
   pr.onchange = () => { n.prenos = pr.checked; uloz(); };
   radek('Ukazovat přenos nad sloupcem („1 si pamatuj“)', pr);
+  const ps = document.createElement('input'); ps.type = 'checkbox'; ps.checked = n.psani;
+  ps.onchange = () => { n.psani = ps.checked; uloz(); if (n.psani) nactiModel().catch(() => {}); };
+  const psObal = div('psani-nast');
+  psObal.append(ps, div('male', `Vypnuto = číselná klávesnice. ${pocetVzorku() ? `Hra zná ${pocetVzorku()} vzorků rukopisu.` : 'Hra se zatím neučila rukopis.'}`),
+    tlacitko('✏️ Naučit hru můj rukopis', () => { zavriPanel(); uceniRukopisu(); }));
+  if (pocetVzorku()) { const sm = tlacitko('Zapomenout rukopis', () => { smazRukopis(); sm.remove(); }, 'male-tl'); psObal.append(sm); }
+  radek('Číslice psát tužkou nebo prstem', psObal);
   const zv = document.createElement('input'); zv.type = 'checkbox'; zv.checked = n.zvuk;
   zv.onchange = () => { n.zvuk = zv.checked; uloz(); obnovHud(); };
   radek('Zvuky', zv);
@@ -622,6 +631,33 @@ function nastaveni() {
   tl.append(reset);
   obal.append(tl);
   otevriPanel(obal, { trida: 'siroky' });
+  naZavreni = napovez;
+}
+
+// ---------- učení rukopisu: každou číslici napsat dvakrát ----------
+function uceniRukopisu() {
+  const poradi = [...zamichej([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]), ...zamichej([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])];
+  let i = 0, poznano = 0;
+  const obal = div('uceni-rukopisu');
+  obal.append(div('nadpis', '✏️ Naučím se tvůj rukopis'));
+  const vyzva = div('vyzva-rukopis');
+  const prubeh = div('male');
+  const ukaz = () => { vyzva.innerHTML = `Napiš číslici <b>${poradi[i]}</b>`; prubeh.textContent = `${i + 1} / ${poradi.length}`; };
+  const plocha = psaciPlocha(() => {}, false, (r) => {
+    if (i >= poradi.length) return;
+    ulozVzorek(poradi[i], r.rysy);
+    if (Number(r.cislice) === poradi[i]) poznano++;
+    zvuk.klik();
+    i++;
+    if (i < poradi.length) { ukaz(); return; }
+    plocha.remove();
+    vyzva.innerHTML = `Hotovo! 🎉 Hned napoprvé jsem správně přečetl <b>${poznano} z ${poradi.length}</b> číslic. Teď už tvůj rukopis znám líp.`;
+    prubeh.textContent = '';
+    const tl = div('tlacitka'); tl.append(tlacitko('Hotovo', () => zavriPanel(), 'hlavni')); obal.append(tl);
+  });
+  ukaz();
+  obal.append(vyzva, plocha, prubeh);
+  otevriPanel(obal);
   naZavreni = napovez;
 }
 
@@ -666,6 +702,7 @@ function konfety(pocet = 80) {
 // ---------- start ----------
 let posledniKrok = 0;
 async function start() {
+  if (stav.nastaveni.psani) nactiModel().catch(() => {}); // psaní tužkou: síť se načte dopředu
   try { await nactiData(); }
   catch (e) { $('#nacitani').textContent = 'Mapu se nepodařilo načíst: ' + e.message; return; }
   if (!dataMapy.mesta.some((m) => m.id === stav.pozice)) stav.pozice = startId();
@@ -726,4 +763,4 @@ addEventListener('keydown', (e) => {
 start();
 
 // háčky pro automatické testy
-window.__ds = { get stav() { return stav; }, get mapa() { return mapa; }, uloz, obnovHud, navstevaMesta, navstevaKounic, obchodPanel, stajPanel, vyberDostihu, zavod, pridejDukaty, hezky };
+window.__ds = { get stav() { return stav; }, get mapa() { return mapa; }, uloz, nastaveni, uceniRukopisu, obnovHud, navstevaMesta, navstevaKounic, obchodPanel, stajPanel, vyberDostihu, zavod, pridejDukaty, hezky };

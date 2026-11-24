@@ -82,13 +82,27 @@ Výsledek má vždy nejvýš 9 cifer. U sčítání a odčítání je zaručený
 - Po chybě ubude srdíčko a objeví se nápověda přesně k tomu kroku (např. `7 + 5 + 1 = 13 → napiš 3, 1 si pamatuj`,
   `6 × 7 = 42 – to je víc než 40, zkus menší číslo`). Srdíček je podle nastavení (výchozí 2), u obtížnosti 3+ o jedno, u 5 o dvě víc.
 
+### Psaní tužkou
+
+Výchozí zápis čísel je **psaní tužkou nebo prstem** na psací plochu vedle příkladu (v nastavení jde přepnout na číselnou
+klávesnici). Po zvednutí tužky a chvilce (0,9 s) se číslice přečte a zapíše do políčka.
+- Čte ji malá konvoluční síť přímo v prohlížeči, bez internetu (`cislice.js`, váhy `cislice-model.json`, 140 kB, int8).
+  Natrénovaná na MNIST + syntetických českých jedničkách s náběhem a sedmičkách s čárkou
+  (`nastroje/dostihy-cislice-synt.py`, `nastroje/dostihy-cislice-trenink.py`), na testu MNIST 99,4 %.
+- Když si čtení není jisté, zeptá se „Co jsi napsala? 1 / 7 / ✏️ Znovu“ – nejistota se nikdy nepočítá jako chyba
+  a nabídka se ukazuje bez ohledu na to, jestli je odpověď správně (neprozradí výsledek).
+- Vybraná podoba se uloží jako vzorek rukopisu. V nastavení je **„Naučit hru můj rukopis“**: každá číslice dvakrát;
+  hra pak čte podle vnitřních rysů sítě i vlastní vzorky (localStorage `dostihy-rukopis`, nejvýš 12 na číslici).
+- Jakmile tablet ohlásí stylus (Apple Pencil, S Pen), dotyky prstem a dlaní se na ploše ignorují.
+- Klávesnice počítače funguje pořád (číslice, Enter, Backspace).
+
 Rozsahy jsou v `data/ukoly.json` (počty cifer `[od, do]` pro každou obtížnost), takže jdou měnit bez programování.
 
 ## Pro rodiče
 
 Ozubené kolečko vpravo nahoře, podržet 2 s: které operace se počítají, nejnižší a nejvyšší obtížnost truhel, srdíčka,
 pauza po chybě, za jak dlouho se prázdná truhla naplní (výchozí 15 min), odpočinek koně po dostihu, jak moc soupeři čekají,
-přenos nad sloupcem, zvuk, statistika (podle operací a obtížností), poslední chyby, úprava postavičky, smazání postupu.
+přenos nad sloupcem, psaní tužkou / klávesnice a učení rukopisu, zvuk, statistika (podle operací a obtížností), poslední chyby, úprava postavičky, smazání postupu.
 Tajný kód: napsat na klávesnici `HOPHOP` = 20 dukátů (na zkoušení obchodu a dostihů).
 
 ## Soubory
@@ -101,7 +115,8 @@ Tajný kód: napsat na klávesnici `HOPHOP` = 20 dukátů (na zkoušení obchodu
 | `postava.js` | holčička (ze Strážců, přidaná jezdecká helma) a hobbyhorse s volbami (barva, hříva, uzdička, ozdoba, tyč) |
 | `kun.js` | závodní kůň: vlastnosti z koupených věcí, kreslení z boku podle zdraví, síly a krásy, jezdkyně |
 | `ulohy.js` | generátory příkladů podle obtížnosti, přenosy, kroky písemného dělení (bez DOM, testuje se v Node) |
-| `ulohy-ui.js` | počítání pod sebou a písemné dělení s kontrolou každého kroku a nápovědou |
+| `ulohy-ui.js` | počítání pod sebou a písemné dělení s kontrolou každého kroku a nápovědou; psací plocha a klávesnice |
+| `cislice.js`, `cislice-model.json` | rozpoznávání psaných číslic (síť v čistém JS) a vzorky rukopisu |
 | `dostihy.js` | simulace dostihu (bez DOM, testuje a vyvažuje se v Node) |
 | `dostihy-ui.js` | obrazovka dostihu: kreslení, tlačítka, klávesnice |
 | `zvuky.js` | zvuky (WebAudio, ze Strážců + mince, kopyta, skok) |

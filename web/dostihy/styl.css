@@ -412,3 +412,37 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
 .dostih-otoc { display: none; position: absolute; left: 50%; top: 64px; transform: translateX(-50%); background: rgba(255,250,240,.92); border-radius: 12px; padding: 6px 12px; font-weight: 800; font-size: 15px; white-space: nowrap; pointer-events: none; }
 @media (orientation: portrait) { .dostih-otoc { display: block; } .dostih-nazev { display: none; } }
+
+/* psaní číslic tužkou nebo prstem */
+.psani { display: flex; flex-direction: column; align-items: center; gap: 6px; width: min(300px, 100%); margin-top: 6px; }
+.psani-stav { font-size: 16px; color: #7a6a55; min-height: 22px; }
+.psani-stav b { color: var(--modra); font-size: 20px; }
+.psani-list { position: relative; width: 100%; }
+.psaci-plocha { display: block; width: 100%; height: 210px; touch-action: none; user-select: none; -webkit-user-select: none; cursor: crosshair;
+  background: #fff repeating-linear-gradient(90deg, transparent 0 34px, #f3f7fb 34px 35px); border: 3px solid #c9d8e8; border-radius: 16px; box-shadow: inset 0 2px 6px #0001; }
+.psani-volby { position: absolute; inset: 0; background: #fffdf6ee; border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+.psani-volby[hidden] { display: none; }
+.psani-otazka { font-size: 19px; font-weight: 800; }
+.psani-moznosti { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.psani-moznosti .klavesa { width: 64px; }
+.psani-znovu { font-size: 16px; }
+.psani-tlacitka { display: flex; gap: 8px; justify-content: center; }
+.psani-tlacitka .tl { font-size: 16px; padding: 8px 14px; }
+.psani-tlacitka .klavesa { width: 70px; height: 50px; font-size: 22px; }
+.uloha-telo > .psani { grid-row: 1 / span 4; grid-column: 2; }
+.psani-nast { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.psani-nast .male { font-size: 14px; opacity: .8; flex: 1 1 160px; }
+.psani-nast .tl { font-size: 15px; padding: 8px 12px; }
+.uceni-rukopisu { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.vyzva-rukopis { font-size: 22px; text-align: center; }
+.vyzva-rukopis b { font-size: 40px; color: var(--modra); vertical-align: middle; }
+.uceni-rukopisu .psani { width: min(320px, 100%); }
+.uceni-rukopisu .psaci-plocha { height: 240px; }
+@media (max-width: 700px) { .psaci-plocha { height: 170px; } }
+@media (max-height: 500px) {
+  .psani { width: 240px; gap: 3px; margin: 0; }
+  .psaci-plocha { height: 150px; }
+  .psani-stav { font-size: 13px; min-height: 16px; }
+  .psani-tlacitka .tl { padding: 5px 10px; font-size: 14px; }
+  .psani-tlacitka .klavesa { height: 40px; }
+}
