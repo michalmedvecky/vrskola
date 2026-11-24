@@ -90,5 +90,24 @@ for (const liga of dostihy.ligy) {
 }
 if (parametry({ rychlost: 8, kondice: 8, skok: 8 }).okno <= parametry({}).okno) chyba('lepší kůň musí mít delší okno pro skok');
 
+// rozpoznávání psaných číslic: model se načte a jednoduché tvary přečte správně
+{
+  const { nastavModel, predikuj } = await import('../web/dostihy/cislice.js');
+  const j = JSON.parse(readFileSync(new URL('../web/dostihy/cislice-model.json', import.meta.url)));
+  nastavModel(j);
+  const tvar = (fn) => { const o = new Float32Array(784); for (let y = 0; y < 28; y++) for (let x = 0; x < 28; x++) if (fn(x, y)) o[y * 28 + x] = 1; return o; };
+  const vzory = {
+    1: tvar((x, y) => y >= 4 && y <= 23 && x >= 13 && x <= 15),
+    0: tvar((x, y) => { const d = Math.hypot((x - 13.5) / 6.5, (y - 13.5) / 9.5); return d > 0.75 && d < 1.05; }),
+    7: tvar((x, y) => (y >= 4 && y <= 6 && x >= 7 && x <= 21) || (y > 6 && y <= 23 && Math.abs(x - (21 - (y - 6) * 0.55)) <= 1.3)),
+  };
+  for (const [c, o] of Object.entries(vzory)) {
+    const { p } = predikuj(o);
+    const nej = p.indexOf(Math.max(...p));
+    if (String(nej) !== c) chyba(`rozpoznávání: ${c} přečteno jako ${nej}`);
+    else if (v) console.log(`  číslice ${c}: ${(p[nej] * 100).toFixed(0)} %`);
+  }
+}
+
 console.log(chyb ? `\n${chyb} chyb` : 'Vše v pořádku ✓');
 process.exit(chyb ? 1 : 0);

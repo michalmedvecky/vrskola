@@ -1,8 +1,10 @@
 // Zobrazení úloh v panelu truhly: písemné počítání pod sebou a písemné dělení.
 // Každá číslice se kontroluje hned, za chybu ubude srdíčko a ukáže se nápověda k tomu kroku.
-// spustUlohu(el, uloha, {zivoty, prenos}) → Promise<{ ok, chyby: [text] }>
+// spustUlohu(el, uloha, {zivoty, prenos, psani}) → Promise<{ ok, chyby: [text] }>
+// psani: true = číslice se píšou tužkou (nebo prstem) na psací plochu, jinak číselná klávesnice.
 import { zvuk } from './zvuky.js';
 import { prenosy, ZNAK, hezky } from './ulohy.js';
+import { rozpoznej, ulozVzorek, modelPripraven } from './cislice.js';
 
 const h = (tag, attrs = {}, ...deti) => {
   const e = document.createElement(tag);
@@ -19,7 +21,7 @@ const zatres = (e) => { e.classList.remove('zatres'); void e.offsetWidth; e.clas
 const cif = (n, k) => Math.floor(n / 10 ** k) % 10; // k-tá číslice od jednotek
 const delka = (n) => String(n).length;
 
-export function spustUlohu(el, u, { zivoty = 2, prenos = true } = {}) {
+export function spustUlohu(el, u, { zivoty = 2, prenos = true, psani = false } = {}) {
   return new Promise((hotovo) => {
     el.innerHTML = '';
     window.__dsUloha = u; // pro automatické testy
@@ -42,7 +44,8 @@ export function spustUlohu(el, u, { zivoty = 2, prenos = true } = {}) {
       if (zbyva <= 0) { konec(false); return false; }
       return true;
     };
-    const ctx = { telo, chyba, konec, prenos };
+    const vstup = psani && modelPripraven() ? psaciPlocha : klavesnice;
+    const ctx = { telo, chyba, konec, prenos, vstup };
     (u.typ === 'deleni' ? deleni : sloupec)(u, ctx);
   });
 }
@@ -56,15 +59,115 @@ function klavesnice(naCislo, sOK) {
     b.onclick = () => naCislo(c);
     k.append(b);
   }
-  // klávesnice počítače (PC a tablet s klávesnicí)
+  klavesyPocitace(k, naCislo, sOK);
+  return k;
+}
+
+// klávesnice počítače (PC a tablet s klávesnicí) – funguje u klávesnice i u psaní
+function klavesyPocitace(prvek, naCislo, sOK) {
   const kl = (e) => {
-    if (!k.isConnected) { removeEventListener('keydown', kl); return; }
+    if (!prvek.isConnected) { removeEventListener('keydown', kl); return; }
     if (/^[0-9]$/.test(e.key)) naCislo(e.key);
     else if (sOK && e.key === 'Enter') naCislo('OK');
     else if (sOK && e.key === 'Backspace') naCislo('⌫');
   };
   addEventListener('keydown', kl);
-  return k;
+}
+
+// ---------- psací plocha: číslice se píše tužkou nebo prstem ----------
+// Po zvednutí tužky a krátké chvilce se číslice přečte. Když si čtení není jisté, nabídne
+// „Je to 1, nebo 7?“ (bez ztráty srdíčka) a vybranou podobu si zapamatuje jako vzorek rukopisu.
+// Jakmile tablet jednou ohlásí tužku, dotyky prstem (dlaní) se na ploše ignorují.
+let videnaTuzka = false;
+export const CEKANI_NA_DOPSANI = 900;
+export function psaciPlocha(naCislo, sOK, naVysledek = null) {
+  const obal = h('div', { class: 'psani' + (sOK ? ' s-ok' : '') });
+  const stav = h('div', { class: 'psani-stav' }, 'Napiš číslici ✏️');
+  const cv = h('canvas', { class: 'psaci-plocha' });
+  const volby = h('div', { class: 'psani-volby' });
+  volby.hidden = true;
+  const tl = h('div', { class: 'psani-tlacitka' });
+  tl.append(h('button', { class: 'tl psani-smaz', onclick: () => { smaz(); stav.textContent = 'Napiš číslici ✏️'; } }, '🧽 Smazat'));
+  if (sOK) {
+    tl.append(h('button', { class: 'tl klavesa', onclick: () => naCislo('⌫') }, '⌫'));
+    tl.append(h('button', { class: 'tl klavesa ok', onclick: () => naCislo('OK') }, 'OK'));
+  }
+  obal.append(stav, h('div', { class: 'psani-list' }, cv, volby), tl);
+
+  let tahy = [], tah = null, casovac = 0, dpr = 1, ukazujeVolby = false;
+  const g = cv.getContext('2d');
+  const prekresli = () => {
+    const w = cv.clientWidth, v = cv.clientHeight;
+    dpr = Math.min(2, devicePixelRatio || 1);
+    if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(v * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(v * dpr); }
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    g.clearRect(0, 0, w, v);
+    // linka jako v sešitě
+    g.strokeStyle = '#cfe0f0'; g.lineWidth = 2; g.setLineDash([8, 8]);
+    g.beginPath(); g.moveTo(10, v * 0.82); g.lineTo(w - 10, v * 0.82); g.stroke(); g.setLineDash([]);
+    g.strokeStyle = '#1f3a93'; g.lineCap = 'round'; g.lineJoin = 'round'; g.lineWidth = Math.max(5, v / 28);
+    for (const t of tahy) {
+      g.beginPath(); t.forEach(([x, y], i) => (i ? g.lineTo(x, y) : g.moveTo(x, y)));
+      if (t.length === 1) g.lineTo(t[0][0] + 0.1, t[0][1]);
+      g.stroke();
+    }
+  };
+  const smaz = () => { clearTimeout(casovac); tahy = []; tah = null; skryjVolby(); prekresli(); };
+  const skryjVolby = () => { ukazujeVolby = false; volby.hidden = true; volby.innerHTML = ''; };
+  const odevzdej = (c) => {
+    smaz();
+    stav.innerHTML = `Přečteno: <b>${c}</b>`;
+    naCislo(c);
+  };
+  const vyhodnot = () => {
+    const r = rozpoznej(tahy);
+    if (!r) { smaz(); return; }
+    if (naVysledek) { smaz(); naVysledek(r); return; } // učení rukopisu: jen předat
+    if (r.jistota >= 0.8) { odevzdej(r.cislice); return; }
+    // nejisté čtení: nabídnout možnosti, nic se nepočítá jako chyba
+    const moznosti = r.poradi.filter((x, i) => i === 0 || x.p >= 0.06).slice(0, 3);
+    ukazujeVolby = true;
+    volby.innerHTML = '';
+    volby.append(h('div', { class: 'psani-otazka' }, moznosti.length > 1 ? 'Co jsi napsala?' : 'Je to tahle číslice?'));
+    const rada = h('div', { class: 'psani-moznosti' });
+    for (const m of moznosti) {
+      rada.append(h('button', { class: 'tl klavesa', onclick: () => { ulozVzorek(m.c, r.rysy); zvuk.klik(); odevzdej(String(m.c)); } }, String(m.c)));
+    }
+    rada.append(h('button', { class: 'tl psani-znovu', onclick: () => { smaz(); stav.textContent = 'Napiš ji znovu, větší a pomaleji ✏️'; } }, '✏️ Znovu'));
+    volby.append(rada);
+    volby.hidden = false;
+  };
+
+  const bod = (e) => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  cv.addEventListener('pointerdown', (e) => {
+    if (e.pointerType === 'pen') videnaTuzka = true;
+    else if (e.pointerType === 'touch' && videnaTuzka) return; // dlaň položená na tabletu
+    e.preventDefault();
+    if (ukazujeVolby) { tahy = []; skryjVolby(); }
+    clearTimeout(casovac);
+    cv.setPointerCapture?.(e.pointerId);
+    tah = { id: e.pointerId, body: [bod(e)] };
+    tahy.push(tah.body);
+    prekresli();
+  });
+  cv.addEventListener('pointermove', (e) => {
+    if (!tah || e.pointerId !== tah.id) return;
+    const evs = e.getCoalescedEvents?.() || [e];
+    for (const x of evs) tah.body.push(bod(x));
+    prekresli();
+  });
+  const zvednuti = (e) => {
+    if (!tah || e.pointerId !== tah.id) return;
+    tah = null;
+    clearTimeout(casovac);
+    casovac = setTimeout(vyhodnot, CEKANI_NA_DOPSANI);
+  };
+  cv.addEventListener('pointerup', zvednuti);
+  cv.addEventListener('pointercancel', zvednuti);
+  new ResizeObserver(() => prekresli()).observe(cv);
+  obal._psani = { tahy: () => tahy, vyhodnot }; // pro automatické testy
+  klavesyPocitace(obal, naCislo, sOK);
+  return obal;
 }
 
 // velikost buňky podle šířky panelu (9 cifer se musí vejít i na mobil)
@@ -77,7 +180,7 @@ function velikostBunky(telo, sloupcu, max = 46, radku = 0) {
 }
 
 // ---------- písemné sčítání, odčítání a násobení pod sebou ----------
-function sloupec(u, { telo, chyba, konec, prenos }) {
+function sloupec(u, { telo, chyba, konec, prenos, vstup }) {
   const { a, b, operace } = u;
   const kroky = []; // pořadí buněk ke kontrole
   let mezisoucty = [];
@@ -163,7 +266,7 @@ function sloupec(u, { telo, chyba, konec, prenos }) {
   };
   ukaz();
   u._cislice = kroky.map((k) => k.hodnota);
-  telo.append(klavesnice((c) => {
+  telo.append(vstup((c) => {
     if (i >= kroky.length) return;
     const k = kroky[i];
     if (c === k.hodnota) {
@@ -182,7 +285,7 @@ function sloupec(u, { telo, chyba, konec, prenos }) {
 }
 
 // ---------- písemné dělení ----------
-function deleni(u, { telo, chyba, konec }) {
+function deleni(u, { telo, chyba, konec, vstup }) {
   const s = String(u.delenec), n = s.length, d = u.delitel;
   const kroky = u.kroky;
   const radku = 1 + kroky.length;
@@ -247,7 +350,7 @@ function deleni(u, { telo, chyba, konec }) {
     else { zadano = ''; pole.textContent = ' '; dotaz.innerHTML = `Kolik zbude? `; dotaz.append(pole); }
   };
   ukaz();
-  const kl = klavesnice((c) => {
+  const kl = vstup((c) => {
     if (j >= kroky.length) return;
     const k = kroky[j];
     if (faze === 'q') {

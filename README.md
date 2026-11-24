@@ -53,7 +53,7 @@ V k3s jsou to ConfigMapy `vrskola-strazcy` a `vrskola-strazcy-data`, nginx je se
 Hra na písemné sčítání, odčítání, násobení a dělení až do 9 cifer ve `web/dostihy/` (bez VR, bez serveru), kostra je ze
 Strážců klýčú. Holčička na hobbyhorsovi jezdí po stylizované mapě Posázaví (Zruč – Kounice – Ledeč), otevírá truhličky
 příklady (1–5 dukátů podle obtížnosti) a v Kounicích za dukáty vylepšuje starou kobylu (zdraví, síla, obratnost, krása)
-a jezdí s ní dostihy ve třech ligách. Data jsou vyměnitelná (`web/dostihy/data/`), podrobnosti a vyvážení dostihů
+a jezdí s ní dostihy ve třech ligách. Číslice se píšou tužkou nebo prstem (rozpoznávání přímo v prohlížeči), jde přepnout na klávesnici. Data jsou vyměnitelná (`web/dostihy/data/`), podrobnosti a vyvážení dostihů
 v [`web/dostihy/README.md`](web/dostihy/README.md). V k3s jsou to ConfigMapy `vrskola-dostihy` a `vrskola-dostihy-data`,
 nginx je servíruje z `/dostihy/`.
 

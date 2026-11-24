@@ -233,6 +233,8 @@ configMapGenerator:
       - web/dostihy/kun.js
       - web/dostihy/ulohy.js
       - web/dostihy/ulohy-ui.js
+      - web/dostihy/cislice.js
+      - web/dostihy/cislice-model.json
       - web/dostihy/dostihy.js
       - web/dostihy/dostihy-ui.js
       - web/dostihy/zvuky.js
