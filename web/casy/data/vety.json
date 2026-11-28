@@ -1,0 +1,111 @@
+{
+  "_popis": "Ručně psané věty po skupinách. [správně|špatně|špatně] = mezera s možnostmi (první je správná), pozn = vysvětlení po odpovědi. Skupinu používá generátor vety s param {skupina}. Nová skupina = nový klíč, stačí ji dát do patra v patra.json.",
+  "skupiny": {
+    "kontext": {
+      "nazev": "Bez signálních slov",
+      "rada": "Signální slovo chybí? Ptej se: děje se to **teď** (Pst!, Podívej!, Kde je…?), nebo **pořád / vždycky** (pravda, povolání, zvyk)?",
+      "vety": [
+        { "v": "Shh! The baby dragon [is sleeping|sleeps].", "pozn": "Shh! = buď potichu, protože se to děje **teď** → present continuous." },
+        { "v": "Water [boils|is boiling] at 100 degrees.", "pozn": "Platí to vždycky (obecná pravda) → present simple." },
+        { "v": "The sun [rises|is rising] in the east.", "pozn": "Obecná pravda → present simple." },
+        { "v": "Hurry up! Everybody [is waiting|waits] for you.", "pozn": "Hurry up! – čekají **teď** → present continuous." },
+        { "v": "Why [are you laughing|do you laugh]? What's so funny?", "pozn": "Směje se **právě teď** → present continuous." },
+        { "v": "Can you hear that? Polly [is singing|sings] in the shower.", "pozn": "Slyšíš to? → děje se to teď → present continuous." },
+        { "v": "Penguins [live|are living] in cold places.", "pozn": "Obecná pravda o tučňácích → present simple." },
+        { "v": "Be careful! Pierre [is carrying|carries] ten cakes.", "pozn": "Pozor! Nese je **teď** → present continuous." },
+        { "v": "Cats [sleep|are sleeping] a lot.", "pozn": "Platí to o kočkách obecně → present simple." },
+        { "v": "Where is Boo? – He [is hiding|hides] under the bed.", "pozn": "Kde je teď? → present continuous." },
+        { "v": "Bolt is a robot. He [runs|is running] on batteries.", "pozn": "Jak robot funguje, platí pořád → present simple." },
+        { "v": "Help! Mr. Frost [is melting|melts]! Turn on the air conditioning!", "pozn": "Help! – děje se to **teď** → present continuous." },
+        { "v": "Bees [make|are making] honey.", "pozn": "Obecná pravda → present simple." },
+        { "v": "Wait a minute, I [am talking|talk] on the phone.", "pozn": "Počkej, **teď** telefonuju → present continuous." },
+        { "v": "Doctor Fin is a dentist. He [works|is working] in the hotel clinic.", "pozn": "Povolání, kde pracuje pořád → present simple." },
+        { "v": "Don't disturb Sparkle, she [is doing|does] her homework.", "pozn": "Neruš ji – dělá to **teď** → present continuous." },
+        { "v": "Turn off the TV, nobody [is watching|watches] it.", "pozn": "Teď se nikdo nedívá → present continuous." },
+        { "v": "Zork comes from Mars. He [speaks|is speaking] Martian.", "pozn": "Jakým jazykem mluví – to platí pořád → present simple." },
+        { "v": "Look at Smokey! Her nose [is smoking|smokes].", "pozn": "Look at… → vidíš to teď → present continuous." },
+        { "v": "Take an umbrella, it [is raining|rains].", "pozn": "Prší **teď** → present continuous." },
+        { "v": "It [rains|is raining] a lot in this town.", "pozn": "A lot = často, obecně → present simple." },
+        { "v": "Ducks [swim|are swimming] very well.", "pozn": "Co kachny umí, platí pořád → present simple." },
+        { "v": "Where are the twins? – They [are playing|play] in the garden.", "pozn": "Kde jsou teď? → present continuous." },
+        { "v": "The hotel [opens|is opening] at seven o'clock.", "pozn": "Otevírací doba, jízdní řády a programy → present simple." },
+        { "v": "What's that noise? Rex [is stomping|stomps] down the stairs.", "pozn": "Co je to za hluk? → děje se to teď → present continuous." }
+      ]
+    },
+    "lina": {
+      "nazev": "Líná slovesa",
+      "rada": "Líná slovesa (**like, love, hate, want, need, know, understand, believe, remember, mean, own, belong, seem, hear**) -ing nechtějí – ani když je ve větě **now**.",
+      "vety": [
+        { "v": "Garlicula [likes|is liking] tomato juice.", "pozn": "Like = mít rád, je to líné sloveso → bez -ing." },
+        { "v": "I [know|am knowing] the answer!", "pozn": "Know = vědět, stav → nikdy -ing." },
+        { "v": "Bolt [doesn't understand|isn't understanding] jokes.", "pozn": "Understand = rozumět, líné sloveso → don't/doesn't, ne isn't + -ing." },
+        { "v": "Zork [wants|is wanting] a pizza right now.", "pozn": "I když je tam right now, want je líné sloveso → wants." },
+        { "v": "Look! The Duchess [hates|is hating] the new carpet.", "pozn": "I když je tam Look!, hate = nesnášet, líné sloveso → hates." },
+        { "v": "We [need|are needing] more towels at the moment.", "pozn": "Need = potřebovat, líné sloveso → need i s at the moment." },
+        { "v": "Smokey [loves|is loving] spicy food.", "pozn": "Love = milovat, stav → loves." },
+        { "v": "This suitcase [belongs|is belonging] to Granny Rocket.", "pozn": "Belong = patřit, líné sloveso." },
+        { "v": "Boo [believes|is believing] in humans.", "pozn": "Believe = věřit, líné sloveso." },
+        { "v": "Polly [knows|is knowing] seven languages.", "pozn": "Know → knows, nikdy knowing." },
+        { "v": "Right now Inky [prefers|is preferring] tea to coffee.", "pozn": "Prefer = mít raději, líné sloveso i s right now." },
+        { "v": "Mr. Frost [doesn't like|isn't liking] the sun.", "pozn": "Like je líné → zápor doesn't like." },
+        { "v": "Bolt and Zork [want|are wanting] ice cream now.", "pozn": "Want je líné sloveso → want i s now." },
+        { "v": "I [understand|am understanding] you now.", "pozn": "Understand je líné → understand i s now." },
+        { "v": "Sparkle [hates|is hating] glitter.", "pozn": "Hate = nesnášet → hates." },
+        { "v": "Rex [owns|is owning] a tiny piano.", "pozn": "Own = vlastnit, líné sloveso." },
+        { "v": "Zelda [seems|is seeming] tired today.", "pozn": "Seem = zdát se, líné sloveso i s today." },
+        { "v": "Professor Hoot [knows|is knowing] everything.", "pozn": "Know → knows." },
+        { "v": "At the moment Speedy [needs|is needing] a long nap.", "pozn": "Need je líné i s at the moment." },
+        { "v": "Hazel [doesn't remember|isn't remembering] the spell.", "pozn": "Remember = pamatovat si, líné sloveso → doesn't remember." },
+        { "v": "We [love|are loving] this crazy hotel!", "pozn": "Love je líné sloveso → love." },
+        { "v": "What [does this word mean|is this word meaning]?", "pozn": "Mean = znamenat, líné sloveso → otázka s does." },
+        { "v": "Pierre [doesn't want|isn't wanting] to slip again.", "pozn": "Want je líné → doesn't want." },
+        { "v": "Croak [believes|is believing] that he is a prince.", "pozn": "Believe je líné sloveso." },
+        { "v": "Listen! I [hear|am hearing] a strange noise.", "pozn": "Hear = slyšet (smyslem), líné sloveso i po Listen!" },
+        { "v": "Buzz [likes|is liking] sunflowers best.", "pozn": "Like → likes." },
+        { "v": "[Do you know|Are you knowing] Count Garlicula?", "pozn": "Know je líné → otázka Do you know…?" }
+      ]
+    },
+    "dvoji": {
+      "nazev": "Slovesa se dvěma tvářemi",
+      "rada": "**have** = mít/vlastnit → bez -ing; ale have lunch / a shower / fun = dělat něco → může -ing. **think** = názor → bez -ing; think about = přemýšlet → může -ing.",
+      "vety": [
+        { "v": "Bolt [has|is having] two batteries.", "pozn": "Have = mít (vlastnit) → bez -ing." },
+        { "v": "Bolt [is having|has] a shower right now.", "pozn": "Have a shower = sprchovat se, činnost → is having." },
+        { "v": "Garlicula [is having|has] breakfast at the moment.", "pozn": "Have breakfast = snídat, činnost teď → is having." },
+        { "v": "Granny Rocket [has|is having] three skateboards.", "pozn": "Vlastní je → has." },
+        { "v": "Shh! The guests [are having|have] dinner.", "pozn": "Večeří **teď** → are having." },
+        { "v": "We [are having|have] a great time at the pool!", "pozn": "Have a great time = užívat si, teď → are having." },
+        { "v": "Polly [has|is having] green feathers.", "pozn": "Má zelené peří (vlastnost) → has." },
+        { "v": "I [think|am thinking] this hotel is crazy.", "pozn": "Think = myslet si (názor) → bez -ing." },
+        { "v": "Be quiet, Professor Hoot [is thinking|thinks] about a difficult question.", "pozn": "Think about = přemýšlet, teď → is thinking." },
+        { "v": "Zork [thinks|is thinking] that socks are hats.", "pozn": "Myslí si to (názor) → thinks." },
+        { "v": "Inky [is tasting|tastes] the soup now.", "pozn": "Ochutnává (činnost) → is tasting." },
+        { "v": "This soup [tastes|is tasting] of old socks.", "pozn": "Taste = chutnat (jak chutná) → stav, bez -ing." },
+        { "v": "Look! Zelda [is smelling|smells] the roses.", "pozn": "Čichá k růžím (činnost) → is smelling." },
+        { "v": "Mmm, the cake [smells|is smelling] wonderful!", "pozn": "Smell = vonět → stav, bez -ing." },
+        { "v": "Don't wake him! Speedy [is having|has] a nap.", "pozn": "Have a nap = dát si šlofíka, teď → is having." },
+        { "v": "Doctor Fin [has|is having] very big teeth.", "pozn": "Má velké zuby (vlastnost) → has." }
+      ]
+    },
+    "docasne": {
+      "nazev": "Dočasně, nebo napořád?",
+      "rada": "Napořád, trvale → **present simple**. Jen na chvíli, dočasně (this week, these days, at the moment) → **present continuous**.",
+      "vety": [
+        { "v": "Bolt usually works in the kitchen, but this week he [is working|works] at reception.", "pozn": "This week = jen dočasně → is working." },
+        { "v": "Granny Rocket [lives|is living] in Prague.", "pozn": "Bydlí tam napořád → lives." },
+        { "v": "This week Granny Rocket [is staying|stays] at Hotel Kuriózum.", "pozn": "V hotelu je jen dočasně → is staying." },
+        { "v": "Zork [is learning|learns] English this year.", "pozn": "This year = dočasné období → is learning." },
+        { "v": "Garlicula [is reading|reads] a very long book these days.", "pozn": "These days = v poslední době, dočasně → is reading." },
+        { "v": "Normally Mr. Frost [lives|is living] in the Arctic.", "pozn": "Normally = obvykle, trvale → lives." },
+        { "v": "This month the Duchess [is sleeping|sleeps] in a shoebox.", "pozn": "This month = dočasně → is sleeping." },
+        { "v": "Inky [cooks|is cooking] in this hotel every summer.", "pozn": "Every summer = pravidelně → cooks." },
+        { "v": "Speedy [is getting|gets] faster and faster.", "pozn": "Něco se právě mění (pořád rychlejší) → is getting." },
+        { "v": "Doctor Fin [works|is working] as a dentist. That's his job.", "pozn": "Povolání = trvale → works." },
+        { "v": "Today Polly [is wearing|wears] a tiny hat.", "pozn": "Dnes výjimečně → is wearing." },
+        { "v": "Hazel [usually flies|is usually flying] on a broom.", "pozn": "Usually = obvykle → flies." },
+        { "v": "At the moment Smokey [is working|works] as a lifeguard.", "pozn": "At the moment = dočasně → is working." },
+        { "v": "Sparkle [runs|is running] a marathon every year.", "pozn": "Every year = pravidelně → runs." }
+      ]
+    }
+  }
+}

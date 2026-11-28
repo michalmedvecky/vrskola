@@ -1,0 +1,191 @@
+{
+  "_popis": "Patra hotelu v pořadí. Každé patro: hosté (id z hoste.json), lekce (snímky: nadpis, text = odstavce, volitelně tabulka / priklady / host), inspektor (strážce patra) a dovednosti (gen = generátor úlohy v ulohy.js, param, serie = kolikrát za sebou napoprvé = zvládnuto). Text: **tučně**, __zvýraznění koncovky__.",
+  "patra": [
+    {
+      "id": "recepce", "nazev": "Přízemí: Kniha hostů", "kratce": "Present simple", "ikona": "📖", "barva": "#b8860b",
+      "hoste": ["garlicula", "bolt", "granny", "boo"],
+      "lekce": [
+        { "nadpis": "Vítej v Hotelu Kuriózum!", "hotel": true, "text": [
+          "Jsi nový **poslíček** 🛎️. V hotelu bydlí ty nejpodivnější hosté na světě a ty o nich musíš umět mluvit anglicky – a hlavně ve **správném čase**.",
+          "Každý host má zápis v **Knize hostů** 📖: co dělá **pravidelně**. A každé dveře mají **klíčovou dírku** 🔑: tou uvidíš, co host dělá **právě teď**.",
+          "Za správné odpovědi dostáváš spropitné 🪙 a hosté jsou čím dál spokojenější. Spokojený host ti dá svou **kartičku do alba**. Sbírej je všechny!"
+        ] },
+        { "nadpis": "📖 Present simple = zvyky a pravdy", "host": "garlicula", "text": [
+          "Present simple používáme pro věci, které se dějí **pravidelně**, **pořád**, nebo **vždycky platí**."
+        ], "priklady": [
+          ["I __sleep__ in a bed.", "Spím v posteli (vždycky)."],
+          ["Garlicula __drinks__ tomato juice every morning.", "Garlicula pije každé ráno rajčatovou šťávu."],
+          ["Bees __make__ honey.", "Včely dělají med (to platí pořád)."]
+        ] },
+        { "nadpis": "Kouzelné -s", "text": [
+          "U **he, she, it** – a taky u jednoho hosta, třeba *Bolt* nebo *Granny Rocket* – přidáme ke slovesu **-s**.",
+          "Pomůcka: **On, ona, ono – esíčko je povinno!**"
+        ], "tabulka": [["I play", "he play__s__"], ["you play", "she play__s__"], ["we play", "it play__s__"], ["they play", "Bolt play__s__"]] },
+        { "nadpis": "Jak se píše -s", "text": [
+          "Na **-s, -x, -z, -ch, -sh, -o** přidáme **-es**: watch → watch__es__, fix → fix__es__, go → go__es__, do → do__es__.",
+          "**Souhláska + y** → **-ies**: fly → fl__ies__, carry → carr__ies__. Ale **samohláska + y** jen -s: play → play__s__.",
+          "A jedna výjimka: have → **has**."
+        ] },
+        { "nadpis": "Zápor a otázka: do / does", "text": [
+          "Zápor: **don't** (I, you, we, they) a **doesn't** (he, she, it). Otázka: **Do** … ? / **Does** … ?",
+          "Pozor: po **doesn't** a **does** už sloveso -s nemá. Esíčko si vzalo do__es__!"
+        ], "priklady": [
+          ["Boo __doesn't sleep__ in the dark.", "Boo nespí ve tmě."],
+          ["__Does__ Bolt __fix__ toasters? – Yes, he does.", "Opravuje Bolt toustovače?"],
+          ["I __don't drink__ tomato juice.", "Já rajčatovou šťávu nepiju."]
+        ] },
+        { "nadpis": "📖 Signální slova", "text": [
+          "Tahle slova ti napoví, že jde o zvyk: **always** (vždycky), **usually** (obvykle), **often** (často), **sometimes** (někdy), **never** (nikdy), **every day** (každý den), **on Sundays**, **twice a week**…",
+          "Always, usually, often, sometimes a never stojí **před slovesem**: Garlicula **always** wear__s__ sunglasses."
+        ] }
+      ],
+      "inspektor": { "jmeno": "Inspektor Bezes", "barva": "#e67e22", "oci": 2, "rohy": 1, "hlaska": "He play, she play, Bolt play… Kdo potřebuje nějaké -s? Já tady ověřím, jestli to v hotelu víte!", "porazen": "Plays… drinks… sleeps… No dobře, to -s tam asi opravdu patří." },
+      "polozky": [
+        { "id": "tvar", "gen": "tvar", "param": { "cas": "s" }, "nazev": "he/she/it → -s" },
+        { "id": "pravopis", "gen": "pravopis", "param": { "cas": "s" }, "nazev": "-es, -ies, has" },
+        { "id": "kniha", "gen": "kniha", "nazev": "Kniha hostů" },
+        { "id": "zapor", "gen": "zapor", "param": { "cas": "s" }, "nazev": "don't / doesn't" },
+        { "id": "otazka", "gen": "otazka", "param": { "cas": "s" }, "nazev": "Do / Does …?" }
+      ]
+    },
+    {
+      "id": "dirka", "nazev": "1. patro: Klíčová dírka", "kratce": "Present continuous", "ikona": "🔑", "barva": "#2980b9",
+      "hoste": ["zork", "smokey", "polly", "zelda"],
+      "lekce": [
+        { "nadpis": "🔑 Present continuous = právě teď", "dirka": "zork", "text": [
+          "Nakoukni klíčovou dírkou! Present continuous říká, co host dělá **právě teď**, v tuhle chvíli."
+        ], "priklady": [
+          ["Look! Zork __is trying__ on a hat.", "Podívej! Zork si zkouší klobouk."],
+          ["Shh! Smokey __is sleeping__.", "Pst! Smokey spí."]
+        ] },
+        { "nadpis": "am / is / are + -ing", "text": [
+          "Present continuous má **dvě části**: am / is / are **a** sloveso s **-ing**.",
+          "Bez am/is/are to nejde! *Zork trying on a hat* je jako „Zork zkoušející klobouk“ – chybí tam sloveso."
+        ], "tabulka": [["I __am__ danc__ing__", ""], ["he / she / it __is__ danc__ing__", "Polly __is__ danc__ing__"], ["you / we / they __are__ danc__ing__", "the twins __are__ danc__ing__"]] },
+        { "nadpis": "Jak se píše -ing", "text": [
+          "Většinou jen přidáš -ing: play → play__ing__, eat → eat__ing__.",
+          "Tiché **-e** na konci odpadne: make → mak__ing__, write → writ__ing__. Ale **ee** zůstane: see → see__ing__.",
+          "Krátké slovo, krátká samohláska a jedna souhláska → **zdvojíme**: swim → swi__mming__, sit → si__tting__, run → ru__nning__.",
+          "**-ie** → **-ying**: lie → l__ying__, tie → t__ying__."
+        ] },
+        { "nadpis": "Zápor a otázka", "text": [
+          "Tady **nepotřebuješ do / does**. Am / is / are si poradí samo:",
+          "Zápor: **am not**, **isn't**, **aren't**. Otázka: am / is / are dáš **před** podmět."
+        ], "priklady": [
+          ["Zelda __isn't sleeping__. She __is writing__ a poem.", "Zelda nespí. Píše báseň."],
+          ["__Is__ Polly __dancing__ on the lamp? – Yes, she is.", "Tancuje Polly na lampě?"],
+          ["We __aren't swimming__ now.", "Teď neplaveme."]
+        ] },
+        { "nadpis": "🔑 Signální slova", "text": [
+          "Napoví ti, že se něco děje teď: **now** (teď), **right now** (právě teď), **at the moment** (v tuhle chvíli), **Look!** (Podívej!), **Listen!** (Poslouchej!), **Shh!** (Pst!), **today**, **this week** (dočasně)."
+        ] }
+      ],
+      "inspektor": { "jmeno": "Inspektorka Ingrid", "barva": "#9b59b6", "oci": 3, "rohy": 2, "hlaska": "She dancing! They singing! Zork swiming! Proč se zdržovat s nějakým is a are?", "porazen": "She IS dancing… swiMMing… Dobře, dobře, máte to v malíčku." },
+      "polozky": [
+        { "id": "tvar", "gen": "tvar", "param": { "cas": "c" }, "nazev": "am / is / are + -ing" },
+        { "id": "pravopis", "gen": "pravopis", "param": { "cas": "c" }, "nazev": "-ing: making, swimming, lying" },
+        { "id": "dirka", "gen": "dirka", "nazev": "Co dělá host právě teď?" },
+        { "id": "zapor", "gen": "zapor", "param": { "cas": "c" }, "nazev": "am not / isn't / aren't" },
+        { "id": "otazka", "gen": "otazka", "param": { "cas": "c" }, "nazev": "Am / Is / Are …?" }
+      ]
+    },
+    {
+      "id": "kdy", "nazev": "2. patro: Teď, nebo vždycky?", "kratce": "Simple × continuous", "ikona": "⏰", "barva": "#16a085",
+      "hoste": ["frost", "fin", "sparkle", "inky"],
+      "lekce": [
+        { "nadpis": "Kniha, nebo dírka?", "text": [
+          "📖 **Kniha hostů** = pravidelně, vždycky, obecně → **present simple**.",
+          "🔑 **Klíčová dírka** = právě teď, dočasně → **present continuous**."
+        ], "priklady": [
+          ["Mr. Frost __wears__ a scarf every day.", "📖 Nosí šálu každý den."],
+          ["Look! Mr. Frost __is sunbathing__ on the beach!", "🔑 Podívej! Opaluje se na pláži!"]
+        ] },
+        { "nadpis": "Hledej signální slova", "text": [
+          "📖 always, usually, often, sometimes, never, every day, every morning, on Sundays, at weekends, twice a week",
+          "🔑 now, right now, at the moment, today, this week, Look!, Listen!, Shh!",
+          "Najdi ve větě signální slovo a hned víš, který čas použít."
+        ] },
+        { "nadpis": "Obvykle…, ale dnes…", "host": "fin", "text": [
+          "Často se oba časy potkají v jedné větě: co host dělá **obvykle**, a co dělá **dnes / teď** jinak."
+        ], "priklady": [
+          ["Doctor Fin usually __checks__ teeth, but today he __is playing__ the piano.", "Obvykle kontroluje zuby, ale dnes hraje na klavír."],
+          ["Right now Inky __is chopping__ onions, but he usually __juggles__ eggs.", "Teď krájí cibuli, ale obvykle žongluje s vejci."]
+        ] },
+        { "nadpis": "Když signální slovo chybí", "text": [
+          "Ptej se: děje se to **teď**? (Shh!, Help!, Where is…?, Can you hear…?) → continuous.",
+          "Platí to **pořád**? (povolání, obecné pravdy, jak věci fungují) → simple: *Water boils at 100 degrees.*"
+        ] }
+      ],
+      "inspektor": { "jmeno": "Inspektor Teďvždycky", "barva": "#1abc9c", "oci": 4, "rohy": 0, "hlaska": "Every day I am eating breakfast now! Nebo now I eat every day? Já to popletu tak, že to popletete i vy!", "porazen": "Kniha je pro zvyky, dírka pro teď. Už to vím. Asi."},
+      "polozky": [
+        { "id": "signal", "gen": "signal", "nazev": "Signální slova" },
+        { "id": "cas", "gen": "cas", "nazev": "Kniha, nebo dírka?", "serie": 4 },
+        { "id": "cas2", "gen": "cas2", "nazev": "Obvykle…, ale dnes…" },
+        { "id": "kontext", "gen": "vety", "param": { "skupina": "kontext" }, "nazev": "Bez signálních slov" }
+      ]
+    },
+    {
+      "id": "otazky", "nazev": "3. patro: Otázky a zápory", "kratce": "Do/does × am/is/are", "ikona": "❓", "barva": "#c0392b",
+      "hoste": ["speedy", "duchess", "rex", "buzz"],
+      "lekce": [
+        { "nadpis": "Dva pomocníci", "text": [
+          "Každý čas má svého pomocníka pro otázky a zápory:",
+          "📖 present simple → **do / does / don't / doesn't** + sloveso bez -s",
+          "🔑 present continuous → **am / is / are (not)** + -ing"
+        ], "tabulka": [["📖 Speedy __doesn't run__ every day.", "🔑 Speedy __isn't running__ now."], ["📖 __Does__ Buzz __make__ honey?", "🔑 __Is__ Buzz __carrying__ a parcel?"]] },
+        { "nadpis": "Krátké odpovědi", "text": [
+          "Odpovídáš **tím slovem, kterým se ptali**:"
+        ], "priklady": [
+          ["__Does__ Rex wear tiny gloves? – Yes, he __does__. / No, he __doesn't__.", ""],
+          ["__Is__ Rex doing yoga? – Yes, he __is__. / No, he __isn't__.", ""],
+          ["__Are__ you listening? – Yes, I __am__.", ""]
+        ] },
+        { "nadpis": "Pozor na chyby navíc", "text": [
+          "*Does he sleeps?* ✗ → **Does he sleep?** ✓ (esíčko už má does)",
+          "*He doesn't sleeps.* ✗ → **He doesn't sleep.** ✓",
+          "*Does he sleeping?* ✗ → **Is he sleeping?** ✓ (-ing patří k am/is/are)"
+        ] }
+      ],
+      "inspektor": { "jmeno": "Inspektor Otazník", "barva": "#e74c3c", "oci": 1, "rohy": 2, "hlaska": "Does he sleeping? Is she sleeps? Do they is? Hehe, kdo mi odpoví správně?", "porazen": "Yes, you do. Teda… Yes, you are. Prostě jste vyhráli."},
+      "polozky": [
+        { "id": "zapor", "gen": "zapor", "param": { "cas": "mix" }, "nazev": "Zápor: don't, nebo isn't?" },
+        { "id": "otazka", "gen": "otazka", "param": { "cas": "mix" }, "nazev": "Otázka: Do, nebo Is?" },
+        { "id": "kratka", "gen": "kratka", "nazev": "Krátké odpovědi" },
+        { "id": "oprav", "gen": "oprav", "nazev": "Opravář vět" }
+      ]
+    },
+    {
+      "id": "lina", "nazev": "4. patro: Líná slovesa", "kratce": "Stavová slovesa", "ikona": "😴", "barva": "#6c3483",
+      "hoste": ["hazel", "pierre", "hoot", "croak"],
+      "lekce": [
+        { "nadpis": "Líná slovesa", "host": "hoot", "text": [
+          "Některá slovesa nepopisují činnost, ale **stav**: co si myslím, co cítím, co vím, co mám. Jsou **líná – -ing nechtějí**.",
+          "**like, love, hate, want, need, prefer, know, understand, believe, remember, mean, own, belong, seem, hear**"
+        ] },
+        { "nadpis": "I když je tam now", "text": [
+          "Líné sloveso zůstane v present simple, i když je ve větě now nebo Look!"
+        ], "priklady": [
+          ["Croak __wants__ a kiss right now.", "ne ~~is wanting~~"],
+          ["I __know__ the answer!", "ne ~~am knowing~~"],
+          ["Pierre __doesn't understand__ the menu.", "ne ~~isn't understanding~~"]
+        ] },
+        { "nadpis": "Slovesa se dvěma tvářemi", "text": [
+          "**have**: Hazel __has__ a toad. (má = vlastní) × Hazel __is having__ lunch. (oběduje)",
+          "**think**: I __think__ it's funny. (myslím si) × Hoot __is thinking__ about a question. (přemýšlí)",
+          "**taste, smell**: The soup __tastes__ great. (chutná) × Inky __is tasting__ the soup. (ochutnává)"
+        ] },
+        { "nadpis": "Dočasně, nebo napořád?", "text": [
+          "Napořád → simple: Granny Rocket __lives__ in Prague.",
+          "Jen na chvíli → continuous: This week she __is staying__ at our hotel."
+        ] }
+      ],
+      "inspektor": { "jmeno": "Inspektor Ingoš", "barva": "#34495e", "oci": 2, "rohy": 3, "hlaska": "I am knowing everything! I am wanting pizza! I am liking -ing! Všechno musí mít -ing!", "porazen": "I know… I want… I like… Hm. Já jsem asi taky líný." },
+      "polozky": [
+        { "id": "lina", "gen": "vety", "param": { "skupina": "lina" }, "nazev": "like, know, want…", "serie": 4 },
+        { "id": "dvoji", "gen": "vety", "param": { "skupina": "dvoji" }, "nazev": "have, think, taste" },
+        { "id": "docasne", "gen": "vety", "param": { "skupina": "docasne" }, "nazev": "Dočasně, nebo napořád?" },
+        { "id": "mix", "gen": "cas", "param": { "osoby": "vse" }, "nazev": "Velký mix časů" }
+      ]
+    }
+  ]
+}

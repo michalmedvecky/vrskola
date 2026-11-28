@@ -1,0 +1,24 @@
+{
+  "nazev": "Hotel Kuriózum",
+  "podtitul": "Present simple a present continuous v nejbláznivějším hotelu na světě",
+  "trenink": { "delkaKola": 10, "podilOpakovani": 0.2 },
+  "strazce": { "otazek": 8, "zivotu": 2 },
+  "srdciNaKartu": 3,
+  "tajnyHost": { "sance": 0.04, "odPatra": 1 },
+  "zaverecna": {
+    "nazev": "Velká inspekce",
+    "popis": "Vrchní inspektor kontroluje celý hotel: všechno ze všech pater, bez nápověd, smíš udělat nejvýš 2 chyby.",
+    "otazek": 14,
+    "zivotu": 3,
+    "plan": ["cas", "cas", "cas", "cas2", "tvar", "pravopisS", "pravopisC", "zapor", "otazka", "kratka", "oprav", "lina", "kontext", "dvoji"],
+    "strazce": { "jmeno": "Vrchní inspektor Časoplet", "barva": "#2c3e50", "oci": 3, "rohy": 4, "hlaska": "Já jsem vrchní inspektor! I am knowing all the times, he play every day and she sleeping now! Najdi moje chyby, jestli to dokážeš!", "porazen": "Hotel Kuriózum dostává pět hvězdiček. A poslíček taky." }
+  },
+  "hodnosti": [
+    { "od": 0, "nazev": "Poslíček" },
+    { "od": 40, "nazev": "Pikolík" },
+    { "od": 150, "nazev": "Recepční" },
+    { "od": 350, "nazev": "Vrchní recepční" },
+    { "od": 650, "nazev": "Šéf hotelu" },
+    { "od": 1000, "nazev": "Majitel hotelu" }
+  ]
+}
