@@ -247,6 +247,25 @@ configMapGenerator:
       - web/dostihy/data/ukoly.json
       - web/dostihy/data/obchod.json
       - web/dostihy/data/dostihy.json
+  - name: vrskola-casy   # samostatná hra Hotel Kuriózum na /casy/ (anglické časy, PC/tablet i VR na Questu)
+    files:
+      - web/casy/index.html
+      - web/casy/styl.css
+      - web/casy/hra.js
+      - web/casy/ulohy.js
+      - web/casy/prisery.js
+      - web/casy/postup.js
+      - web/casy/zvuk.js
+      - web/casy/vr.js
+      - web/casy/manifest.json
+      - web/casy/ikona.svg
+  - name: vrskola-casy-data   # hosté, patra s lekcemi, gramatika a věty Hotelu Kuriózum (vyměnitelná data), servíruje se z /casy/data/
+    files:
+      - web/casy/data/kurz.json
+      - web/casy/data/patra.json
+      - web/casy/data/hoste.json
+      - web/casy/data/jazyk.json
+      - web/casy/data/vety.json
   - name: vrskola-nginx
     files:
       - deploy/default.conf

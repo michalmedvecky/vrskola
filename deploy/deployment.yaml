@@ -101,6 +101,12 @@ spec:
             - name: dostihy-data
               mountPath: /usr/share/nginx/dostihy-data
               readOnly: true
+            - name: casy
+              mountPath: /usr/share/nginx/casy
+              readOnly: true
+            - name: casy-data
+              mountPath: /usr/share/nginx/casy-data
+              readOnly: true
             - name: nginx-conf
               mountPath: /etc/nginx/conf.d
               readOnly: true
@@ -164,6 +170,12 @@ spec:
         - name: dostihy-data
           configMap:
             name: vrskola-dostihy-data
+        - name: casy
+          configMap:
+            name: vrskola-casy
+        - name: casy-data
+          configMap:
+            name: vrskola-casy-data
         - name: nginx-conf
           configMap:
             name: vrskola-nginx

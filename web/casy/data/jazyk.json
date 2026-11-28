@@ -1,0 +1,43 @@
+{
+  "_popis": "Gramatika pro generátory. casy = časy, které hra umí (klíč → název, ikona). signaly = signální slova (kde: pred = před slovesem, konec = na konec věty, zacatek = na začátek). Tvary sloves se počítají pravidly; zdvoj = slovesa, kterým se před -ing zdvojí souhláska, vyjimky = nepravidelné tvary.",
+  "casy": {
+    "s": { "nazev": "present simple", "ikona": "📖", "kdy": "zvyk, pravidelně, vždycky platí" },
+    "c": { "nazev": "present continuous", "ikona": "🔑", "kdy": "právě teď, dočasně" }
+  },
+  "signaly": {
+    "s": [
+      { "t": "always", "kde": "pred", "cs": "vždycky" },
+      { "t": "usually", "kde": "pred", "cs": "obvykle" },
+      { "t": "often", "kde": "pred", "cs": "často" },
+      { "t": "sometimes", "kde": "pred", "cs": "někdy" },
+      { "t": "never", "kde": "pred", "cs": "nikdy", "bezZaporu": true },
+      { "t": "every day", "kde": "konec", "cs": "každý den" },
+      { "t": "every morning", "kde": "konec", "cs": "každé ráno" },
+      { "t": "every evening", "kde": "konec", "cs": "každý večer" },
+      { "t": "on Sundays", "kde": "konec", "cs": "v neděli (každou)" },
+      { "t": "at weekends", "kde": "konec", "cs": "o víkendech" },
+      { "t": "twice a week", "kde": "konec", "cs": "dvakrát týdně" },
+      { "t": "once a month", "kde": "konec", "cs": "jednou měsíčně" }
+    ],
+    "c": [
+      { "t": "now", "kde": "konec", "cs": "teď" },
+      { "t": "right now", "kde": "konec", "cs": "právě teď" },
+      { "t": "at the moment", "kde": "konec", "cs": "v tuhle chvíli" },
+      { "t": "today", "kde": "konec", "cs": "dnes (výjimečně)" },
+      { "t": "this week", "kde": "konec", "cs": "tento týden (dočasně)" },
+      { "t": "Look!", "kde": "zacatek", "cs": "Podívej!" },
+      { "t": "Listen!", "kde": "zacatek", "cs": "Poslouchej!" },
+      { "t": "Shh!", "kde": "zacatek", "cs": "Pst! (děje se to teď)" },
+      { "t": "Quick!", "kde": "zacatek", "cs": "Rychle!" }
+    ]
+  },
+  "zdvoj": ["swim", "run", "sit", "dig", "shop", "jog", "stop", "plan", "flip", "hug", "get", "clap", "slip", "chop", "knit", "put", "spin", "begin"],
+  "vyjimky": { "have": { "s": "has", "ing": "having" }, "be": { "s": "is", "ing": "being" } },
+  "lina": ["like", "love", "hate", "want", "need", "prefer", "know", "understand", "believe", "remember", "mean", "own", "belong", "seem", "hear", "cost"],
+  "mnozne": [
+    { "t": "I", "os": "I" }, { "t": "you", "os": "you" }, { "t": "we", "os": "we" }, { "t": "they", "os": "they" },
+    { "t": "the twins", "os": "they" }, { "t": "my friends", "os": "they" }
+  ],
+  "pravopisS": ["watch", "wash", "brush", "fix", "mix", "catch", "teach", "kiss", "go", "do", "buzz", "fly", "carry", "try", "cry", "study", "play", "say", "stay", "enjoy", "have", "read", "sleep", "drink", "dance", "jump", "polish", "touch", "push", "miss", "relax", "hurry", "obey", "worry"],
+  "pravopisC": ["make", "bake", "ride", "write", "dance", "smile", "come", "take", "swim", "run", "sit", "dig", "shop", "stop", "plan", "hug", "get", "clap", "put", "lie", "tie", "untie", "see", "flee", "agree", "play", "read", "eat", "jump", "fly", "carry", "visit", "open", "rain", "cook", "wait", "argue", "knit", "chop", "slip"]
+}

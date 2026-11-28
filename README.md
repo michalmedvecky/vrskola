@@ -57,6 +57,16 @@ a jezdí s ní dostihy ve třech ligách. Číslice se píšou tužkou nebo prst
 v [`web/dostihy/README.md`](web/dostihy/README.md). V k3s jsou to ConfigMapy `vrskola-dostihy` a `vrskola-dostihy-data`,
 nginx je servíruje z `/dostihy/`.
 
+## Hotel Kuriózum – anglické časy (PC, tablet i VR, `/casy/`)
+
+Hra na present simple × present continuous ve `web/casy/` (bez serveru). Hráč je poslíček v bláznivém hotelu
+plném vymyšlených hostů: v **Knize hostů** 📖 jsou jejich zvyky (simple), **klíčovou dírkou** 🔑 vidí, co dělají
+právě teď (continuous). Pět pater (simple, continuous, rozlišení, otázky a zápory, líná slovesa), v každém lekce →
+služba do zvládnutí → kontrola inspektora; na střeše Velká inspekce. Spokojení hosté dávají kartičky do alba,
+občas přijede tajný host. Na Questu stojí hráč u recepce a odpovídá tlačítky 1–4 a zvonkem. Data jsou vyměnitelná
+(`web/casy/data/`), další časy jdou přidat jako další patra, podrobnosti v [`web/casy/README.md`](web/casy/README.md).
+V k3s jsou to ConfigMapy `vrskola-casy` a `vrskola-casy-data`, nginx je servíruje z `/casy/`.
+
 ## Padám padám (tablet, `/padam/`)
 
 Hra na určování pádů podstatných jmen pro tablet (bez VR, bez serveru) ve `web/padam/`. Městečko se čtyřmi minihrami

@@ -1,0 +1,10 @@
+{
+  "name": "Hotel Kuriózum",
+  "short_name": "Hotel",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "background_color": "#7b1e3a",
+  "theme_color": "#7b1e3a",
+  "icons": [{ "src": "ikona.svg", "sizes": "any", "type": "image/svg+xml" }]
+}
